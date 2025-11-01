@@ -1,20 +1,11 @@
-import {Pool} from 'pg';
-import { config } from '../../../common/configuracion.js';
+import { Pool } from 'pg';
+import { configuracion } from '../../../common/configuracion';
 
 export const pool = new Pool({
-    host: config.pg.host,
-    port: config.pg.port,
-    user: config.pg.user,
-    password: config.pg.password,
-    database: config.pg.database,
-    ssl: config.pg.ssl ? { rejectUnauthorized: false } : false,
+  host: configuracion.db.host,
+  port: configuracion.db.port,
+  user: configuracion.db.user,
+  password: configuracion.db.password,
+  database: configuracion.db.database,
+  ssl: { rejectUnauthorized: false },
 });
-
-export async function ejecutarConsulta(
-  consulta: string,
-  parametros?: Array<number | string>
-) {
-  return await pool.query(consulta, parametros);
-}
-
-
