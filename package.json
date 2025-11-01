@@ -1,26 +1,30 @@
 {
-  "name": "proyecto-db",
+  "name": "JESSoft",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "start": "node ./dist/index.js",
-    "dev": "tsnd --respawn --clear src/index.ts"
+    "dev" : "tsx ./src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
-    "@types/node": "^24.9.2",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.3"
+    "@types/node": "^24.7.2",
+    "typescript": "^5.9.3",
+    "tsx": "^4.20.6"
   },
   "dependencies": {
-    "dotenv": "^17.2.3",
     "fastify": "^5.6.1",
+    "@types/node": "^24.7.2",
+    "dotenv": "^17.2.3",
     "pg": "^8.16.3",
-    "uuid": "^13.0.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.3",
     "zod": "^4.1.12"
-  }
+  },
+  "type": "module"
 }
