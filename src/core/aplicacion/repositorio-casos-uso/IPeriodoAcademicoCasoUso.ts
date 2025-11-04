@@ -1,6 +1,5 @@
 import { IPeriodoAcademico } from "../../dominio/entidades/IPeriodoAcademico.js";
-import { PeriodoAcademicoDTO } from "../../../presentation/esquemas/PeriodoAcademicoEsquema";
-
+import { PeriodoAcademicoDTO } from "../../../presentation/esquemas/PeriodoAcademicoEsquema.js";
 export interface IPeriodoAcademicoCasoUso{
     crearPeriodo(periodo: PeriodoAcademicoDTO): Promise<string>;
     obtenerPeriodos(limite?: number): Promise<IPeriodoAcademico[]>;
