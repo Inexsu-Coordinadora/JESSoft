@@ -1,6 +1,5 @@
 import {Pool} from 'pg';
-import { config } from '../../../common/configuracion';
-
+import { config } from '../../../common/configuracion.js';
 export const pool = new Pool(config.pg)
 pool.connect()
   .then(() => console.log('Conectado a la base de datos:', config.pg.database))
@@ -13,8 +12,4 @@ export async function ejecutarConsulta(
   return await pool.query(consulta, parametros);
 }
 
-<<<<<<< HEAD
  
-=======
-
->>>>>>> 57092ed83eb8caa141f2c1b9181df62e2a509a5b

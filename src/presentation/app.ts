@@ -10,7 +10,7 @@ app.register(
     //construirProgramasEnrutador(appInstance);
     construirPeriodosEnrutador(appInstance);
     construirProgramasEnrutador(appInstance);
-  }
+  },
   { prefix: "/api" }
 );
 
