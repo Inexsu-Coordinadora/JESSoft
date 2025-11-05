@@ -156,6 +156,27 @@ npm start
 | `PUT`    | `/asignaturas/:id` | Actualiza una asignatura    |
 | `DELETE` | `/asignaturas/:id` | Elimina una asignatura      |
 
+| Método   | Endpoint           | Descripción                 |
+| -------- | ------------------ | --------------------------- |
+| `GET`    | `/docentes`        | Lista todos los docentes    |
+| `POST`   | `/docentes`        | Crea un nuevo docente       |
+| `PUT`    | `/docentes/:id`    | Actualiza un docente        |
+| `DELETE` | `/docentes/:id`    | Elimina un docente          |
+
+| Método   | Endpoint           | Descripción                 |
+| -------- | ------------------ | --------------------------- |
+| `GET`    | `/programas`       | Lista todas los programas   |
+| `POST`   | `/programas`       | Crea un nuevo programa      |
+| `PUT`    | `/programas/:id`   | Actualiza un programas      |
+| `DELETE` | `/programas/:id`   | Elimina un programa         |
+
+| Método   | Endpoint           | Descripción                 |
+| -------- | ------------------ | --------------------------- |
+| `GET`    | `/periodos`        | Lista todos los periodos    |
+| `POST`   | `/periodos`        | Crea un nuevo periodo       |
+| `PUT`    | `/periodos/:id`    | Actualiza un periodo        |
+| `DELETE` | `/periodos/:id`    | Elimina un periodo          |
+
 🧩 Validaciones Implementadas
 -
 Campos obligatorios (NOT NULL)
@@ -182,7 +203,7 @@ Controlador y rutas (presentation)
 
 🧠 Autor
 -
-👨‍💻 Sebastián Higuita - Jimena Valencia
+👨‍💻 Sebastián Higuita - Jimena Valencia - Sara Mellán - Edwin Rivera
 
 Desarrolladores Backend · Proyecto académico — Gestión Académica Administrativa
 📅 Noviembre 2025
