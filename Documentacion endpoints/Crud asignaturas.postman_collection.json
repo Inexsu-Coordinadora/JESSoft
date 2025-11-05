@@ -1,0 +1,122 @@
+{
+	"info": {
+		"_postman_id": "c4c363f0-3ba0-47a5-b2a9-c6299e87d80f",
+		"name": "Crud asignaturas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37707864"
+	},
+	"item": [
+		{
+			"name": "Agregar",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\n        \"nombre\": \"Diseño Digital II\",\n        \"creditos\": 3,\n        \"carga_horaria\": 4,\n        \"tipo\": \"practica\",\n        \"descripcion\": \"Uso de software de diseño gráfico\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/api/asignaturas",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"asignaturas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3000/api/asignaturas",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"asignaturas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\n        \"nombre\": \"Diseño Digital II\",\n        \"creditos\": 5,\n        \"carga_horaria\": 4,\n        \"tipo\": \"practica\",\n        \"descripcion\": \"Uso de software de diseño gráfico\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/api/asignaturas/A27",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"asignaturas",
+						"A27"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3000/api/asignaturas/A27",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"asignaturas",
+						"A27"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
