@@ -7,7 +7,6 @@ const app = fastify({ logger: true });
 
 app.register(
   async (appInstance) => {
-    //construirProgramasEnrutador(appInstance);
     construirPeriodosEnrutador(appInstance);
     construirProgramasEnrutador(appInstance);
     registrarAsignaturaRutas(appInstance);
