@@ -201,15 +201,10 @@ Repositorio (core/infraestructura)
 
 Controlador y rutas (presentation)
 
-🧠 Autor
+PDF de la documentacion y enlace del video:
 -
-👨‍💻 Sebastián Higuita - Jimena Valencia - Sara Mellán - Edwin Rivera
-
-Desarrolladores Backend · Proyecto académico — Gestión Académica Administrativa
-📅 Noviembre 2025
-
-PDF de la documentacion:
 - [Informe-JESSoft.pdf](https://github.com/user-attachments/files/23347979/Informe-JESSoft.pdf)
+- https://youtu.be/PgmNPc9FmsM
   
 Checklist de completado:
 -
@@ -223,4 +218,12 @@ Checklist de completado:
 |    ✅   | **Video demostrativo agregado**      | Se grabó un video mostrando el funcionamiento de los CRUDs y la conexión con la base de datos en la nube.                                                                   |
 |    ✅   | **Informe adjunto**                  | Documento técnico con descripción de arquitectura, decisiones de diseño y estructura del código.                                                                            |
 |    ✅   | **Pull Request creado**              | Se realizó el PR **`release/sprint-1 → main`** incluyendo todos los cambios implementados y validados.                                                                      |
+
+🧠 Autor
+-
+👨‍💻 Sebastián Higuita - Jimena Valencia - Sara Mellán - Edwin Rivera
+
+Desarrolladores Backend · Proyecto académico — Gestión Académica Administrativa
+📅 Noviembre 2025
+
 
