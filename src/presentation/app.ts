@@ -1,8 +1,8 @@
 import fastify from "fastify";
 import { FastifyError } from "fastify";
-//import { construirProgramasEnrutador } from "./rutas/ProgramaAcademicoEnrutador";
 import { construirPeriodosEnrutador } from "./rutas/PeriodoAcademicoEnrutador.js";
 import { construirProgramasEnrutador } from "./rutas/ProgramaAcademicoEnrutador.js";
+import { registrarAsignaturaRutas } from "./rutas/AsignaturaEnrutador.js";
 const app = fastify({ logger: true });
 
 app.register(
@@ -10,6 +10,7 @@ app.register(
     //construirProgramasEnrutador(appInstance);
     construirPeriodosEnrutador(appInstance);
     construirProgramasEnrutador(appInstance);
+    registrarAsignaturaRutas(appInstance);
   },
   { prefix: "/api" }
 );

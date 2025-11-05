@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -15,6 +16,9 @@ export const config = {
 };
 
 /*import 'dotenv/config';
+=======
+import 'dotenv/config';
+>>>>>>> feature/crud-asignatura
 
 export const configuracion = {
   db: {
@@ -28,4 +32,8 @@ export const configuracion = {
       : false,
   },
   port: Number(process.env.PUERTO || 3000),
+<<<<<<< HEAD
 };*/
+=======
+};
+>>>>>>> feature/crud-asignatura
