@@ -27,7 +27,7 @@
     "ts-node-dev": "^2.0.0",
     "zod": "^4.1.12"
   },
-  "type": "module",
+  "type": "commonjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Inexsu-Coordinadora/JESSoft.git"
