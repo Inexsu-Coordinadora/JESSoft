@@ -210,5 +210,17 @@ Desarrolladores Backend · Proyecto académico — Gestión Académica Administr
 
 PDF de la documentacion:
 - [Informe-JESSoft.pdf](https://github.com/user-attachments/files/23347979/Informe-JESSoft.pdf)
+  
+Checklist de completado:
+-
 
+| Estado | Ítem                                 | Descripción                                                                                                                                                                 |
+| :----: | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|    ✅   | **Migraciones implementadas**        | Se crearon las migraciones en PostgreSQL para las entidades `Programa Académico`, `Asignatura`, `Periodo Académico` y `Docente`, con sus respectivas secuencias y triggers. |
+|    ✅   | **CRUD completo para cada entidad**  | Se desarrollaron los endpoints de creación, lectura, actualización y eliminación con validaciones y manejo de errores.                                                      |
+|    ✅   | **Validaciones básicas aplicadas**   | Se implementaron restricciones de tipo, obligatoriedad y valores controlados (CHECK, NOT NULL, etc.).                                                                       |
+|    ✅   | **Documentación mínima actualizada** | El proyecto cuenta con un `README.md` detallado con pasos de instalación, ejecución, migraciones y estructura del proyecto.                                                 |
+|    ✅   | **Video demostrativo agregado**      | Se grabó un video mostrando el funcionamiento de los CRUDs y la conexión con la base de datos en la nube.                                                                   |
+|    ✅   | **Informe adjunto**                  | Documento técnico con descripción de arquitectura, decisiones de diseño y estructura del código.                                                                            |
+|    ✅   | **Pull Request creado**              | Se realizó el PR **`release/sprint-1 → main`** incluyendo todos los cambios implementados y validados.                                                                      |
 
