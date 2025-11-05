@@ -3,6 +3,7 @@ import { FastifyError } from "fastify";
 import { construirPeriodosEnrutador } from "./rutas/PeriodoAcademicoEnrutador.js";
 import { construirProgramasEnrutador } from "./rutas/ProgramaAcademicoEnrutador.js";
 import { registrarAsignaturaRutas } from "./rutas/AsignaturaEnrutador.js";
+import { DocenteEnrutador } from "./rutas/DocenteEnrutador.js";
 const app = fastify({ logger: true });
 
 app.register(
@@ -10,6 +11,7 @@ app.register(
     construirPeriodosEnrutador(appInstance);
     construirProgramasEnrutador(appInstance);
     registrarAsignaturaRutas(appInstance);
+    DocenteEnrutador(appInstance);
   },
   { prefix: "/api" }
 );
