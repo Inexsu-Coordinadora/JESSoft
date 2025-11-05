@@ -187,3 +187,7 @@ Controlador y rutas (presentation)
 Desarrolladores Backend · Proyecto académico — Gestión Académica Administrativa
 📅 Noviembre 2025
 
+PDF de la documentacion:
+- [Informe-JESSoft.pdf](https://github.com/user-attachments/files/23347979/Informe-JESSoft.pdf)
+
+
