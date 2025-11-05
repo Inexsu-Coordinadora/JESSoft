@@ -15,61 +15,61 @@ Cada entidad cuenta con sus respectivas validaciones, estructura de base de dato
 -
 Contiene la información general del programa:
 
-ID (autogenerado)
+- ID (autogenerado)
 
-Nombre
+- Nombre
 
-Información general
+- Información general
 
-Nivel educativo
+- Nivel educativo
 
-Duración
+- Duración
 
-Modalidad (Presencial, Virtual, Distancia)
+- Modalidad (Presencial, Virtual, Distancia)
 
 📘 2. Asignatura
 -
 Datos de las materias que componen los programas:
 
-ID (autogenerado)
+- ID (autogenerado)
 
-Nombre
+- Nombre
 
-Créditos
+- Créditos
 
-Carga horaria
+- Carga horaria
 
-Tipo (teórica, práctica, mixta)
+- Tipo (teórica, práctica, mixta)
 
-Descripción
+- Descripción
 
 📆 3. Período Académico
 -
 Representa los ciclos académicos de la institución:
 
-ID (autogenerado)
+- ID (autogenerado)
 
-Fecha de inicio
+- Fecha de inicio
 
-Fecha de fin
+- Fecha de fin
 
-Estado (activo, cerrado, en preparación)
+- Estado (activo, cerrado, en preparación)
 
-Descripción
+- Descripción
 
 👨‍🏫 4. Docente
 -
 Información del cuerpo docente:
 
-ID (autogenerado)
+- ID (autogenerado)
 
-Nombre
+- Nombre
 
-Apellido
+- Apellido
 
-Especialidad
+- Especialidad
 
-Vinculación (Tiempo completo, Cátedra, Medio tiempo)
+- Vinculación (Tiempo completo, Cátedra, Medio tiempo)
 
 🧱 Arquitectura del Proyecto
 -
@@ -78,22 +78,22 @@ El sistema fue desarrollado siguiendo principios de Arquitectura Limpia 🧠 y e
 
 ✅ Ventajas:
 -
-Código mantenible y escalable
+- Código mantenible y escalable
 
-Separación clara de responsabilidades
+- Separación clara de responsabilidades
 
-Fácil de extender y probar
+- Fácil de extender y probar
 
 🗄️ Base de Datos — PostgreSQL (Cloud SQL)
 -
 La base de datos se encuentra desplegada en Google Cloud SQL 🌐
 Cada tabla incluye:
 
-Secuencias automáticas (CREATE SEQUENCE)
+- Secuencias automáticas (CREATE SEQUENCE)
 
-Triggers para generar IDs personalizados (PA, A, P, D)
+- Triggers para generar IDs personalizados (PA, A, P, D)
 
-Restricciones de integridad y checks
+- Restricciones de integridad y checks
 
 📤 Migración (Script SQL)
 -
@@ -114,16 +114,21 @@ psql -h <host> -U <usuario> -d <nombre_bd> -f migracion.sql
 -
 🔧 Requisitos previos
 -
-Node.js v18 o superior
+- Node.js v18 o superior
 
-PostgreSQL (o acceso a la BD en Google Cloud)
+- PostgreSQL (o acceso a la BD en Google Cloud)
 
-Archivo .env con tus credenciales:
-DB_HOST=<host>
-DB_PORT=5432
-DB_USER=<usuario>
-DB_PASSWORD=<contraseña>
-DB_NAME=<nombre_bd>
+- Archivo .env con tus credenciales:
+
+  DB_HOST=<host>
+
+  DB_PORT=5432
+
+  DB_USER=<usuario>
+
+  DB_PASSWORD=<contraseña>
+
+  DB_NAME=<nombre_bd>
 
 Pasos de instalación
 -
@@ -179,27 +184,27 @@ npm start
 
 🧩 Validaciones Implementadas
 -
-Campos obligatorios (NOT NULL)
+- Campos obligatorios (NOT NULL)
 
-Tipos de datos adecuados (VARCHAR, INT, DATE, etc.)
+- Tipos de datos adecuados (VARCHAR, INT, DATE, etc.)
 
-Validación de opciones (CHECK para valores limitados)
+- Validación de opciones (CHECK para valores limitados)
 
-Unicidad básica en claves primarias
+- Unicidad básica en claves primarias
 
 🧾 Documentación
 -
 Cada módulo del CRUD cuenta con:
 -
-Entidad de dominio (core/dominio)
+- Entidad de dominio (core/dominio)
 
-DTO (transferencia de datos)
+- DTO (transferencia de datos)
 
-Caso de uso (core/aplicacion/casos-uso)
+- Caso de uso (core/aplicacion/casos-uso)
 
-Repositorio (core/infraestructura)
+- Repositorio (core/infraestructura)
 
-Controlador y rutas (presentation)
+- Controlador y rutas (presentation)
 
 PDF de la documentacion y enlace del video:
 -
