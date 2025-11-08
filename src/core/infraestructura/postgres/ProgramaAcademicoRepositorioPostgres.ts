@@ -31,9 +31,9 @@ export class ProgramaAcademicoRepositorio implements IProgramaAcademicoRepositor
     return result.rows;
   }
 
-  async obtenerProgramaPorId(id_pa: string): Promise<IProgramaAcademico | null> {
-    const query = "SELECT * FROM programa_academico WHERE id_pa = $1";
-    const result = await ejecutarConsulta(query, [id_pa]);
+  async obtenerProgramaPorId(id_programa: string): Promise<IProgramaAcademico | null> {
+    const query = "SELECT * FROM programa_academico WHERE id_programa = $1";
+    const result = await ejecutarConsulta(query, [id_programa]);
     return result.rows[0] || null;
   }
 
@@ -46,7 +46,7 @@ export class ProgramaAcademicoRepositorio implements IProgramaAcademicoRepositor
     const query = `
       UPDATE programa_academico
       SET ${setClause}
-      WHERE id_pa=$${parametros.length}
+      WHERE id_programa=$${parametros.length}
       RETURNING *;
     `;
 
@@ -54,7 +54,7 @@ export class ProgramaAcademicoRepositorio implements IProgramaAcademicoRepositor
     return result.rows[0];
   }
 
-  async eliminarPrograma(id_pa: string): Promise<void> {
-    await ejecutarConsulta("DELETE FROM programa_academico WHERE id_pa = $1", [id_pa]);
+  async eliminarPrograma(id_programa: string): Promise<void> {
+    await ejecutarConsulta("DELETE FROM programa_academico WHERE id_programa = $1", [id_programa]);
   }
 }

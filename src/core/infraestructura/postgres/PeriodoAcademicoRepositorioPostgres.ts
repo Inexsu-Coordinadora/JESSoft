@@ -31,9 +31,9 @@ export class PeriodoAcademicoRepositorio implements IPeriodoAcademicoRepositorio
     return result.rows;
   }
 
-  async obtenerPeriodoPorId(id_p: string): Promise<IPeriodoAcademico | null> {
-    const query = "SELECT * FROM periodo_academico WHERE id_p = $1";
-    const result = await ejecutarConsulta(query, [id_p]);
+  async obtenerPeriodoPorId(id_periodo: string): Promise<IPeriodoAcademico | null> {
+    const query = "SELECT * FROM periodo_academico WHERE id_periodo = $1";
+    const result = await ejecutarConsulta(query, [id_periodo]);
     return result.rows[0] || null;
   }
 
@@ -46,7 +46,7 @@ export class PeriodoAcademicoRepositorio implements IPeriodoAcademicoRepositorio
     const query = `
       UPDATE periodo_academico
       SET ${setClause}
-      WHERE id_p=$${parametros.length}
+      WHERE id_periodo=$${parametros.length}
       RETURNING *;
     `;
 
@@ -54,7 +54,7 @@ export class PeriodoAcademicoRepositorio implements IPeriodoAcademicoRepositorio
     return result.rows[0];
   }
 
-  async eliminarPeriodo(id_p: string): Promise<void> {
-    await ejecutarConsulta("DELETE FROM periodo_academico WHERE id_p = $1", [id_p]);
+  async eliminarPeriodo(id_periodo: string): Promise<void> {
+    await ejecutarConsulta("DELETE FROM periodo_academico WHERE id_periodo = $1", [id_periodo]);
   }
 }
