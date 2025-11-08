@@ -1,0 +1,64 @@
+{
+	"info": {
+		"_postman_id": "d0492ce9-d6d4-4106-add9-05278fcb73e5",
+		"name": "Crud Periodo Acdemico",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "37707864"
+	},
+	"item": [
+		{
+			"name": "Get Data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:3000/api/periodos"
+			},
+			"response": []
+		},
+		{
+			"name": "Post Data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n            \"fecha_inicio\": \"2025-07-19\",\n            \"fecha_fin\": \"2025-12-10\",\n            \"estado\": \"sds\",\n            \"descripcion\": \"Periodo académico 2025-2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:3000/api/periodos"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Data",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n            \"fecha_inicio\": \"2025-07-18\",\n            \"fecha_fin\": \"2025-12-23\",\n            \"estado\": \"activo\",\n            \"descripcion\": \"Periodo académico 2027-2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:3000/api/periodos/P8"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Data",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://127.0.0.1:3000/api/periodos/P8"
+			},
+			"response": []
+		}
+	]
+}
