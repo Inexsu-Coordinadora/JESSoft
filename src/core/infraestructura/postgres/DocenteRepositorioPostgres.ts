@@ -25,18 +25,19 @@ export class DocenteRepositorioPostgres implements IDocenteRepositorio {
   // 🔹 Listar docentes
   async listar(): Promise<Docente[]> {
     const { rows } = await pool.query<Docente>(
-      'SELECT id_d, cedula, nombre, apellido, especialidad, vinculacion FROM docente ORDER BY id_d'
+      'SELECT id_docente, cedula, nombre, apellido, especialidad, vinculacion FROM docente ORDER BY id_d'
     );
     return rows;
   }
+  
 
   // 🔹 Obtener por ID
   async buscarPorId(id: string): Promise<Docente | null> {
     const { rows } = await pool.query<Docente>(
       `
-      SELECT id_d, cedula, nombre, apellido, especialidad, vinculacion
+      SELECT id_docente, cedula, nombre, apellido, especialidad, vinculacion
       FROM docente
-      WHERE id_d = $1
+      WHERE id_docente = $1
       `,
       [id]
     );
@@ -52,7 +53,7 @@ export class DocenteRepositorioPostgres implements IDocenteRepositorio {
           apellido = $3,
           especialidad = $4,
           vinculacion = $5
-      WHERE id_d = $6
+      WHERE id_docente = $6
     `;
 
     const values = [
@@ -71,7 +72,7 @@ export class DocenteRepositorioPostgres implements IDocenteRepositorio {
   async eliminar(id: string): Promise<void> {
     const query = `
       DELETE FROM docente
-      WHERE id_d = $1
+      WHERE id_docente = $1
     `;
     await pool.query(query, [id]);
   }
