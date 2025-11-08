@@ -29,12 +29,12 @@ export class ProgramaAcademicoControlador {
   };
 
   obtenerProgramaPorId = async (
-    request: FastifyRequest<{ Params: { id_pa: string } }>,
+    request: FastifyRequest<{ Params: { id_plan: string } }>,
     reply: FastifyReply
   ) => {
     try {
-      const { id_pa } = request.params;
-      const programaEncontrado = await this.programaAcademicoCasoUso.obtenerProgramaPorId(id_pa);
+      const { id_plan } = request.params;
+      const programaEncontrado = await this.programaAcademicoCasoUso.obtenerProgramaPorId(id_plan);
 
       if (!programaEncontrado) {
         return reply.code(404).send({
@@ -81,14 +81,14 @@ export class ProgramaAcademicoControlador {
   };
 
   actualizarPrograma = async (
-    request: FastifyRequest<{ Params: { id_pa: string }; Body: IProgramaAcademico }>,
+    request: FastifyRequest<{ Params: { id_plan: string }; Body: IProgramaAcademico }>,
     reply: FastifyReply
   ) => {
     try {
-        const { id_pa } = request.params;
+        const { id_plan } = request.params;
         const nuevoPrograma = request.body;
         const programaActualizado = await this.programaAcademicoCasoUso.actualizarPrograma(
-            id_pa,
+            id_plan,
             nuevoPrograma
         );
 
@@ -98,7 +98,7 @@ export class ProgramaAcademicoControlador {
             });
         }
 
-        if (nuevoPrograma.id_pa && nuevoPrograma.id_pa !== id_pa) {
+        if (nuevoPrograma.id_plan && nuevoPrograma.id_plan !== id_plan) {
         return reply.code(400).send({
             mensaje: "No se permite modificar el ID del programa académico.",
         });
@@ -117,16 +117,16 @@ export class ProgramaAcademicoControlador {
     };
 
   eliminarPrograma = async (
-    request: FastifyRequest<{ Params: { id_pa: string } }>,
+    request: FastifyRequest<{ Params: { id_plan: string } }>,
     reply: FastifyReply
   ) => {
     try {
-      const { id_pa } = request.params;
-      await this.programaAcademicoCasoUso.eliminarPrograma(id_pa);
+      const { id_plan } = request.params;
+      await this.programaAcademicoCasoUso.eliminarPrograma(id_plan);
 
       return reply.code(200).send({
         mensaje: "Programa eliminado correctamente",
-        idPrograma: id_pa,
+        idPrograma: id_plan,
       });
     } catch (err) {
       return reply.code(500).send({

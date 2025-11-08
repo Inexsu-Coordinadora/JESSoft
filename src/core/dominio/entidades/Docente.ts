@@ -1,5 +1,5 @@
 export interface Docente {
-  id_d?: string; // generado automáticamente por la secuencia y trigger
+  id_docente?: string; // generado automáticamente por la secuencia y trigger
   cedula: string;
   nombre: string;
   apellido: string;
