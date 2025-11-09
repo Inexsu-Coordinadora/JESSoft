@@ -14,7 +14,7 @@ export const esquemaCrearOferta = z.object({
     .optional(), 
 
   cupo: z
-    .number({ required_error: "El cupo es obligatorio." })
+    .number({ message: "El cupo es obligatorio." })
     .int({ message: "El cupo debe ser un número entero." })
     .positive({ message: "El cupo debe ser mayor que cero." }),
 });

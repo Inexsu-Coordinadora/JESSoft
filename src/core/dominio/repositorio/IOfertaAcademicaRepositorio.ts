@@ -15,7 +15,7 @@ export interface IOfertaAcademicaRepositorio {
 
   crearOferta(datos: CrearOfertaAcademicaDTO): Promise<OfertaAcademica>;
 
-  listarOfertas(): Promise<OfertaAcademicaExtendidaDTO[]>;
+  listarOfertas(): Promise<CrearOfertaAcademicaDTO[]>;
 }
 
 

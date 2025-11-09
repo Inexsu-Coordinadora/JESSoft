@@ -101,7 +101,7 @@ export class PeriodoAcademicoControlador {
             });
         }
 
-        if (nuevoPeriodo.id_p && nuevoPeriodo.id_p !== id_p) {
+        if (nuevoPeriodo.id_periodo && nuevoPeriodo.id_periodo !== id_p) {
         return reply.code(400).send({
             mensaje: "No se permite modificar el ID del periodo académico.",
         });

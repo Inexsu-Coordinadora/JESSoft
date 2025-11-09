@@ -3,13 +3,14 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { esquemaCrearOferta } from "../esquemas/OfertaAcademicaEsquema";
 import { OfertaAcademicaCasoUso } from "../../core/aplicacion/casos-uso/OfertaAcademicaCasoUso";
 import { OfertaAcademicaRepositorioPostgres } from "../../core/infraestructura/postgres/OfertaAcademicaRepositorioPostgres";
+import { CrearOfertaAcademicaDTO } from "../../core/dominio/dtos/OfertaAcademicaDTO";
 
 const repositorio = new OfertaAcademicaRepositorioPostgres();
 const casoUso = new OfertaAcademicaCasoUso(repositorio);
 
-export async function crearOfertaAcademicaControlador(req: FastifyRequest, reply: FastifyReply) {
+export async function crearOfertaAcademicaControlador(req: FastifyRequest<{ Body: CrearOfertaAcademicaDTO }>, reply: FastifyReply) {
   try {
-    const datos = esquemaCrearOferta.parse(req.body); 
+    const datos = req.body;
     const resultado = await casoUso.crearOferta(datos);
     reply.code(201).send({
       mensaje: "Oferta académica creada correctamente",

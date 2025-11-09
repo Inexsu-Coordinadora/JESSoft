@@ -11,7 +11,7 @@ export class OfertaAcademicaCasoUso {
   }
 
   //Nueva oferta académica
-  public async crearOferta(datos: CrearOfertaAcademicaDTO): Promise<OfertaAcademicaDTO> {
+  public async crearOferta(datos: CrearOfertaAcademicaDTO): Promise<CrearOfertaAcademicaDTO> {
     const periodo = await this.repo.buscarPeriodo(datos.id_periodo);
     if (!periodo.existe) {
       throw new Error("El periodo académico no existe.");
@@ -46,8 +46,7 @@ export class OfertaAcademicaCasoUso {
     //Crear la oferta
     const nuevaOferta = await this.repo.crearOferta(datos);
 
-    const respuesta: OfertaAcademicaExtendidaDTO = {
-      id_oferta: nuevaOferta.id_oferta,
+    const respuesta: CrearOfertaAcademicaDTO = {
       id_periodo: nuevaOferta.id_periodo,
       id_plan: nuevaOferta.id_plan,
       grupo: nuevaOferta.grupo,
@@ -58,7 +57,7 @@ export class OfertaAcademicaCasoUso {
   }
 
   //Listar
-  public async listarOfertas(): Promise<OfertaAcademicaExtendidaDTO[]> {
+  public async listarOfertas(): Promise<CrearOfertaAcademicaDTO[]> {
   const lista = await this.repo.listarOfertas();
   return lista; 
 }

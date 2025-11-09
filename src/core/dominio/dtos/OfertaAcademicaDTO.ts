@@ -1,10 +1,28 @@
 //Crear oferta
-export interface CrearOfertaAcademicaDTO {
+export class CrearOfertaAcademicaDTO {
   id_periodo: string;
   id_plan: string;
   cupo: number;
   grupo?: string; 
+
+  constructor (
+    id_periodo: string,
+    id_plan: string,
+    cupo: number,
+    grupo?: string
+  ) {
+    this.id_periodo = id_periodo;
+    this.id_plan = id_plan;
+    this.cupo = cupo;
+    if (grupo) {
+      this.grupo = grupo;
+    }
+  }
 }
+
+
+
+//Listar ofertas
 
 export interface OfertaAcademicaExtendidaDTO {
   id_oferta: string;

@@ -20,7 +20,7 @@ export class ProgramaAcademicoCasoUso {
     }
 
     async actualizarPrograma(id_plan: string, programa: IProgramaAcademico): Promise<IProgramaAcademico | null> {
-        if (programa.id_plan && programa.id_plan !== id_plan) {
+        if (programa.id_programa && programa.id_programa !== id_plan) {
             throw new Error("No se permite modificar el ID del programa académico.");
         }
         const programaActualizado = await this.ProgramaAcademicoRepositorio.actualizarPrograma(

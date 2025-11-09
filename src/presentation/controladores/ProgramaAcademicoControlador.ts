@@ -98,7 +98,7 @@ export class ProgramaAcademicoControlador {
             });
         }
 
-        if (nuevoPrograma.id_plan && nuevoPrograma.id_plan !== id_plan) {
+        if (nuevoPrograma.id_programa && nuevoPrograma.id_programa !== id_plan) {
         return reply.code(400).send({
             mensaje: "No se permite modificar el ID del programa académico.",
         });
