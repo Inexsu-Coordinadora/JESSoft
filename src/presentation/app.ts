@@ -4,6 +4,7 @@ import { construirPeriodosEnrutador } from "./rutas/PeriodoAcademicoEnrutador.js
 import { construirProgramasEnrutador } from "./rutas/ProgramaAcademicoEnrutador.js";
 import { registrarAsignaturaRutas } from "./rutas/AsignaturaEnrutador.js";
 import { DocenteEnrutador } from "./rutas/DocenteEnrutador.js";
+import { construirPlanEstudioEnrutador } from "./rutas/PlanEstudioEnrutador.js";
 const app = fastify({ logger: true });
 
 app.register(
@@ -12,6 +13,7 @@ app.register(
     construirProgramasEnrutador(appInstance);
     registrarAsignaturaRutas(appInstance);
     DocenteEnrutador(appInstance);
+    construirPlanEstudioEnrutador(appInstance);
   },
   { prefix: "/api" }
 );
