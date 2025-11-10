@@ -23,12 +23,12 @@ export class OfertaAcademicaRepositorioPostgres implements IOfertaAcademicaRepos
   }
 
   // Comprobar duplicado (periodo + plan + grupo)
-  async existeGrupoDuplicado(id_periodo: string, id_plan: string, grupo: string): Promise<boolean> {
+  async existeGrupoDuplicado(id_periodo: string, id_plan: string): Promise<boolean> {
     const consulta = `
       SELECT 1 FROM oferta_academica 
-      WHERE id_periodo = $1 AND id_plan = $2 AND grupo = $3
+      WHERE id_periodo = $1 AND id_plan = $2 
     `;
-    const resultado = await pool.query(consulta, [id_periodo, id_plan, grupo]);
+    const resultado = await pool.query(consulta, [id_periodo, id_plan]);
     return (resultado.rowCount ?? 0) > 0;
   }
 
@@ -51,25 +51,78 @@ export class OfertaAcademicaRepositorioPostgres implements IOfertaAcademicaRepos
     );
   }
 
-//istar todas las ofertas académicas
-  async listarOfertas(): Promise<any[]> {
-    const query = `
-      SELECT 
+// Listar todas las ofertas académicas con datos relacionados
+async listarOfertas(): Promise<any[]> {
+  const res = await pool.query(
+    `SELECT 
         oa.id_oferta,
+        oa.id_periodo,
+        p.descripcion AS periodo_descripcion,
+        p.estado AS periodo_estado,
+        oa.id_plan,
+        pa.id_programa,
+        prog.nombre AS programa_nombre,
+        a.nombre AS asignatura_nombre,
         oa.grupo,
-        oa.cupo,
-        pa.descripcion AS periodo,
-        prog.nombre AS programa,
-        asig.nombre AS asignatura
-      FROM oferta_academica oa
-      JOIN periodo_academico pa ON pa.id_periodo = oa.id_periodo
-      JOIN plan_estudio pl ON pl.id_plan = oa.id_plan
-      JOIN programa_academico prog ON prog.id_programa = pl.id_programa
-      JOIN asignatura asig ON asig.id_asignatura = pl.id_asignatura
-      ORDER BY CAST(SUBSTRING(oa.id_oferta FROM 3) AS INTEGER);
-    `;
-    const resultado = await pool.query(query);
-    return resultado.rows;
-  }
+        oa.cupo
+     FROM oferta_academica oa
+     JOIN periodo_academico p ON oa.id_periodo = p.id_periodo
+     JOIN plan_estudio pa ON oa.id_plan = pa.id_plan
+     JOIN programa_academico prog ON pa.id_programa = prog.id_programa
+     JOIN asignatura a ON pa.id_asignatura = a.id_asignatura
+     ORDER BY oa.id_oferta ASC`
+  );
+  return res.rows;
+}
+
+
+  //Eliminar una oferta académica por su id
+async eliminarOferta(id_oferta: string): Promise<void> {
+  await pool.query(
+    "DELETE FROM oferta_academica WHERE id_oferta = $1",
+    [id_oferta]
+  );
+}
+
+async actualizarOferta(
+  id_oferta: string,
+  datos: { id_periodo?: string | null; id_plan?: string | null; cupo?: number | null }
+): Promise<void> {
+  await pool.query(
+    `UPDATE oferta_academica
+     SET 
+       id_periodo = COALESCE($1, id_periodo),
+       id_plan = COALESCE($2, id_plan),
+       cupo = COALESCE($3, cupo)
+     WHERE id_oferta = $4`,
+    [datos.id_periodo, datos.id_plan, datos.cupo, id_oferta]
+  );
+}
+
+// Buscar una oferta académica por su id
+async buscarPorId(id_oferta: string): Promise<any | null> {
+  const res = await pool.query(
+    `SELECT 
+        oa.id_oferta,
+        oa.id_periodo,
+        p.descripcion AS periodo_descripcion,
+        p.estado AS periodo_estado,
+        oa.id_plan,
+        pa.id_programa,
+        prog.nombre AS programa_nombre,
+        a.nombre AS asignatura_nombre,
+        oa.grupo,
+        oa.cupo
+     FROM oferta_academica oa
+     JOIN periodo_academico p ON oa.id_periodo = p.id_periodo
+     JOIN plan_estudio pa ON oa.id_plan = pa.id_plan
+     JOIN programa_academico prog ON pa.id_programa = prog.id_programa
+     JOIN asignatura a ON pa.id_asignatura = a.id_asignatura
+     WHERE oa.id_oferta = $1
+     LIMIT 1`,
+    [id_oferta]
+  );
+  return res.rows.length > 0 ? res.rows[0] : null;
+}
 }
 

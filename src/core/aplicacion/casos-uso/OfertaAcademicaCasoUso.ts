@@ -1,66 +1,76 @@
-
-import { CrearOfertaAcademicaDTO, OfertaAcademicaExtendidaDTO } from "../../dominio/dtos/OfertaAcademicaDTO";
+import { CrearOfertaAcademicaDTO } from "../../dominio/dtos/OfertaAcademicaDTO";
 import { IOfertaAcademicaRepositorio } from "../../dominio/repositorio/IOfertaAcademicaRepositorio";
-import { OfertaAcademica } from "../../dominio/entidades/OfertaAcademica";
 
 export class OfertaAcademicaCasoUso {
-  private repo: IOfertaAcademicaRepositorio;
+  constructor(private repo: IOfertaAcademicaRepositorio) {}
 
-  constructor(repo: IOfertaAcademicaRepositorio) {
-    this.repo = repo;
-  }
-
-  //Nueva oferta académica
-  public async crearOferta(datos: CrearOfertaAcademicaDTO): Promise<CrearOfertaAcademicaDTO> {
-    const periodo = await this.repo.buscarPeriodo(datos.id_periodo);
-    if (!periodo.existe) {
-      throw new Error("El periodo académico no existe.");
-    }
-
-    //Vr si el perido esta activo
-    if (periodo.estado !== "activo") {
-      throw new Error("No se puede realizar la oferta en un periodo inactivo.");
-    }
-
-    //Ver si el plan de estudio si existe 
-    const existePlan = await this.repo.buscarPlan(datos.id_plan);
-    if (!existePlan) {
-      throw new Error("El plan de estudio no existe.");
-    }
-
-    //Ver si no existe ese grupo
+  async crearOferta(datos: CrearOfertaAcademicaDTO) {
+    // Verificar si ya existe una oferta igual
     const duplicado = await this.repo.existeGrupoDuplicado(
       datos.id_periodo,
       datos.id_plan,
-      datos.grupo || "G1" // por si viene vacío el se crea
     );
+
     if (duplicado) {
-      throw new Error("Ya existe este grupo");
+      throw new Error("Ya existe una oferta con esa información");
     }
 
-    //Ver si el numero de cupos sirve 
-    if (datos.cupo <= 0) {
-      throw new Error("El cupo debe ser mayor que 0.");
-    }
-
-    //Crear la oferta
+    // Crear la oferta
     const nuevaOferta = await this.repo.crearOferta(datos);
-
-    const respuesta: CrearOfertaAcademicaDTO = {
-      id_periodo: nuevaOferta.id_periodo,
-      id_plan: nuevaOferta.id_plan,
-      grupo: nuevaOferta.grupo,
-      cupo: nuevaOferta.cupo,
+    return {
+      mensaje: "Oferta académica creada correctamente",
+      data: nuevaOferta,
     };
-
-    return respuesta;
   }
 
-  //Listar
-  public async listarOfertas(): Promise<CrearOfertaAcademicaDTO[]> {
-  const lista = await this.repo.listarOfertas();
-  return lista; 
+  async listarOfertas() {
+    return await this.repo.listarOfertas();
+  }
+
+  async eliminarOferta(id_oferta: string) {
+  // Primero verifica si la oferta existe
+  const ofertas = await this.repo.listarOfertas();
+  const existe = ofertas.some((o) => o.id_oferta === id_oferta);
+
+  if (!existe) {
+    throw new Error("La oferta académica no existe");
+  }
+
+  // Si existe, elimínala
+  await this.repo.eliminarOferta(id_oferta);
+  return { mensaje: `Oferta académica ${id_oferta} eliminada correctamente` };
 }
+
+async actualizarOferta(
+  id_oferta: string,
+  datos: { id_periodo?: string | null; id_plan?: string | null; cupo?: number | null }
+) {
+  const ofertas = await this.repo.listarOfertas();
+  const existe = ofertas.some((o) => o.id_oferta === id_oferta);
+  if (!existe) throw new Error("La oferta académica no existe");
+
+  if (datos.id_periodo && datos.id_plan) {
+    const duplicado = await this.repo.existeGrupoDuplicado(
+      datos.id_periodo,
+      datos.id_plan,
+    );
+    if (duplicado) throw new Error("Ya existe una oferta con ese período y plan");
+  }
+
+  await this.repo.actualizarOferta(id_oferta, datos);
+  return { mensaje: `Oferta académica ${id_oferta} actualizada correctamente` };
+}
+
+async buscarOfertaPorId(id_oferta: string) {
+  const oferta = await this.repo.buscarPorId(id_oferta);
+  if (!oferta) {
+    throw new Error("La oferta académica no existe");
+  }
+  return oferta;
+}
+
+
+
 }
 
 
