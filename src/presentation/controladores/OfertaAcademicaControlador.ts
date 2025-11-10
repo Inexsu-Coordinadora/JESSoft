@@ -1,6 +1,4 @@
-
 import { FastifyRequest, FastifyReply } from "fastify";
-import { esquemaCrearOferta } from "../esquemas/OfertaAcademicaEsquema";
 import { OfertaAcademicaCasoUso } from "../../core/aplicacion/casos-uso/OfertaAcademicaCasoUso";
 import { OfertaAcademicaRepositorioPostgres } from "../../core/infraestructura/postgres/OfertaAcademicaRepositorioPostgres";
 import { CrearOfertaAcademicaDTO } from "../../core/dominio/dtos/OfertaAcademicaDTO";
@@ -8,44 +6,76 @@ import { CrearOfertaAcademicaDTO } from "../../core/dominio/dtos/OfertaAcademica
 const repositorio = new OfertaAcademicaRepositorioPostgres();
 const casoUso = new OfertaAcademicaCasoUso(repositorio);
 
-export async function crearOfertaAcademicaControlador(req: FastifyRequest<{ Body: CrearOfertaAcademicaDTO }>, reply: FastifyReply) {
+export async function crearOfertaAcademicaControlador(
+  req: FastifyRequest<{ Body: CrearOfertaAcademicaDTO }>,
+  reply: FastifyReply
+) {
   try {
     const datos = req.body;
     const resultado = await casoUso.crearOferta(datos);
-    reply.code(201).send({
-      mensaje: "Oferta académica creada correctamente",
-      data: resultado,
-    });
-  } catch (error: any) {
-  let mensajeError = "Ocurrió un error inesperado.";
-  try {
-    const posibleError = JSON.parse(error.message);
-    if (Array.isArray(posibleError) && posibleError[0]?.message) {
-      mensajeError = posibleError[0].message;
-    }
-  } catch {
-    mensajeError = error.message;
-  }
-
-  reply.code(400).send({
-    mensaje: "Error al crear la oferta académica",
-    detalle: mensajeError,
-  });
-}
-
-}
-
-export async function listarOfertasAcademicasControlador(req: FastifyRequest, reply: FastifyReply) {
-  try {
-    const lista = await casoUso.listarOfertas();
-    reply.code(200).send({
-      mensaje: "Lista de ofertas académicas",
-      data: lista,
-    });
-  } catch (error: any) {
-    reply.code(500).send({
-      mensaje: "Error al listar las ofertas académicas",
-      detalle: error.message,
+    reply.code(201).send(resultado);
+  } catch (error) {
+    reply.code(400).send({
+      mensaje: (error as Error).message,
     });
   }
 }
+
+export async function listarOfertasAcademicasControlador(
+  req: FastifyRequest,
+  reply: FastifyReply
+) {
+  const resultado = await casoUso.listarOfertas();
+  reply.send(resultado);
+}
+
+export async function eliminarOfertaAcademicaControlador(
+  req: FastifyRequest<{ Params: { id: string } }>,
+  reply: FastifyReply
+) {
+  try {
+    const { id } = req.params;
+    const resultado = await casoUso.eliminarOferta(id);
+    reply.code(200).send(resultado);
+  } catch (error) {
+    reply.code(400).send({
+      mensaje: (error as Error).message,
+    });
+  }
+}
+
+export async function actualizarOfertaAcademicaControlador(
+  req: FastifyRequest<{ Params: { id: string }; Body: { id_periodo?: string; id_plan?: string; cupo?: number } }>,
+  reply: FastifyReply
+) {
+  try {
+    const { id } = req.params;
+    const { id_periodo, id_plan, cupo } = req.body;
+    const resultado = await casoUso.actualizarOferta(id, {
+      id_periodo: id_periodo ?? null,
+      id_plan: id_plan ?? null,
+      cupo: cupo ?? null,
+    });
+    reply.code(200).send(resultado);
+  } catch (error) {
+    reply.code(400).send({
+      mensaje: (error as Error).message,
+    });
+  }
+}
+export async function buscarOfertaPorIdControlador(
+  req: FastifyRequest<{ Params: { id: string } }>,
+  reply: FastifyReply
+) {
+  try {
+    const { id } = req.params;
+    const oferta = await casoUso.buscarOfertaPorId(id);
+    reply.code(200).send(oferta);
+  } catch (error) {
+    reply.code(404).send({
+      mensaje: (error as Error).message,
+    });
+  }
+}
+
+
