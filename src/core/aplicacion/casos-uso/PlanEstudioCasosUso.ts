@@ -1,4 +1,4 @@
-import { IPlanEstudioCasosUso } from "../repositorio-casos-uso/IPlanEstudioCasosUso.js";
+import { IPlanEstudioCasosUso } from "../repositorio-casos-uso/IPlanEstudioCasosUso";
 import { IPlanEstudioRepositorio } from "../../dominio/repositorio/IPlanEstudioRepositorio.js";
 import { PlanEstudio } from "../../dominio/entidades/PlanEstudio.js";
 import { IAsignaturaCasosUso } from "../repositorio-casos-uso/IAsignaturaCasosUso";
