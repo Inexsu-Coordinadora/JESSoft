@@ -5,19 +5,22 @@ import { PlanEstudio } from "../../dominio/entidades/PlanEstudio";
 
 export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
     async crearPlanEstudio(plan: PlanEstudio): Promise<string> {
-        const columnas = Object.keys(plan).map((key) => key.toLowerCase());
-        const parametros: Array<string | number> = Object.values(plan);
-        const placeholders = columnas.map((_, i) => `$${i + 1}`).join(", ");
+        const parametros = [
+            plan.getidProgramaAcademico(),
+            plan.getidAsignatura(),
+            plan.getSemestre(),
+        ];
 
         const query = `
-            INSERT INTO plan_estudio (${columnas.join(", ")})
-            VALUES (${placeholders})
-            RETURNING *  
-    `;
+    INSERT INTO plan_estudio (id_programa, id_asignatura, semestre)
+    VALUES ($1, $2, $3)
+    RETURNING id_plan;
+  `;
 
         const respuesta = await ejecutarConsulta(query, parametros);
         return respuesta.rows[0].id_plan;
     }
+
     async obtenerTodo(limite?: number): Promise<IPlanEstudio[]> {
         let query = "SELECT * FROM plan_estudio";
         const parametros: number[] = [];
