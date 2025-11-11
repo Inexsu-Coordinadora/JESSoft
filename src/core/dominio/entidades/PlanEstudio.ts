@@ -1,27 +1,25 @@
 export class PlanEstudio {
-
-    private id_programaAcademico: string;
-    private id_asignatura: string;
+    private id_plan: String;
+    private id_asignatura: String;
+    private id_programa: String;
     private semestre: number;
 
-    constructor(
-        id_programaAcademico: string,
-        id_asignatura: string,
-        semestre: number,
-    ) {
-        this.id_programaAcademico = id_programaAcademico;
+    constructor(id_plan: String, id_asignatura: String, id_programa: String, semestre: number) {
+        this.id_plan = id_plan;
         this.id_asignatura = id_asignatura;
+        this.id_programa = id_programa;
         this.semestre = semestre;
     }
-
-    getidProgramaAcademico(): string {
-        return this.id_programaAcademico;
+    public getIdPlan(): String {
+        return this.id_plan;
     }
-    getidAsignatura(): string {
+    public getIdAsignatura(): String {
         return this.id_asignatura;
     }
-    getSemestre(): number {
+    public getIdPrograma(): String {
+        return this.id_programa;
+    }
+    public getSemestre(): number {
         return this.semestre;
     }
-
 }

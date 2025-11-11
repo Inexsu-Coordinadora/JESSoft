@@ -8,6 +8,24 @@ export class PeriodoAcademicoRepositorio implements IPeriodoAcademicoRepositorio
     const parametros: Array<string | number> = Object.values(datosPeriodoAcademico);
     const placeholders = columnas.map((_, i) => `$${i + 1}`).join(", ");
 
+    const buscarPeriodoQuery = `
+      SELECT * FROM periodo_academico
+      WHERE fecha_inicio = $1 AND fecha_fin = $2
+    `;
+
+    if (datosPeriodoAcademico.fecha_inicio.getFullYear() > datosPeriodoAcademico.fecha_fin.getFullYear()) {
+      throw new Error("El año de fecha_inicio debe ser menor o igual al año de fecha_fin");
+    }
+
+    const periodoExistente = await pool.query(buscarPeriodoQuery, [
+      datosPeriodoAcademico.fecha_inicio,
+      datosPeriodoAcademico.fecha_fin,
+    ]);
+    
+    if (periodoExistente.rows.length > 0) {
+      throw new Error("Ya existe un periodo académico con las mismas fechas de inicio y fin");
+    }
+
     const query = `
       INSERT INTO periodo_academico (${columnas.join(", ")})
       VALUES (${placeholders})
