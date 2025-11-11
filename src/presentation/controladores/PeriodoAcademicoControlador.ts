@@ -75,6 +75,16 @@ export class PeriodoAcademicoControlador {
           mensaje: "Error crear un nuevo periodo",
           error: err.issues[0]?.message || "Error desconocido",
         });
+      } else if (err instanceof Error && err.message === "El año de fecha_inicio debe ser menor o igual al año de fecha_fin") {
+        return reply.code(400).send({
+          mensaje: "El año de fecha_inicio debe ser menor o igual al año de fecha_fin",
+          error: err.message,
+        });
+      } else if (err instanceof Error && err.message === "Ya existe un periodo académico con las mismas fechas de inicio y fin") {
+        return reply.code(409).send({
+          mensaje: "Ya existe un periodo académico con las mismas fechas de inicio y fin",
+          error: err.message,
+        });
       }
       return reply.code(500).send({
         mensaje: "Error crear un nuevo periodo",

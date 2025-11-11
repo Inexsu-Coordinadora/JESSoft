@@ -81,6 +81,25 @@ export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
     }
 
     async actualizar(planEstudio: PlanEstudio): Promise<void> {
+        const queryBuscarPlanEstudio = `SELECT * FROM plan_estudio WHERE id_asignatura = $1 AND id_programa = $2 AND semestre = $3`;
+        const queryBuscarAsignatura_Programa = `SELECT * FROM plan_estudio WHERE id_asignatura = $1 AND id_programa = $2`;
+        const resultBuscarPlanEstudio = await pool.query(queryBuscarPlanEstudio, [
+            planEstudio.getIdAsignatura(),
+            planEstudio.getIdPrograma(),
+            planEstudio.getSemestre(),
+        ]);
+        if (resultBuscarPlanEstudio.rows.length > 0) {
+            throw new Error("Ya existe un plan de estudio con esos datos.");
+        }
+
+        const resultBuscarAsignatura_Programa = await pool.query(queryBuscarAsignatura_Programa, [
+            planEstudio.getIdAsignatura(),
+            planEstudio.getIdPrograma(),
+        ]);
+
+        if (resultBuscarAsignatura_Programa.rows.length > 0) {
+            throw new Error("Ya existe un plan de estudio para esa asignatura en ese programa.");
+        }
         const query = `
       UPDATE plan_estudio
       SET id_asignatura = $1, id_programa = $2, semestre = $3

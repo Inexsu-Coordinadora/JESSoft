@@ -60,8 +60,22 @@ export class PlanEstudioControlador {
                 planEstudioActualizado
             });
         } catch (error) {
-            console.error("Error actualizando plan de estudio:", error);
-            return res.status(500).send({ mensaje: "Error interno al actualizar plan de estudio" });
+            if (error instanceof Error && (error.message === "Ya existe un plan de estudio con esos datos." || error.message === "Ya existe un plan de estudio con ese ID.")) {
+                return res.status(400).send({ mensaje: error.message });
+            } else if (error instanceof Error && error.message === "Ya existe un plan de estudio para esa asignatura en ese programa.") {
+                return res.status(409).send({ mensaje: error.message });
+            } else if (error instanceof Error && error.message.includes("insert or update on table \"plan_estudio\" violates foreign key constraint \"plan_estudio_id_asignatura_fkey\"")) {
+                return res.status(400).send({ mensaje: "El ID de asignatura no existe." });
+            } else if (error instanceof Error && error.message.includes("insert or update on table \"plan_estudio\" violates foreign key constraint \"plan_estudio_id_programa_fkey\"")) {
+                return res.status(400).send({ mensaje: "El ID de programa no existe." });
+            } else if (error instanceof ZodError) {
+                return res.code(400).send({
+                    mensaje: "Error al actualizar un nuevo programa",
+                    error: error.issues[0]?.message || "Error desconocido",
+                });
+            }
+            console.error("Error creando plan de estudio:", error);
+            return res.status(500).send({ mensaje: "Error interno al crear plan de estudio" });
         }
     }
 
