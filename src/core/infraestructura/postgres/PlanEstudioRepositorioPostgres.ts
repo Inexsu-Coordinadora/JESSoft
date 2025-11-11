@@ -23,7 +23,7 @@ export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
         const parametros: number[] = [];
 
         if (limite !== undefined) {
-            query += "LIMIT $1";
+            query += " LIMIT $1";
             parametros.push(limite);
         }
 
@@ -55,7 +55,7 @@ export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
     }
 
     async eliminarPlan(id_plan: string): Promise<void> {
-        await ejecutarConsulta("DELETE FROM programa_academico WHERE id_programa = $1", [id_plan])
+        await ejecutarConsulta("DELETE FROM plan_estudio WHERE id_plan = $1", [id_plan])
     }
 
     async buscarPorProgramaYAsignatura(id_programa: string, id_asignatura: string, semestre: number): Promise<IPlanEstudio | null> {
@@ -74,7 +74,7 @@ export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
     }
 
     async existeAsignatura(id_asignatura: string): Promise<Boolean> {
-        const query = "SELECT 1 FROM programa_academico WHERE id_programa = $1";
+        const query = "SELECT 1 FROM asignatura WHERE id_asignatura = $1";
         const resultado = await ejecutarConsulta(query, [id_asignatura]);
         return (resultado.rowCount ?? 0) > 0;
     }
