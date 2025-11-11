@@ -1,11 +1,10 @@
-import { IPlanEstudio } from "../../dominio/entidades/IPlanEstudio";
-import { planEstudioDTO } from "../../../presentation/esquemas/PlanEstudioEsquema";
-export interface IplanEstudioCasosUso{
-    crearPlanEstudio(planEstudio: planEstudioDTO): Promise<string>;
-    obtenerPlanes(limite?: number):Promise<IPlanEstudio[]>;
-    obtenerPorId(id_plan:string): Promise<IPlanEstudio|null>;
-    actualizarPlan(id_plan:string, plan: IPlanEstudio): Promise<IPlanEstudio|null>;
-    eliminarPlan(id_plan:string):Promise<void>;
-   
-}
+import { PlanEstudio } from "../../dominio/entidades/PlanEstudio";
+import { PlanEstudioDTO } from "../../../presentation/esquemas/PlanDeEstudioEsquema";
 
+export interface IPlanEstudioCasosUso {
+    obtenerTodos(): Promise<PlanEstudio[]>;
+    obtenerPorId(id: string): Promise<PlanEstudio | null>;
+    crear(planEstudioDto: PlanEstudioDTO): Promise<String>;
+    eliminar(id: string): Promise<void>;
+    actualizar(planEstudioDto: PlanEstudioDTO, id: string): Promise<PlanEstudioDTO>;
+}

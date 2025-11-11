@@ -1,22 +1,18 @@
 import { FastifyInstance } from "fastify";
 import { PlanEstudioControlador } from "../controladores/PlanEstudioControlador";
-import { IPlanEstudioRepositorio } from "../../core/dominio/repositorio/IPlanEstudioRepositorio";
-import { PlanEstudioRepositorio } from "../../core/infraestructura/postgres/planEstudioRepositorioPostgres";
+import { PlanEstudioRepositorio } from "../../core/infraestructura/postgres/PlanEstudioRepositorio";
 import { PlanEstudioCasosUso } from "../../core/aplicacion/casos-uso/PlanEstudioCasosUso";
+import { IPlanEstudioRepositorio } from "../../core/dominio/repositorio/IPlanEstudioRepositorio";
 
-function planEstudioEnrutador(app: FastifyInstance, PlanEstudioControlador: PlanEstudioControlador) {
-    app.post("/plan-estudio", PlanEstudioControlador.crearPlanEstudio);
-    app.get("/plan-estudio", PlanEstudioControlador.obtenerTodo);
-    app.get("/plan-estudio/:id_plan", PlanEstudioControlador.obtenerPorId);
-    app.put("/plan-estudio/:id_plan", PlanEstudioControlador.actualizarPlan);
-    app.delete("/plan-estudio/:id_plan", PlanEstudioControlador.eliminarPlan);
+function planEstudioEnrutador(app: FastifyInstance, planEstudioControlador: PlanEstudioControlador) {
+    app.post("/planes-estudio", planEstudioControlador.crear);
+    app.get("/planes-estudio", planEstudioControlador.listar);
+    app.put("/planes-estudio/:id", planEstudioControlador.actualizar);
+    app.delete("/planes-estudio/:id", planEstudioControlador.eliminar);
 }
-
-
-export async function construirPlanEstudioEnrutador(app: FastifyInstance) {
-    const planesRepositorio: IPlanEstudioRepositorio = new PlanEstudioRepositorio();
-    const planesCasosUso = new PlanEstudioCasosUso(planesRepositorio);
-    const planesControlador = new PlanEstudioControlador(planesCasosUso);
-
-    planEstudioEnrutador(app, planesControlador);
+export async function registrarPlanEstudioRutas(app: FastifyInstance) {
+    const planEstudioRepositorio: IPlanEstudioRepositorio = new PlanEstudioRepositorio();
+    const planEstudioCasosUso = new PlanEstudioCasosUso(planEstudioRepositorio);
+    const planEstudioControlador = new PlanEstudioControlador(planEstudioCasosUso);
+    planEstudioEnrutador(app, planEstudioControlador);
 }

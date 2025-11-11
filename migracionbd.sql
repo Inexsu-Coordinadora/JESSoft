@@ -34,14 +34,14 @@ $$;
 
 
 --
--- Name: gen_id_d(); Type: FUNCTION; Schema: public; Owner: -
+-- Name: gen_id_docenteocente(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION public.gen_id_d() RETURNS trigger
+CREATE FUNCTION public.gen_id_docenteocente() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
-  NEW.id_d := 'D' || nextval('docente_seq');
+  NEW.id_docenteocente := 'D' || nextval('docente_seq');
   RETURN NEW;
 END;
 $$;
@@ -62,14 +62,14 @@ $$;
 
 
 --
--- Name: gen_id_pa(); Type: FUNCTION; Schema: public; Owner: -
+-- Name: gen_id_plan(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION public.gen_id_pa() RETURNS trigger
+CREATE FUNCTION public.gen_id_plan() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
-  NEW.id_pa := 'PA' || nextval('programa_seq');
+  NEW.id_plan := 'PA' || nextval('programa_seq');
   RETURN NEW;
 END;
 $$;
@@ -111,7 +111,7 @@ CREATE SEQUENCE public.asignatura_seq
 --
 
 CREATE TABLE public.docente (
-    id_d character varying(15) NOT NULL,
+    id_docenteocente character varying(15) NOT NULL,
     nombre character varying(50) NOT NULL,
     apellido character varying(50) NOT NULL,
     especialidad character varying(20) NOT NULL,
@@ -164,7 +164,7 @@ CREATE SEQUENCE public.periodo_seq
 --
 
 CREATE TABLE public.programa_academico (
-    id_pa character varying NOT NULL,
+    id_plan character varying NOT NULL,
     nombre character varying(50) NOT NULL,
     informacion character varying(50) NOT NULL,
     nivel_educativo character varying(20) NOT NULL,
@@ -205,7 +205,7 @@ A20	Bases de datos III	4	4	practica	Fundamentos de programación
 -- Data for Name: docente; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.docente (id_d, nombre, apellido, especialidad, vinculacion, cedula) FROM stdin;
+COPY public.docente (id_docenteocente, nombre, apellido, especialidad, vinculacion, cedula) FROM stdin;
 D8	Carlos	Ramírez	Informática	Tiempo completo	2839405758
 D10	María	González	Finanzas	Catedra	2940273003
 D11	Julián	Pérez	Diseño	Medio tiempo	294027204
@@ -229,7 +229,7 @@ P3	2026-01-15	2026-06-15	en preparacion	Periodo académico 2026-1
 -- Data for Name: programa_academico; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.programa_academico (id_pa, nombre, informacion, nivel_educativo, duracion, modalidad) FROM stdin;
+COPY public.programa_academico (id_plan, nombre, informacion, nivel_educativo, duracion, modalidad) FROM stdin;
 PA1	Ingeniería de Sistemas	Formación en software y redes	Pregrado	10 semestres	Presencial
 PA2	Administración de Empresas	Gestión y liderazgo empresarial	Pregrado	8 semestres	Virtual
 PA3	Diseño Gráfico	Creatividad y comunicación visual	Pregrado	8 semestres	Presencial
@@ -287,7 +287,7 @@ ALTER TABLE ONLY public.docente
 --
 
 ALTER TABLE ONLY public.docente
-    ADD CONSTRAINT docente_pkey PRIMARY KEY (id_d);
+    ADD CONSTRAINT docente_pkey PRIMARY KEY (id_docenteocente);
 
 
 --
@@ -303,7 +303,7 @@ ALTER TABLE ONLY public.periodo_academico
 --
 
 ALTER TABLE ONLY public.programa_academico
-    ADD CONSTRAINT programa_academico_pkey PRIMARY KEY (id_pa);
+    ADD CONSTRAINT programa_academico_pkey PRIMARY KEY (id_plan);
 
 
 --
@@ -314,10 +314,10 @@ CREATE TRIGGER trg_id_a BEFORE INSERT ON public.asignatura FOR EACH ROW EXECUTE 
 
 
 --
--- Name: docente trg_id_d; Type: TRIGGER; Schema: public; Owner: -
+-- Name: docente trg_id_docente; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER trg_id_d BEFORE INSERT ON public.docente FOR EACH ROW EXECUTE FUNCTION public.gen_id_d();
+CREATE TRIGGER trg_id_docente BEFORE INSERT ON public.docente FOR EACH ROW EXECUTE FUNCTION public.gen_id_docente();
 
 
 --
@@ -328,10 +328,10 @@ CREATE TRIGGER trg_id_p BEFORE INSERT ON public.periodo_academico FOR EACH ROW E
 
 
 --
--- Name: programa_academico trg_id_pa; Type: TRIGGER; Schema: public; Owner: -
+-- Name: programa_academico trg_id_plan; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER trg_id_pa BEFORE INSERT ON public.programa_academico FOR EACH ROW EXECUTE FUNCTION public.gen_id_pa();
+CREATE TRIGGER trg_id_plan BEFORE INSERT ON public.programa_academico FOR EACH ROW EXECUTE FUNCTION public.gen_id_plan();
 
 
 --

@@ -1,5 +1,5 @@
 export interface IProgramaAcademico{
-    id_pa? : string,
+    id_programa? : string,
     nombre : string,
     informacion : string,
     nivel_educativo : string,
