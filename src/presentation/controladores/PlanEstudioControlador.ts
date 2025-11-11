@@ -83,7 +83,9 @@ export class PlanEstudioControlador {
         try {
             const id = req.params.id;
             await planEstudioCasosUso.eliminar(id);
-            return res.status(204).send({ mensaje: "Plan de estudio eliminado correctamente", id: id });
+            return res.status(204).send({
+                 mensaje: "Plan de estudio eliminado correctamente",
+                 id: id });
         } catch (error) {
             if (error instanceof Error && error.message === "No existe un plan de estudio con ese ID.") {
                 return res.status(404).send({ mensaje: error.message });
