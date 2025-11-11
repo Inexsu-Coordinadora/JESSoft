@@ -9,10 +9,10 @@ function programaAcademicoEnrutador(
   programaControlador: ProgramaAcademicoControlador
 ) {
   app.get("/programas", programaControlador.obtenerProgramas);
-  app.get("/programas/:id_plan", programaControlador.obtenerProgramaPorId);
+  app.get("/programas/:id_pa", programaControlador.obtenerProgramaPorId);
   app.post("/programas", programaControlador.crearPrograma);
-  app.put("/programas/:id_plan", programaControlador.actualizarPrograma);
-  app.delete("/programas/:id_plan", programaControlador.eliminarPrograma);
+  app.put("/programas/:id_pa", programaControlador.actualizarPrograma);
+  app.delete("/programas/:id_pa", programaControlador.eliminarPrograma);
 }
 
 export async function construirProgramasEnrutador(app: FastifyInstance) {
