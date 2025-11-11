@@ -20,7 +20,7 @@ export class PeriodoAcademicoCasoUso implements IPeriodoAcademicoCasoUso {
     }
 
     async actualizarPeriodo(id_p: string, periodo: IPeriodoAcademico): Promise<IPeriodoAcademico | null> {
-        if (periodo.id_p && periodo.id_p !== id_p) {
+        if (periodo.id_periodo && periodo.id_periodo !== id_p) {
             throw new Error("No se permite modificar el ID del periodo académico.");
         }
         const periodoActualizado = await this.PeriodoAcademicoRepositorio.actualizarPeriodo(
