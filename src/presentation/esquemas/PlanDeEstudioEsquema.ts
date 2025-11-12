@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const EsquemaPlanEstudio = z.object({
+
   id_programa: z
     .string()
     .nonempty("El ID del programa académico es obligatorio")
@@ -15,6 +16,7 @@ export const EsquemaPlanEstudio = z.object({
     .number()
     .int("El semestre debe ser un número entero")
     .positive("El semestre debe ser mayor que 0"),
+
 });
 
 export type PlanEstudioDTO = z.infer<typeof EsquemaPlanEstudio>;

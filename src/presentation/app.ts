@@ -20,6 +20,7 @@ app.register(
   { prefix: "/api" }
 );
 
+
 export const startServer = async (): Promise<void> => {
   try {
     await app.listen({ port: 3000 });
@@ -35,6 +36,7 @@ export const startServer = async (): Promise<void> => {
     };
 
     throw serverError;
+
   }
 }
 
