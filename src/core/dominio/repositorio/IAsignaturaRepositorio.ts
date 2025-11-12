@@ -5,5 +5,5 @@ export interface IAsignaturaRepositorio {
   obtenerPorId(id: string): Promise<Asignatura | null>;
   crear(asignatura: Asignatura): Promise<void>;
   eliminar(id: string): Promise<void>;
-  actualizar(asignatura: Asignatura): Promise<void>;
+  actualizar(asignatura: Asignatura, id: string): Promise<void>;
 }
