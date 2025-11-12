@@ -39,7 +39,7 @@ export const EsquemaAsignatura = z.object({
   descripcion: z
     .string()
     .nonempty("La descripción es obligatoria")
-    .max(200, "La descripción no puede tener más de 200 caracteres")
+    .max(50, "La descripción no puede tener más de 200 caracteres")
     .transform(capitalizar),
 });
 
