@@ -15,7 +15,7 @@ Cada entidad cuenta con sus respectivas validaciones, estructura de base de dato
 -
 Contiene la información general del programa:
 
-- ID (autogenerado)
+- Id_programa (autogenerado)
 
 - Nombre
 
@@ -31,7 +31,7 @@ Contiene la información general del programa:
 -
 Datos de las materias que componen los programas:
 
-- ID (autogenerado)
+- Id_asignatura (autogenerado)
 
 - Nombre
 
@@ -47,7 +47,7 @@ Datos de las materias que componen los programas:
 -
 Representa los ciclos académicos de la institución:
 
-- ID (autogenerado)
+- Id_periodo (autogenerado)
 
 - Fecha de inicio
 
@@ -61,7 +61,9 @@ Representa los ciclos académicos de la institución:
 -
 Información del cuerpo docente:
 
-- ID (autogenerado)
+- Id_docente (autogenerado)
+
+- Cedula
 
 - Nombre
 
@@ -71,23 +73,27 @@ Información del cuerpo docente:
 
 - Vinculación (Tiempo completo, Cátedra, Medio tiempo)
 
-📚 5. Plan de Estudio
+🧩 **Entidades Dependientes**
+
+📚 1. Plan de Estudio
 -
 Relaciona programas académicos con las asignaturas que los componen:
 
-- ID (autogenerado)
+- Id_plan (autogenerado)
 
 - ID del programa académico (FK)
 
 - ID de la asignatura (FK)
 
+- Semestre
+
 Semestre
 
-🏫 6. Oferta Académica
+🏫 2. Oferta Académica
 -
 Representa los grupos y cupos disponibles para un período académico determinado:
 
-- ID (autogenerado)
+- Id_oferta (autogenerado)
 
 - ID del período académico (FK)
 
@@ -97,11 +103,11 @@ Representa los grupos y cupos disponibles para un período académico determinad
 
 - Cupo
 
-🧑‍🏫 7. Asignación Docente
+🧑‍🏫 3. Asignación Docente
 -
 Define qué docente imparte qué grupo y oferta académica:
 
-- ID (autogenerado)
+- Id_asignacion (autogenerado)
 
 - ID del docente (FK)
 
@@ -277,8 +283,16 @@ Cada módulo del CRUD cuenta con:
 
 PDF de la documentacion y enlace del video:
 -
+Entrega 1 
+-
 - [Informe-JESSoft.pdf](https://github.com/user-attachments/files/23347979/Informe-JESSoft.pdf)
 - https://youtu.be/PgmNPc9FmsM
+
+Entrega 2
+-
+- [Informe2-JESSOFT.pdf](https://github.com/user-attachments/files/23515733/Informe2-JESSOFT.pdf)
+- https://www.youtube.com/watch?v=GHNqmps0C8s
+
   
 Checklist de completado:
 -
