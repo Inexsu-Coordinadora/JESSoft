@@ -71,6 +71,42 @@ Información del cuerpo docente:
 
 - Vinculación (Tiempo completo, Cátedra, Medio tiempo)
 
+📚 5. Plan de Estudio
+-
+Relaciona programas académicos con las asignaturas que los componen:
+
+- ID (autogenerado)
+
+- ID del programa académico (FK)
+
+- ID de la asignatura (FK)
+
+Semestre
+
+🏫 6. Oferta Académica
+-
+Representa los grupos y cupos disponibles para un período académico determinado:
+
+- ID (autogenerado)
+
+- ID del período académico (FK)
+
+- ID del plan de estudio (FK)
+
+- Grupo (autogenerado)
+
+- Cupo
+
+🧑‍🏫 7. Asignación Docente
+-
+Define qué docente imparte qué grupo y oferta académica:
+
+- ID (autogenerado)
+
+- ID del docente (FK)
+
+- ID de la oferta académica (FK)
+
 🧱 Arquitectura del Proyecto
 -
 El sistema fue desarrollado siguiendo principios de Arquitectura Limpia 🧠 y enfoque hexagonal, separando responsabilidades por capas:
@@ -182,7 +218,29 @@ npm start
 | `PUT`    | `/periodos/:id`    | Actualiza un periodo        |
 | `DELETE` | `/periodos/:id`    | Elimina un periodo          |
 
-🧩 Validaciones Implementadas
+| Método   | Endpoint              | Descripción                       |
+| -------- | --------------------- | --------------------------------- |
+| `GET`    | `/planes-estudio`     | Lista todos los planes de estudio |
+| `POST`   | `/planes-estudio`     | Crea un nuevo plan de estudio     |
+| `PUT`    | `/planes-estudio/:id` | Actualiza un plan de estudio      |
+| `DELETE` | `/planes-estudio/:id` | Elimina un plan de estudio        |
+
+| Método   | Endpoint                 | Descripción                        |
+| -------- | ------------------------ | ---------------------------------- |
+| `GET`    | `/ofertaa-academica`     | Lista todas las ofertas académicas |
+| `POST`   | `/ofertaa-academica`     | Crea una nueva oferta académica    |
+| `PUT`    | `/ofertaa-academica/:id` | Actualiza una oferta académica     |
+| `DELETE` | `/ofertaa-academica/:id` | Elimina una oferta académica       |
+
+| Método   | Endpoint                     | Descripción                  |
+| -------- | ------------------- | ------------------------------------- |
+| `GET`    | `/asignaciones`     | Lista todas las asignaciones docentes |
+| `POST`   | `/asignaciones`     | Crea una nueva asignación docente     |
+| `PUT`    | `/asignaciones/:id` | Actualiza una asignación docente      |
+| `DELETE` | `/asignaciones/:id` | Elimina una asignación docente        |
+
+
+🧩 Validaciones Generales Implementadas
 -
 - Campos obligatorios (NOT NULL)
 
@@ -191,6 +249,15 @@ npm start
 - Validación de opciones (CHECK para valores limitados)
 
 - Unicidad básica en claves primarias
+  
+- Prevención de modificación de IDs en actualizaciones.
+  
+- Validaciones de entrada: mediante Zod, garantizando que los datos enviados desde el cliente cumplan con el formato, tipo y estructura esperada
+
+- Manejo de errores controlado: uso de bloques try/catch y mensajes descriptivos con códigos HTTP adecuados
+
+- Integridad referencial: asegurada mediante claves foráneas (FOREIGN KEY) entre las tablas relacionadas
+
 
 🧾 Documentación
 -
@@ -205,6 +272,8 @@ Cada módulo del CRUD cuenta con:
 - Repositorio (core/infraestructura)
 
 - Controlador y rutas (presentation)
+  
+- Validaciones (Core)
 
 PDF de la documentacion y enlace del video:
 -
@@ -214,15 +283,16 @@ PDF de la documentacion y enlace del video:
 Checklist de completado:
 -
 
-| Estado | Ítem                                 | Descripción                                                                                                                                                                 |
-| :----: | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    ✅   | **Migraciones implementadas**        | Se crearon las migraciones en PostgreSQL para las entidades `Programa Académico`, `Asignatura`, `Periodo Académico` y `Docente`, con sus respectivas secuencias y triggers. |
-|    ✅   | **CRUD completo para cada entidad**  | Se desarrollaron los endpoints de creación, lectura, actualización y eliminación con validaciones y manejo de errores.                                                      |
-|    ✅   | **Validaciones básicas aplicadas**   | Se implementaron restricciones de tipo, obligatoriedad y valores controlados (CHECK, NOT NULL, etc.).                                                                       |
-|    ✅   | **Documentación mínima actualizada** | El proyecto cuenta con un `README.md` detallado con pasos de instalación, ejecución, migraciones y estructura del proyecto.                                                 |
-|    ✅   | **Video demostrativo agregado**      | Se grabó un video mostrando el funcionamiento de los CRUDs y la conexión con la base de datos en la nube.                                                                   |
-|    ✅   | **Informe adjunto**                  | Documento técnico con descripción de arquitectura, decisiones de diseño y estructura del código.                                                                            |
-|    ✅   | **Pull Request creado**              | Se realizó el PR **`release/sprint-1 → main`** incluyendo todos los cambios implementados y validados.                                                                      |
+| Estado | Ítem                                             | Descripción                                                                                                                                                                                                              |
+| :----: | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+|    ✅   | **Migraciones implementadas**                    | Se desarrollaron las migraciones en PostgreSQL para todas las entidades del módulo (`Programa Académico`, `Asignatura`, `Periodo Académico`, `Oferta Académica` y `Asignación Docente`) con sus secuencias y relaciones. |
+|    ✅   | **CRUD completo para todos los servicios (1–4)** | Cada servicio cuenta con operaciones de creación, lectura, actualización y eliminación completamente funcionales y probadas.                                                                                             |
+|    ✅   | **Validaciones de datos y reglas de negocio**    | Se aplicaron validaciones de tipo, obligatoriedad, unicidad, no duplicidad, y reglas específicas de negocio en los casos de uso y controladores.                                                                         |
+|    ✅   | **Estructura de errores uniforme**               | Todos los endpoints devuelven respuestas consistentes con mensajes claros, diferenciando errores de validación, inexistencia y del servidor.                                                                             |
+|    ✅   | **Arquitectura limpia implementada**             | El proyecto sigue la arquitectura hexagonal, separando capas de dominio, aplicación, infraestructura y presentación.                                                                                                     |
+|    ✅   | **Documentación y entregables completos**        | Se entregaron el `README.md`, el informe técnico con descripción de arquitectura y decisiones de diseño, además del video demostrativo.                                                                                  |
+|    ✅   | **Pull Request creado**                          | Se generó el PR **`feature/gestion-academica → main`** integrando todo el desarrollo, validaciones y documentación final.                                                                                                |
+
 
 🧠 Autor
 -
