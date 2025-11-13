@@ -60,6 +60,7 @@ export class AsignaturaControlador {
           error: error.issues[0]?.message || "Error desconocido",
         });
       }
+      
       console.error("Error actualizando asignatura:", error);
       return res.status(500).send({ mensaje: "Error interno al actualizar asignatura" });
     }
