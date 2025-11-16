@@ -11,10 +11,12 @@ export const esquemaCrearOferta = z.object({
 
   grupo: z
     .string()
-    .optional(), 
+    .optional(),
 
   cupo: z
     .number({ message: "El cupo es obligatorio." })
     .int({ message: "El cupo debe ser un número entero." })
     .positive({ message: "El cupo debe ser mayor que cero." }),
 });
+
+export type OfertaAcademicaDTO = z.infer<typeof esquemaCrearOferta>;

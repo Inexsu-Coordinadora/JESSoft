@@ -1,26 +1,26 @@
-import { IDocenteRepositorio } from '../../dominio/repositorio/IDocenteRepositorio';
-import { DocenteDTO } from '../../dominio/dtos/DocenteDTO';
+import { IDocente } from "../../dominio/entidades/IDocente.js";
+import { IDocenteRepositorio } from "../../dominio/repositorio/IDocenteRepositorio.js";
 
 export class DocenteCasoUso {
-  constructor(private readonly repo: IDocenteRepositorio) {}
+  constructor(private docenteRepositorio: IDocenteRepositorio) {}
 
-  crear(dto: DocenteDTO) {
-    return this.repo.crear(dto);
+  async crearDocente(datosDocente: IDocente): Promise<string> {
+    return this.docenteRepositorio.crearDocente(datosDocente);
   }
 
-  listar() {
-    return this.repo.listar();
+  async obtenerDocentes(limite?: number): Promise<IDocente[]> {
+    return this.docenteRepositorio.listarDocentes(limite);
   }
 
-  buscarPorId(id: string) {
-    return this.repo.buscarPorId(id);
+  async obtenerDocentePorId(id_docente: string): Promise<IDocente | null> {
+    return this.docenteRepositorio.obtenerDocentePorId(id_docente);
   }
 
-  actualizar(id: string, dto: DocenteDTO) {
-    return this.repo.actualizar(id, dto);
+  async actualizarDocente(id_docente: string, docente: IDocente): Promise<IDocente | null> {
+    return this.docenteRepositorio.actualizarDocente(id_docente, docente);
   }
 
-  eliminar(id: string) {
-    return this.repo.eliminar(id);
+  async eliminarDocente(id_docente: string): Promise<void> {
+    return this.docenteRepositorio.eliminarDocente(id_docente);
   }
 }

@@ -1,16 +1,10 @@
 import { FastifyInstance } from "fastify";
-import {
-  crearOfertaAcademicaControlador,
-  listarOfertasAcademicasControlador,
-  eliminarOfertaAcademicaControlador,
-  actualizarOfertaAcademicaControlador,
-  buscarOfertaPorIdControlador,
-} from "../controladores/OfertaAcademicaControlador.js";
+import { OfertaAcademicaControlador } from "../controladores/OfertaAcademicaControlador.js";
 
-export async function construirOfertaAcademicaEnrutador(app: FastifyInstance) {
-  app.post("/oferta-academica", crearOfertaAcademicaControlador);
-  app.get("/oferta-academica", listarOfertasAcademicasControlador);
-  app.get("/oferta-academica/:id", buscarOfertaPorIdControlador);
-  app.put("/oferta-academica/:id", actualizarOfertaAcademicaControlador);
-  app.delete("/oferta-academica/:id", eliminarOfertaAcademicaControlador);
+export async function OfertaAcademicaEnrutador(app: FastifyInstance) {
+  app.post("/ofertas", OfertaAcademicaControlador.crear);
+  app.get("/ofertas", OfertaAcademicaControlador.listar);
+  app.get("/ofertas/:id", OfertaAcademicaControlador.obtenerPorId);
+  app.put("/ofertas/:id", OfertaAcademicaControlador.actualizar);
+  app.delete("/ofertas/:id", OfertaAcademicaControlador.eliminar);
 }

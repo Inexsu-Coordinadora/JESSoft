@@ -1,81 +1,60 @@
-import { pool } from './ConexionPostgres';
-import { IDocenteRepositorio } from '../../dominio/repositorio/IDocenteRepositorio';
-import { Docente } from '../../dominio/entidades/Docente';
-import { DocenteDTO } from '../../dominio/dtos/DocenteDTO';
+import { IDocenteRepositorio } from "../../dominio/repositorio/IDocenteRepositorio.js";
+import { ejecutarConsulta } from "./ConexionPostgres.js";
+import { IDocente } from "../../dominio/entidades/IDocente.js";
 
 export class DocenteRepositorioPostgres implements IDocenteRepositorio {
-  // Crear docente
-  async crear(data: DocenteDTO): Promise<void> {
+  async crearDocente(datosDocente: IDocente): Promise<string> {
+    const columnas = Object.keys(datosDocente).map((key) => key.toLowerCase());
+    const parametros: Array<string | number> = Object.values(datosDocente);
+    const placeholders = columnas.map((_, i) => `$${i + 1}`).join(", ");
+
     const query = `
-      INSERT INTO docente (
-        cedula, nombre, apellido, especialidad, vinculacion
-      )
-      VALUES ($1,$2,$3,$4,$5)
+      INSERT INTO docente (${columnas.join(", ")})
+      VALUES (${placeholders})
+      RETURNING *
     `;
-    const values = [
-      data.cedula,
-      data.nombre,
-      data.apellido,
-      data.especialidad,
-      data.vinculacion,
-    ];
-    await pool.query(query, values);
+
+    const respuesta = await ejecutarConsulta(query, parametros);
+    return respuesta.rows[0].id_docente;
   }
 
-  // Listar docentes
-  async listar(): Promise<Docente[]> {
-    const { rows } = await pool.query<Docente>(
-      'SELECT id_docente, cedula, nombre, apellido, especialidad, vinculacion FROM docente ORDER BY id_docente'
-    );
-    return rows;
-  }
-  
+  async listarDocentes(limite?: number): Promise<IDocente[]> {
+    let query = "SELECT * FROM docente";
+    const valores: number[] = [];
 
-  // Obtener por ID
-  async buscarPorId(id: string): Promise<Docente | null> {
-    const { rows } = await pool.query<Docente>(
-      `
-      SELECT id_docente, cedula, nombre, apellido, especialidad, vinculacion
-      FROM docente
-      WHERE id_docente = $1
-      `,
-      [id]
-    );
-    return rows[0] ?? null;
+    if (limite !== undefined) {
+      query += " LIMIT $1";
+      valores.push(limite);
+    }
+
+    const result = await ejecutarConsulta(query, valores);
+    return result.rows;
   }
 
-  // Actualizar datos
-  async actualizar(id: string, data: DocenteDTO): Promise<void> {
+  async obtenerDocentePorId(id_docente: string): Promise<IDocente | null> {
+    const query = "SELECT * FROM docente WHERE id_docente = $1";
+    const result = await ejecutarConsulta(query, [id_docente]);
+    return result.rows[0] || null;
+  }
+
+  async actualizarDocente(id_docente: string, datosDocente: IDocente): Promise<IDocente | null> {
+    const columnas = Object.keys(datosDocente).map((key) => key.toLowerCase());
+    const parametros = Object.values(datosDocente);
+    const setClause = columnas.map((col, i) => `${col}=$${i + 1}`).join(", ");
+    parametros.push(id_docente);
+
     const query = `
       UPDATE docente
-      SET cedula = $1,
-          nombre = $2,
-          apellido = $3,
-          especialidad = $4,
-          vinculacion = $5
-      WHERE id_docente = $6
+      SET ${setClause}
+      WHERE id_docente=$${parametros.length}
+      RETURNING *;
     `;
 
-    const values = [
-      data.cedula,
-      data.nombre,
-      data.apellido,
-      data.especialidad,
-      data.vinculacion,
-      id,
-    ];
-
-    await pool.query(query, values);
+    const result = await ejecutarConsulta(query, parametros);
+    return result.rows[0] || null;
   }
 
-  // Eliminar docente
-  async eliminar(id: string): Promise<void> {
-    const query = `
-      DELETE FROM docente
-      WHERE id_docente = $1
-    `;
-    await pool.query(query, [id]);
+  async eliminarDocente(id_docente: string): Promise<void> {
+    await ejecutarConsulta("DELETE FROM docente WHERE id_docente = $1", [id_docente]);
   }
 }
-
-

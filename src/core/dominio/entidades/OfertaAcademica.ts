@@ -1,22 +1,17 @@
+import { IOfertaAcademica } from "./IOfertaAcademica.js";
 
-export class OfertaAcademica {
-  id_oferta: string;
+export class OfertaAcademica implements IOfertaAcademica {
+  id_oferta?: string;
   id_periodo: string;
   id_plan: string;
   grupo: string;
   cupo: number;
 
-  constructor(
-    id_oferta: string,
-    id_periodo: string,
-    id_plan: string,
-    grupo: string,
-    cupo: number
-  ) {
-    this.id_oferta = id_oferta;
-    this.id_periodo = id_periodo;
-    this.id_plan = id_plan;
-    this.grupo = grupo;
-    this.cupo = cupo;
+  constructor(datos: IOfertaAcademica) {
+    this.id_oferta = datos.id_oferta;
+    this.id_periodo = datos.id_periodo;
+    this.id_plan = datos.id_plan;
+    this.grupo = datos.grupo;
+    this.cupo = datos.cupo;
   }
 }
