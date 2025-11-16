@@ -1,23 +1,68 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-import { OfertaAcademicaCasoUso } from "../../core/aplicacion/casos-uso/OfertaAcademicaCasoUso.js";
-import { OfertaAcademicaRepositorioPostgres } from "../../core/infraestructura/postgres/OfertaAcademicaRepositorioPostgres.js";
-import { esquemaCrearOferta, OfertaAcademicaDTO } from "../esquemas/OfertaAcademicaEsquema.js";
+import { FastifyRequest, FastifyReply } from "fastify";
+import { IOfertaAcademica } from "../../core/dominio/entidades/IOfertaAcademica.js";
+import { IOfertaAcademicaCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IOfertaAcademicaCasoUso.js";
+import { OfertaAcademicaDTO, EsquemaOfertaAcademica } from "../esquemas/OfertaAcademicaEsquema.js";
 import { ZodError } from "zod";
 
-const repo = new OfertaAcademicaRepositorioPostgres();
-const casoUso = new OfertaAcademicaCasoUso(repo);
 
 export class OfertaAcademicaControlador {
+  constructor(private ofertaCasoUso: IOfertaAcademicaCasoUso) {}
+
+  // Listar ofertas
+  listarOfertas = async (
+    request: FastifyRequest<{ Querystring: { limite?: number } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { limite } = request.query;
+      const ofertas = await this.ofertaCasoUso.listarOfertas(limite);
+
+      return reply.code(200).send({
+        mensaje: "Ofertas encontradas correctamente",
+        ofertas,
+        cantidad: ofertas.length,
+      });
+    } catch (err) {
+      return reply.code(500).send({
+        mensaje: "Error al listar las ofertas académicas",
+        error: err instanceof Error ? err.message : err,
+      });
+    }
+  };
+
+  // Obtener oferta por ID
+  obtenerOfertaPorId = async (
+    request: FastifyRequest<{ Params: { id_oferta: string } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { id_oferta } = request.params;
+      const oferta = await this.ofertaCasoUso.obtenerOfertaPorId(id_oferta);
+
+      if (!oferta) {
+        return reply.code(404).send({ mensaje: "Oferta académica no encontrada" });
+      }
+
+      return reply.code(200).send({
+        mensaje: "Oferta encontrada correctamente",
+        oferta,
+      });
+    } catch (err) {
+      return reply.code(500).send({
+        mensaje: "Error al obtener la oferta académica",
+        error: err instanceof Error ? err.message : err,
+      });
+    }
+  };
 
   // Crear oferta
-  static async crear(
-    req: FastifyRequest<{ Body: OfertaAcademicaDTO }>,
+  crearOferta = async (
+    request: FastifyRequest<{ Body: OfertaAcademicaDTO }>,
     reply: FastifyReply
-  ) {
+  ) => {
     try {
-      const datosValidados = esquemaCrearOferta.parse(req.body);
-
-      const idNueva = await casoUso.crearOferta(datosValidados);
+      const datosValidados = EsquemaOfertaAcademica.parse(request.body);
+      const idNueva = await this.ofertaCasoUso.crearOferta(datosValidados);
 
       return reply.code(201).send({
         mensaje: "Oferta académica creada correctamente",
@@ -28,114 +73,67 @@ export class OfertaAcademicaControlador {
         return reply.code(400).send({
           mensaje: "Error de validación",
           error: err.issues?.[0]?.message || "Datos inválidos",
-
         });
       }
 
       return reply.code(500).send({
         mensaje: "Error al crear la oferta académica",
-        error: err instanceof Error ? err.message : String(err),
+        error: err instanceof Error ? err.message : err,
       });
     }
-  }
+  };
 
-  // Listar ofertas
-  static async listar(req: FastifyRequest, reply: FastifyReply) {
-    try {
-      const data = await casoUso.listarOfertas();
-
-      return reply.code(200).send({
-        mensaje: "Ofertas académicas listadas correctamente",
-        cantidad: data.length,
-        data,
-      });
-    } catch (err) {
-      return reply.code(500).send({
-        mensaje: "Error al listar las ofertas académicas",
-        error: err instanceof Error ? err.message : String(err),
-      });
-    }
-  }
-
-  // Obtener por ID
-  static async obtenerPorId(
-    req: FastifyRequest<{ Params: { id: string } }>,
+  // Actualizar oferta
+  actualizarOferta = async (
+    request: FastifyRequest<{ Params: { id_oferta: string }; Body: OfertaAcademicaDTO }>,
     reply: FastifyReply
-  ) {
+  ) => {
     try {
-      const { id } = req.params;
-
-      const oferta = await casoUso.obtenerOfertaPorId(id);
-
-      if (!oferta) {
-        return reply.code(404).send({
-          mensaje: "La oferta académica no existe",
-        });
+      const { id_oferta } = request.params;
+      const datosValidados = EsquemaOfertaAcademica.parse(request.body);
+      const ofertaActualizada = await this.ofertaCasoUso.actualizarOferta(id_oferta, datosValidados);
+      
+      if (!ofertaActualizada) {
+        return reply.code(404).send({ mensaje: "Oferta académica no encontrada" });
       }
 
       return reply.code(200).send({
-        mensaje: "Oferta académica encontrada",
-        data: oferta,
-      });
-    } catch (err) {
-      return reply.code(500).send({
-        mensaje: "Error al obtener la oferta académica",
-        error: err instanceof Error ? err.message : String(err),
-      });
-    }
-  }
-
-  // Actualizar oferta
-  static async actualizar(
-    req: FastifyRequest<{ Params: { id: string }; Body: OfertaAcademicaDTO }>,
-    reply: FastifyReply
-  ) {
-    try {
-      const { id } = req.params;
-
-      const datosValidados = esquemaCrearOferta.parse(req.body);
-
-      const ofertaActualizada =
-        await casoUso.actualizarOferta(id, datosValidados);
-
-      return reply.code(200).send({
         mensaje: "Oferta académica actualizada correctamente",
-        data: ofertaActualizada,
+        ofertaActualizada,
       });
     } catch (err) {
       if (err instanceof ZodError) {
         return reply.code(400).send({
           mensaje: "Error de validación",
           error: err.issues?.[0]?.message || "Datos inválidos",
-
         });
       }
 
       return reply.code(500).send({
         mensaje: "Error al actualizar la oferta académica",
-        error: err instanceof Error ? err.message : String(err),
+        error: err instanceof Error ? err.message : err,
       });
     }
-  }
+  };
 
   // Eliminar oferta
-  static async eliminar(
-    req: FastifyRequest<{ Params: { id: string } }>,
+  eliminarOferta = async (
+    request: FastifyRequest<{ Params: { id_oferta: string } }>,
     reply: FastifyReply
-  ) {
+  ) => {
     try {
-      const { id } = req.params;
-
-      await casoUso.eliminarOferta(id);
+      const { id_oferta } = request.params;
+      await this.ofertaCasoUso.eliminarOferta(id_oferta);
 
       return reply.code(200).send({
         mensaje: "Oferta académica eliminada correctamente",
+        id_oferta,
       });
     } catch (err) {
       return reply.code(500).send({
         mensaje: "Error al eliminar la oferta académica",
-        error: err instanceof Error ? err.message : String(err),
+        error: err instanceof Error ? err.message : err,
       });
     }
-  }
+  };
 }

@@ -11,21 +11,32 @@ export class OfertaAcademicaCasoUso {
     }
 
     // Listar ofertas
-    async listarOfertas(limite?: number) {
+    async listarOfertas(limite?: number): Promise<IOfertaAcademica[]> {
         return await this.ofertaRepositorio.listarOfertas(limite);
     }
 
     // Obtener oferta por id
-    async obtenerOfertaPorId(id_oferta: string) {
-        const oferta = await this.ofertaRepositorio.obtenerOfertaPorId(id_oferta);
-        return oferta;
+    async obtenerOfertaPorId(id_oferta: string): Promise<IOfertaAcademica | null> {
+        const ofertaObtenida = await this.ofertaRepositorio.obtenerOfertaPorId(id_oferta);
+        console.log(ofertaObtenida);
+        return ofertaObtenida;
     }
 
     // Actualizar oferta
-    async actualizarOferta(id_oferta: string, datos: IOfertaAcademica) {
-        const ofertaActualizada =
-            await this.ofertaRepositorio.actualizarOferta(id_oferta, datos);
-        return ofertaActualizada;
+    async actualizarOferta(
+        id_oferta: string,
+        datos: IOfertaAcademica
+    ): Promise<IOfertaAcademica | null> {
+        if (datos.id_oferta && datos.id_oferta !== id_oferta) {
+            throw new Error("No se puede modificar el ID de la oferta académica.");
+        }
+
+        const ofertaActualizada = await this.ofertaRepositorio.actualizarOferta(
+            id_oferta,
+            datos
+        );
+
+        return ofertaActualizada || null;
     }
 
     // Eliminar oferta
