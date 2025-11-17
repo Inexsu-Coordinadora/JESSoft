@@ -41,6 +41,8 @@ export class OfertaAcademicaCasoUso {
 
     // Eliminar oferta
     async eliminarOferta(id_oferta: string): Promise<void> {
-        await this.ofertaRepositorio.eliminarOferta(id_oferta);
-    }
+  await this.ofertaRepositorio.eliminarOferta(id_oferta);
+}
+
+
 }

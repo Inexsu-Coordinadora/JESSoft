@@ -21,29 +21,54 @@ export class OfertaAcademicaRepositorioPostgres implements IOfertaAcademicaRepos
   }
 
   // Listar ofertas académicas 
-  async listarOfertas(limite?: number): Promise<IOfertaAcademica[]> {
-    let query = "SELECT * FROM oferta_academica";
-    const valores: any[] = [];
+ async listarOfertas(limite?: number): Promise<IOfertaAcademica[]> {
+  let query = `
+    SELECT
+      o.id_oferta,
+      p.descripcion AS periodo,
+      pa.nombre AS programa_academico,
+      o.grupo,
+      o.cupo
+    FROM oferta_academica o
+    JOIN periodo_academico p ON o.id_periodo = p.id_periodo
+    JOIN plan_estudio pe ON o.id_plan = pe.id_plan
+    JOIN programa_academico pa ON pe.id_programa = pa.id_programa
+  `;
 
-    if (limite !== undefined) {
-      query += " LIMIT $1";
-      valores.push(limite);
-    }
+  const valores: any[] = [];
 
-    const result = await ejecutarConsulta(query, valores);
-    return result.rows;
+  if (limite !== undefined) {
+    query += " LIMIT $1";
+    valores.push(limite);
   }
+
+  const result = await ejecutarConsulta(query, valores);
+  return result.rows;
+}
+
 
   // Obtener oferta por ID 
   async obtenerOfertaPorId(id_oferta: string): Promise<IOfertaAcademica | null> {
-    const query = `
-      SELECT *
-      FROM oferta_academica
-      WHERE id_oferta = $1
-    `;
-    const result = await ejecutarConsulta(query, [id_oferta]);
-    return result.rows[0] || null;
-  }
+  const query = `
+    SELECT
+      o.id_oferta,
+      o.id_periodo,
+      o.id_plan,
+      p.descripcion AS periodo,
+      pa.nombre AS programa_academico,
+      o.grupo,
+      o.cupo
+    FROM oferta_academica o
+    JOIN periodo_academico p ON o.id_periodo = p.id_periodo
+    JOIN plan_estudio pe ON o.id_plan = pe.id_plan
+    JOIN programa_academico pa ON pe.id_programa = pa.id_programa
+    WHERE o.id_oferta = $1
+  `;
+
+  const result = await ejecutarConsulta(query, [id_oferta]);
+  return result.rows[0] || null;
+}
+
 
   // Actualizar oferta 
   async actualizarOferta(id_oferta: string, datos: IOfertaAcademica): Promise<IOfertaAcademica | null> {
@@ -66,11 +91,19 @@ export class OfertaAcademicaRepositorioPostgres implements IOfertaAcademicaRepos
 
   // Eliminar oferta 
   async eliminarOferta(id_oferta: string): Promise<void> {
-    const query = `
-      DELETE FROM oferta_academica
-      WHERE id_oferta = $1
-    `;
-    await ejecutarConsulta(query, [id_oferta]);
+  const query = `
+    DELETE FROM oferta_academica
+    WHERE id_oferta = $1
+  `;
+
+  const result = await ejecutarConsulta(query, [id_oferta]);
+
+  if (result.rowCount === 0) {
+    throw new Error("OFERTA_NO_ENCONTRADA");
   }
+}
+
+
+
 }
 

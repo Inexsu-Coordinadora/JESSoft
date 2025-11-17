@@ -8,3 +8,4 @@ export interface IOfertaAcademicaCasoUso {
     actualizarOferta(id_oferta: string, datos: IOfertaAcademica): Promise<IOfertaAcademica | null>;
     eliminarOferta(id_oferta: string): Promise<void>;
 }
+
