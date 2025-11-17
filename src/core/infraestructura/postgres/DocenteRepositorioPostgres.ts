@@ -4,22 +4,32 @@ import { IDocente } from "../../dominio/entidades/IDocente.js";
 
 export class DocenteRepositorioPostgres implements IDocenteRepositorio {
   async crearDocente(datosDocente: IDocente): Promise<string> {
-    const columnas = Object.keys(datosDocente).map((key) => key.toLowerCase());
-    const parametros: Array<string | number> = Object.values(datosDocente);
-    const placeholders = columnas.map((_, i) => `$${i + 1}`).join(", ");
+  const columnas = Object.keys(datosDocente).map((key) => key.toLowerCase());
+  const parametros: Array<string | number> = Object.values(datosDocente);
+  const placeholders = columnas.map((_, i) => `$${i + 1}`).join(", ");
 
-    const query = `
-      INSERT INTO docente (${columnas.join(", ")})
-      VALUES (${placeholders})
-      RETURNING *
-    `;
+  const query = `
+    INSERT INTO docente (${columnas.join(", ")})
+    VALUES (${placeholders})
+    RETURNING *
+  `;
 
+  try {
     const respuesta = await ejecutarConsulta(query, parametros);
     return respuesta.rows[0].id_docente;
+
+  } catch (error: any) {
+    if (error.code === "23505") {
+      throw new Error("CEDULA_YA_EXISTE");
+    }
+
+    throw error;
   }
+}
+
 
   async listarDocentes(limite?: number): Promise<IDocente[]> {
-    let query = "SELECT * FROM docente";
+    let query = "SELECT * FROM docente ORDER BY id_docente ASC";
     const valores: number[] = [];
 
     if (limite !== undefined) {
@@ -55,6 +65,12 @@ export class DocenteRepositorioPostgres implements IDocenteRepositorio {
   }
 
   async eliminarDocente(id_docente: string): Promise<void> {
-    await ejecutarConsulta("DELETE FROM docente WHERE id_docente = $1", [id_docente]);
+  const result = await ejecutarConsulta(
+    "DELETE FROM docente WHERE id_docente = $1",
+    [id_docente]
+  );
+  if (result.rowCount === 0) {
+    throw new Error("DOCENTE_NO_ENCONTRADO");
   }
+}
 }

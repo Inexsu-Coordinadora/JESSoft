@@ -30,11 +30,13 @@ export const EsquemaDocente = z.object({
     .max(100, "La especialidad no puede tener más de 100 caracteres")
     .transform(capitalizar),
 
-  vinculacion: z.enum([
-    "Tiempo completo",
-    "Catedra",
-    "Medio tiempo",
-  ]),
+  vinculacion: z.enum(
+    ["Tiempo completo", "Catedra", "Medio tiempo"],
+    {
+      message:
+        "La vinculación debe ser 'Tiempo completo', 'Catedra' o 'Medio tiempo'",
+    }
+  ),
 });
 
 export type DocenteDTO = z.infer<typeof EsquemaDocente>;
