@@ -1,4 +1,3 @@
-import { Pool } from "pg";
 import { Asignatura } from "../../dominio/entidades/Asignatura.js";
 import { IAsignaturaRepositorio } from "../../dominio/repositorio/IAsignaturaRepositorio.js";
 import { pool } from "./ConexionPostgres.js"; // tu conexión

@@ -6,6 +6,7 @@ import { registrarAsignaturaRutas } from "./rutas/AsignaturaEnrutador.js";
 import { DocenteEnrutador } from "./rutas/DocenteEnrutador.js";
 import { construirAsignacionesEnrutador } from "./rutas/AsignacionDocenteEnrutador.js"
 import { construirOfertaAcademicaEnrutador } from "./rutas/OfertaAcademicaEnrutador";
+import { registrarPlanEstudioRutas } from "./rutas/PlanEstudioEnrutador.js";
 const app = fastify({ logger: true });
 
 app.register(
@@ -16,9 +17,11 @@ app.register(
     DocenteEnrutador(appInstance);
     construirAsignacionesEnrutador(appInstance);
     construirOfertaAcademicaEnrutador(appInstance);
+    registrarPlanEstudioRutas(appInstance);
   },
   { prefix: "/api" }
 );
+
 
 export const startServer = async (): Promise<void> => {
   try {
@@ -35,6 +38,7 @@ export const startServer = async (): Promise<void> => {
     };
 
     throw serverError;
+
   }
 }
 
