@@ -8,6 +8,7 @@ const repo = new PlanEstudioRepositorio();
 const planEstudioCasosUso = new PlanEstudioCasosUso(repo);
 
 export class PlanEstudioControlador {
+
     constructor(private casosUso: PlanEstudioCasosUso) { }
 
     async crear(req: FastifyRequest<{ Body: PlanEstudioDTO }>, res: FastifyReply) {
@@ -38,6 +39,7 @@ export class PlanEstudioControlador {
         }
     }
 
+
     async listar(req: FastifyRequest, res: FastifyReply) {
         try {
             const planesEstudio = await planEstudioCasosUso.obtenerTodos();
@@ -48,6 +50,7 @@ export class PlanEstudioControlador {
             return res.status(500).send({ mensaje: "Error interno al listar planes de estudio" });
         }
     }
+
 
     async actualizar(req: FastifyRequest<{ Body: PlanEstudioDTO, Params: { id: string } }>, res: FastifyReply) {
         try {
@@ -79,11 +82,15 @@ export class PlanEstudioControlador {
         }
     }
 
+
     async eliminar(req: FastifyRequest<{ Params: { id: string } }>, res: FastifyReply) {
         try {
             const id = req.params.id;
             await planEstudioCasosUso.eliminar(id);
-            return res.status(204).send({ mensaje: "Plan de estudio eliminado correctamente", id: id });
+            return res.status(204).send({
+                mensaje: "Plan de estudio eliminado correctamente",
+                id: id
+            });
         } catch (error) {
             if (error instanceof Error && error.message === "No existe un plan de estudio con ese ID.") {
                 return res.status(404).send({ mensaje: error.message });

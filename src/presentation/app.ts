@@ -4,6 +4,7 @@ import { construirPeriodosEnrutador } from "./rutas/PeriodoAcademicoEnrutador.js
 import { construirProgramasEnrutador } from "./rutas/ProgramaAcademicoEnrutador.js";
 import { registrarAsignaturaRutas } from "./rutas/AsignaturaEnrutador.js";
 import { DocenteEnrutador } from "./rutas/DocenteEnrutador.js";
+import { construirAsignacionesEnrutador } from "./rutas/AsignacionDocenteEnrutador.js"
 import { construirOfertaAcademicaEnrutador } from "./rutas/OfertaAcademicaEnrutador";
 import { registrarPlanEstudioRutas } from "./rutas/PlanEstudioEnrutador.js";
 const app = fastify({ logger: true });
@@ -14,11 +15,13 @@ app.register(
     construirProgramasEnrutador(appInstance);
     registrarAsignaturaRutas(appInstance);
     DocenteEnrutador(appInstance);
+    construirAsignacionesEnrutador(appInstance);
     construirOfertaAcademicaEnrutador(appInstance);
     registrarPlanEstudioRutas(appInstance);
   },
   { prefix: "/api" }
 );
+
 
 export const startServer = async (): Promise<void> => {
   try {
@@ -35,6 +38,7 @@ export const startServer = async (): Promise<void> => {
     };
 
     throw serverError;
+
   }
 }
 

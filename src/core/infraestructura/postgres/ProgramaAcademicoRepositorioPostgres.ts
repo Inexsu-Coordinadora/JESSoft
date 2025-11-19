@@ -15,7 +15,7 @@ export class ProgramaAcademicoRepositorio implements IProgramaAcademicoRepositor
     `;
 
     const respuesta = await ejecutarConsulta(query, parametros);
-    return respuesta.rows[0].id_plan;
+    return respuesta.rows[0].id_pa;
   }
 
   async listarProgramas(limite?: number): Promise<IProgramaAcademico[]> {

@@ -22,6 +22,7 @@ CREATE SEQUENCE public.programa_seq
     NO MAXVALUE
     CACHE 1;
 
+SET default_table_access_method = heap;
 
 --
 -- Name: programa_academico; Type: TABLE; Schema: public; Owner: -

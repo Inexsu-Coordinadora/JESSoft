@@ -10,16 +10,21 @@ export class PlanEstudio {
         this.id_programa = id_programa;
         this.semestre = semestre;
     }
+
     public getIdPlan(): String {
         return this.id_plan;
     }
+
     public getIdAsignatura(): String {
         return this.id_asignatura;
     }
+
     public getIdPrograma(): String {
         return this.id_programa;
     }
+
     public getSemestre(): number {
         return this.semestre;
     }
+
 }
