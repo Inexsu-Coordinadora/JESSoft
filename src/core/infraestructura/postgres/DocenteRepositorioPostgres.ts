@@ -4,7 +4,7 @@ import { Docente } from '../../dominio/entidades/Docente';
 import { DocenteDTO } from '../../dominio/dtos/DocenteDTO';
 
 export class DocenteRepositorioPostgres implements IDocenteRepositorio {
-  // 🔹 Crear docente
+  // Crear docente
   async crear(data: DocenteDTO): Promise<void> {
     const query = `
       INSERT INTO docente (
@@ -22,16 +22,16 @@ export class DocenteRepositorioPostgres implements IDocenteRepositorio {
     await pool.query(query, values);
   }
 
-  // 🔹 Listar docentes
+  // Listar docentes
   async listar(): Promise<Docente[]> {
     const { rows } = await pool.query<Docente>(
-      'SELECT id_docente, cedula, nombre, apellido, especialidad, vinculacion FROM docente ORDER BY id_d'
+      'SELECT id_docente, cedula, nombre, apellido, especialidad, vinculacion FROM docente ORDER BY id_docente'
     );
     return rows;
   }
   
 
-  // 🔹 Obtener por ID
+  // Obtener por ID
   async buscarPorId(id: string): Promise<Docente | null> {
     const { rows } = await pool.query<Docente>(
       `
@@ -44,7 +44,7 @@ export class DocenteRepositorioPostgres implements IDocenteRepositorio {
     return rows[0] ?? null;
   }
 
-  // 🔹 Actualizar datos
+  // Actualizar datos
   async actualizar(id: string, data: DocenteDTO): Promise<void> {
     const query = `
       UPDATE docente
@@ -68,7 +68,7 @@ export class DocenteRepositorioPostgres implements IDocenteRepositorio {
     await pool.query(query, values);
   }
 
-  // 🔹 Eliminar docente
+  // Eliminar docente
   async eliminar(id: string): Promise<void> {
     const query = `
       DELETE FROM docente

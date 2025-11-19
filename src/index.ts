@@ -9,3 +9,4 @@ main().catch((err) => {
   console.error('Error al iniciar el servidor:', err);
   process.exit(1);
 });
+
