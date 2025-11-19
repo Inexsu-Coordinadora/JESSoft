@@ -26,6 +26,7 @@ export class Asignatura {
   public getId(): string {
     return this.id;
   }
+  
 
   public getNombre(): string {
     return this.nombre;

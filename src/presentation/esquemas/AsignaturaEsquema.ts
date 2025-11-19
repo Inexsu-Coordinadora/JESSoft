@@ -17,6 +17,7 @@ export const EsquemaAsignatura = z.object({
     .number({
       message: "El número de créditos es obligatorio",
 
+      
     })
     .int("Los créditos deben ser un número entero")
     .positive("Los créditos deben ser mayores que cero"),
