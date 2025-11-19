@@ -69,10 +69,10 @@ export class AsignaturaRepositorio implements IAsignaturaRepositorio {
         return;
     }
 
-    async actualizar(asignatura: Asignatura): Promise<void> {
+    async actualizar(asignatura: Asignatura, id: string): Promise<void> {
         const queryBuscarId = `SELECT * FROM asignatura WHERE id_asignatura = $1`;
         const resultBuscar = await pool.query(queryBuscarId, [
-            asignatura.getId(),
+            id,
         ]);
         if (resultBuscar.rows.length === 0) {
              return Promise.reject(new Error("No existe una asignatura con ese ID."));
@@ -94,7 +94,7 @@ export class AsignaturaRepositorio implements IAsignaturaRepositorio {
             asignatura.getCarga_horaria(),
             asignatura.getTipo(),
             asignatura.getDescripcion(),
-            asignatura.getId(),
+            id,
         ];
 
         const result = await pool.query(query, values);

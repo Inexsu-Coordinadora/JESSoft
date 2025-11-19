@@ -1,7 +1,6 @@
 import { IAsignaturaCasosUso } from "../repositorio-casos-uso/IAsignaturaCasosUso.js";
 import { IAsignaturaRepositorio } from "../../dominio/repositorio/IAsignaturaRepositorio.js";
 import { Asignatura } from "../../dominio/entidades/Asignatura.js";
-import { AsignaturaMapeador } from "../mappers/MapperAsignatura.js";
 import { AsignaturaDTO } from "../../../presentation/esquemas/AsignaturaEsquema.js";
 
 
@@ -22,21 +21,49 @@ export class AsignaturaCasosUso implements IAsignaturaCasosUso {
 
  async crear(dto: AsignaturaDTO): Promise<AsignaturaDTO> {
     // Convertir el DTO a Entidad
-    const asignatura = AsignaturaMapeador.toEntidad(dto);
-
-    // Guardamos la entidad en la BD
+    const asignatura =  new Asignatura(
+      " ",
+      dto.nombre,
+      dto.creditos,
+      dto.carga_horaria,
+      dto.tipo,
+      dto.descripcion
+    );
     await this.asignaturaRepositorio.crear(asignatura);
-
     // Retornamos la entidad convertida a DTO de respuesta
-    return AsignaturaMapeador.toDTO(asignatura);
+
+    const dtoCreado: AsignaturaDTO = {
+      nombre: asignatura.getNombre(),
+      creditos: asignatura.getCreditos(),
+      carga_horaria: asignatura.getCarga_horaria(),
+      tipo: asignatura.getTipo(),
+      descripcion: asignatura.getDescripcion()
+    };
+    return dtoCreado;
+    //return AsignaturaMapeador.toDTO(asignatura);
   }
 
   async eliminar(id: string): Promise<void> {
     return this.asignaturaRepositorio.eliminar(id);
   }
-  async actualizar(dto: AsignaturaDTO): Promise<AsignaturaDTO> {
-    const asignatura = AsignaturaMapeador.toEntidadActualizar(dto);
-    await this.asignaturaRepositorio.actualizar(asignatura);
-    return AsignaturaMapeador.toDTOActualizar(asignatura);
+  async actualizar(dto: AsignaturaDTO, id: string): Promise<AsignaturaDTO> {
+    const asignatura = new Asignatura(
+      "",
+      dto.nombre,
+      dto.creditos,
+      dto.carga_horaria,
+      dto.tipo,
+      dto.descripcion
+    );
+    await this.asignaturaRepositorio.actualizar(asignatura, id);
+    const dtoActualizado: AsignaturaDTO = {
+      nombre: asignatura.getNombre(),
+      creditos: asignatura.getCreditos(),
+      carga_horaria: asignatura.getCarga_horaria(),
+      tipo: asignatura.getTipo(),
+      descripcion: asignatura.getDescripcion()
+    };
+    return dtoActualizado;
+    //return AsignaturaMapeador.toDTO(asignatura);
   }
 }

@@ -1,20 +1,27 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { AsignaturaCasosUso } from "../../core/aplicacion/casos-uso/AsignaturaCasosUso.js";
 import { AsignaturaRepositorio } from "../../core/infraestructura/postgres/AsignaturaRepositorio.js";
-import { AsignaturaDTO } from "../esquemas/AsignaturaEsquema.js";
+import { AsignaturaDTO, EsquemaAsignatura } from "../esquemas/AsignaturaEsquema.js";
+import { ZodError } from "zod";
 
 const repo = new AsignaturaRepositorio();
 const asignaturaCasosUso = new AsignaturaCasosUso(repo);
 
 export class AsignaturaControlador {
-  constructor(private casosUso: AsignaturaCasosUso) {}
+  constructor(private casosUso: AsignaturaCasosUso) { }
 
-   async crear(req: FastifyRequest<{ Body: AsignaturaDTO }>, res: FastifyReply) {
+  async crear(req: FastifyRequest<{ Body: AsignaturaDTO }>, res: FastifyReply) {
     try {
-      const dto = req.body;
-      const nuevaAsignatura = await asignaturaCasosUso.crear(dto);
-      return res.status(201).send(nuevaAsignatura);
+      const nuevaAsignatura = EsquemaAsignatura.parse(req.body);
+      const asignaturaCreada = await asignaturaCasosUso.crear(nuevaAsignatura);
+      return res.status(201).send(asignaturaCreada);
     } catch (error) {
+      if (error instanceof ZodError) {
+        return res.code(400).send({
+          mensaje: "Error crear un nuevo programa",
+          error: error.issues[0]?.message || "Error desconocido",
+        });
+      }
       console.error("Error creando asignatura:", error);
       return res.status(500).send({ mensaje: "Error interno al crear asignatura" });
     }
@@ -25,6 +32,12 @@ export class AsignaturaControlador {
       const asignaturas = await asignaturaCasosUso.obtenerTodas();
       return res.status(200).send(asignaturas);
     } catch (error) {
+      if (error instanceof ZodError) {
+        return res.code(400).send({
+          mensaje: "Error crear un nuevo programa",
+          error: error.issues[0]?.message || "Error desconocido",
+        });
+      }
       console.error("Error listando asignaturas:", error);
       return res.status(500).send({ mensaje: "Error interno al listar asignaturas" });
     }
@@ -32,27 +45,38 @@ export class AsignaturaControlador {
 
   async actualizar(req: FastifyRequest<{ Body: AsignaturaDTO, Params: { id: string } }>, res: FastifyReply) {
     try {
-      const dto = req.body;
+      const dto = EsquemaAsignatura.parse(req.body);
       const id = req.params.id;
-      dto.id = id;
-      const asignaturaActualizada = await asignaturaCasosUso.actualizar(dto);
+      const asignaturaActualizada = await asignaturaCasosUso.actualizar(dto, id);
 
       if (!asignaturaActualizada) {
         return res.status(404).send({ mensaje: "Asignatura no encontrada" });
       }
-        return res.status(200).send(asignaturaActualizada);
+      return res.status(200).send(asignaturaActualizada);
     } catch (error) {
+      if (error instanceof ZodError) {
+        return res.code(400).send({
+          mensaje: "Error crear un nuevo programa",
+          error: error.issues[0]?.message || "Error desconocido",
+        });
+      }
       console.error("Error actualizando asignatura:", error);
       return res.status(500).send({ mensaje: "Error interno al actualizar asignatura" });
     }
   }
 
-    async eliminar(req: FastifyRequest<{ Params: { id: string } }>, res: FastifyReply) {
+  async eliminar(req: FastifyRequest<{ Params: { id: string } }>, res: FastifyReply) {
     try {
       const id = req.params.id;
       await asignaturaCasosUso.eliminar(id);
-      return res.status(204).send({mensaje: "Asignatura eliminada correctamente", id: id});
+      return res.status(204).send({ mensaje: "Asignatura eliminada correctamente", id: id });
     } catch (error) {
+      if (error instanceof ZodError) {
+        return res.code(400).send({
+          mensaje: "Error crear un nuevo programa",
+          error: error.issues[0]?.message || "Error desconocido",
+        });
+      }
       console.error("Error eliminando asignatura:", error);
       return res.status(500).send({ mensaje: "Error interno al eliminar asignatura" });
     }
