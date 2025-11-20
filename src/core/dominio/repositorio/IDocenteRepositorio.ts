@@ -1,10 +1,9 @@
-import { Docente } from '../entidades/Docente';
-import { DocenteDTO } from '../dtos/DocenteDTO';
+import { IDocente } from "../entidades/IDocente.js";
 
 export interface IDocenteRepositorio {
-  crear(data: DocenteDTO): Promise<void>;
-  listar(): Promise<Docente[]>;
-  buscarPorId(id_docente: string): Promise<Docente | null>;
-  actualizar(id_docente: string, data: DocenteDTO): Promise<void>;
-  eliminar(id_docente: string): Promise<void>;
+  crearDocente(docente: IDocente): Promise<string>;
+  listarDocentes(limite?: number): Promise<IDocente[]>;
+  obtenerDocentePorId(id_docente: string): Promise<IDocente | null>;
+  actualizarDocente(id_docente: string, docente: IDocente): Promise<IDocente | null>;
+  eliminarDocente(id_docente: string): Promise<void>;
 }

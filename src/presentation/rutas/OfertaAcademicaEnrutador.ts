@@ -1,16 +1,28 @@
 import { FastifyInstance } from "fastify";
-import {
-  crearOfertaAcademicaControlador,
-  listarOfertasAcademicasControlador,
-  eliminarOfertaAcademicaControlador,
-  actualizarOfertaAcademicaControlador,
-  buscarOfertaPorIdControlador,
-} from "../controladores/OfertaAcademicaControlador.js";
+import { OfertaAcademicaControlador } from "../controladores/OfertaAcademicaControlador.js";
+import { IOfertaAcademicaRepositorio } from "../../core/dominio/repositorio/IOfertaAcademicaRepositorio.js";
+import { OfertaAcademicaRepositorioPostgres } from "../../core/infraestructura/postgres/OfertaAcademicaRepositorioPostgres.js";
+import { OfertaAcademicaCasoUso } from "../../core/aplicacion/casos-uso/OfertaAcademicaCasoUso.js";
+
+function ofertaAcademicaEnrutador(
+  app: FastifyInstance,
+  ofertaControlador: OfertaAcademicaControlador
+) {
+  app.get("/ofertas", ofertaControlador.listarOfertas);
+  app.get("/ofertas/:id_oferta", ofertaControlador.obtenerOfertaPorId);
+  app.post("/ofertas", ofertaControlador.crearOferta);
+  app.put("/ofertas/:id_oferta", ofertaControlador.actualizarOferta);
+  app.delete("/ofertas/:id_oferta", ofertaControlador.eliminarOferta);
+}
 
 export async function construirOfertaAcademicaEnrutador(app: FastifyInstance) {
-  app.post("/oferta-academica", crearOfertaAcademicaControlador);
-  app.get("/oferta-academica", listarOfertasAcademicasControlador);
-  app.get("/oferta-academica/:id", buscarOfertaPorIdControlador);
-  app.put("/oferta-academica/:id", actualizarOfertaAcademicaControlador);
-  app.delete("/oferta-academica/:id", eliminarOfertaAcademicaControlador);
+  const ofertaRepositorio: IOfertaAcademicaRepositorio =
+    new OfertaAcademicaRepositorioPostgres();
+
+  const ofertaCasoUso = new OfertaAcademicaCasoUso(ofertaRepositorio);
+
+  const ofertaControlador = new OfertaAcademicaControlador(ofertaCasoUso);
+
+  ofertaAcademicaEnrutador(app, ofertaControlador);
 }
+

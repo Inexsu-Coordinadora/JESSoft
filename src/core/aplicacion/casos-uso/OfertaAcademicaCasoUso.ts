@@ -1,76 +1,48 @@
-import { CrearOfertaAcademicaDTO } from "../../dominio/dtos/OfertaAcademicaDTO";
-import { IOfertaAcademicaRepositorio } from "../../dominio/repositorio/IOfertaAcademicaRepositorio";
+import { IOfertaAcademicaRepositorio } from "../../dominio/repositorio/IOfertaAcademicaRepositorio.js";
+import { IOfertaAcademica } from "../../dominio/entidades/IOfertaAcademica.js";
 
 export class OfertaAcademicaCasoUso {
-  constructor(private repo: IOfertaAcademicaRepositorio) {}
+    constructor(private ofertaRepositorio: IOfertaAcademicaRepositorio) {}
 
-  async crearOferta(datos: CrearOfertaAcademicaDTO) {
-    // Verificar si ya existe una oferta igual
-    const duplicado = await this.repo.existeGrupoDuplicado(
-      datos.id_periodo,
-      datos.id_plan,
-    );
-
-    if (duplicado) {
-      throw new Error("Ya existe una oferta con esa información");
+    // Crear oferta
+    async crearOferta(datos: IOfertaAcademica): Promise<string> {
+        const idNuevaOferta = await this.ofertaRepositorio.crearOferta(datos);
+        return idNuevaOferta;
     }
 
-    // Crear la oferta
-    const nuevaOferta = await this.repo.crearOferta(datos);
-    return {
-      mensaje: "Oferta académica creada correctamente",
-      data: nuevaOferta,
-    };
-  }
+    // Listar ofertas
+    async listarOfertas(limite?: number): Promise<IOfertaAcademica[]> {
+        return await this.ofertaRepositorio.listarOfertas(limite);
+    }
 
-  async listarOfertas() {
-    return await this.repo.listarOfertas();
-  }
+    // Obtener oferta por id
+    async obtenerOfertaPorId(id_oferta: string): Promise<IOfertaAcademica | null> {
+        const ofertaObtenida = await this.ofertaRepositorio.obtenerOfertaPorId(id_oferta);
+        console.log(ofertaObtenida);
+        return ofertaObtenida;
+    }
 
-  async eliminarOferta(id_oferta: string) {
-  // Primero verifica si la oferta existe
-  const ofertas = await this.repo.listarOfertas();
-  const existe = ofertas.some((o) => o.id_oferta === id_oferta);
+    // Actualizar oferta
+    async actualizarOferta(
+        id_oferta: string,
+        datos: IOfertaAcademica
+    ): Promise<IOfertaAcademica | null> {
+        if (datos.id_oferta && datos.id_oferta !== id_oferta) {
+            throw new Error("No se puede modificar el ID de la oferta académica.");
+        }
 
-  if (!existe) {
-    throw new Error("La oferta académica no existe");
-  }
+        const ofertaActualizada = await this.ofertaRepositorio.actualizarOferta(
+            id_oferta,
+            datos
+        );
 
-  // Si existe, elimínala
-  await this.repo.eliminarOferta(id_oferta);
-  return { mensaje: `Oferta académica ${id_oferta} eliminada correctamente` };
-}
+        return ofertaActualizada || null;
+    }
 
-async actualizarOferta(
-  id_oferta: string,
-  datos: { id_periodo?: string | null; id_plan?: string | null; cupo?: number | null }
-) {
-  const ofertas = await this.repo.listarOfertas();
-  const existe = ofertas.some((o) => o.id_oferta === id_oferta);
-  if (!existe) throw new Error("La oferta académica no existe");
-
-  if (datos.id_periodo && datos.id_plan) {
-    const duplicado = await this.repo.existeGrupoDuplicado(
-      datos.id_periodo,
-      datos.id_plan,
-    );
-    if (duplicado) throw new Error("Ya existe una oferta con ese período y plan");
-  }
-
-  await this.repo.actualizarOferta(id_oferta, datos);
-  return { mensaje: `Oferta académica ${id_oferta} actualizada correctamente` };
-}
-
-async buscarOfertaPorId(id_oferta: string) {
-  const oferta = await this.repo.buscarPorId(id_oferta);
-  if (!oferta) {
-    throw new Error("La oferta académica no existe");
-  }
-  return oferta;
+    // Eliminar oferta
+    async eliminarOferta(id_oferta: string): Promise<void> {
+  await this.ofertaRepositorio.eliminarOferta(id_oferta);
 }
 
 
-
 }
-
-
