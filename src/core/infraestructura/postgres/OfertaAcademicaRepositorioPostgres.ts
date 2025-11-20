@@ -23,17 +23,20 @@ export class OfertaAcademicaRepositorioPostgres implements IOfertaAcademicaRepos
   // Listar ofertas académicas 
  async listarOfertas(limite?: number): Promise<IOfertaAcademica[]> {
   let query = `
-    SELECT
-      o.id_oferta,
-      p.descripcion AS periodo,
-      pa.nombre AS programa_academico,
-      o.grupo,
-      o.cupo
-    FROM oferta_academica o
-    JOIN periodo_academico p ON o.id_periodo = p.id_periodo
-    JOIN plan_estudio pe ON o.id_plan = pe.id_plan
-    JOIN programa_academico pa ON pe.id_programa = pa.id_programa
-  `;
+  SELECT
+    o.id_oferta,
+    p.descripcion AS periodo,
+    pa.nombre AS programa_academico,
+    a.nombre AS asignatura,
+    o.grupo,
+    o.cupo
+  FROM oferta_academica o
+  JOIN periodo_academico p ON o.id_periodo = p.id_periodo
+  JOIN plan_estudio pe ON o.id_plan = pe.id_plan
+  JOIN programa_academico pa ON pe.id_programa = pa.id_programa
+  JOIN asignatura a ON pe.id_asignatura = a.id_asignatura
+  ORDER BY o.id_oferta
+`;
 
   const valores: any[] = [];
 
@@ -49,21 +52,23 @@ export class OfertaAcademicaRepositorioPostgres implements IOfertaAcademicaRepos
 
   // Obtener oferta por ID 
   async obtenerOfertaPorId(id_oferta: string): Promise<IOfertaAcademica | null> {
-  const query = `
-    SELECT
-      o.id_oferta,
-      o.id_periodo,
-      o.id_plan,
-      p.descripcion AS periodo,
-      pa.nombre AS programa_academico,
-      o.grupo,
-      o.cupo
-    FROM oferta_academica o
-    JOIN periodo_academico p ON o.id_periodo = p.id_periodo
-    JOIN plan_estudio pe ON o.id_plan = pe.id_plan
-    JOIN programa_academico pa ON pe.id_programa = pa.id_programa
-    WHERE o.id_oferta = $1
-  `;
+ const query = `
+  SELECT
+    o.id_oferta,
+    o.id_periodo,
+    o.id_plan,
+    p.descripcion AS periodo,
+    pa.nombre AS programa_academico,
+    a.nombre AS asignatura,
+    o.grupo,
+    o.cupo
+  FROM oferta_academica o
+  JOIN periodo_academico p ON o.id_periodo = p.id_periodo
+  JOIN plan_estudio pe ON o.id_plan = pe.id_plan
+  JOIN programa_academico pa ON pe.id_programa = pa.id_programa
+  JOIN asignatura a ON pe.id_asignatura = a.id_asignatura
+  WHERE o.id_oferta = $1
+`;
 
   const result = await ejecutarConsulta(query, [id_oferta]);
   return result.rows[0] || null;
