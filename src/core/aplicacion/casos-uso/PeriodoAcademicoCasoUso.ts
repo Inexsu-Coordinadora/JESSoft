@@ -1,6 +1,6 @@
-import { IPeriodoAcademico } from "../../dominio/entidades/IPeriodoAcademico.js";
-import { IPeriodoAcademicoRepositorio } from "../../dominio/repositorio/IPeriodoAcademico.js";
-import { IPeriodoAcademicoCasoUso } from "../repositorio-casos-uso/IPeriodoAcademicoCasoUso.js";
+import { IPeriodoAcademico } from "../../dominio/entidades/IPeriodoAcademico";
+import { IPeriodoAcademicoRepositorio } from "../../dominio/repositorio/IPeriodoAcademico";
+import { IPeriodoAcademicoCasoUso } from "../repositorio-casos-uso/IPeriodoAcademicoCasoUso";
 
 export class PeriodoAcademicoCasoUso implements IPeriodoAcademicoCasoUso {
     constructor(private PeriodoAcademicoRepositorio: IPeriodoAcademicoRepositorio) {}

@@ -1,6 +1,6 @@
-import { ejecutarConsulta } from "./ConexionPostgres.js";
-import { IOfertaAcademicaRepositorio } from "../../dominio/repositorio/IOfertaAcademicaRepositorio.js";
-import { IOfertaAcademica } from "../../dominio/entidades/IOfertaAcademica.js";
+import { ejecutarConsulta } from "./ConexionPostgres";
+import { IOfertaAcademicaRepositorio } from "../../dominio/repositorio/IOfertaAcademicaRepositorio";
+import { IOfertaAcademica } from "../../dominio/entidades/IOfertaAcademica";
 
 export class OfertaAcademicaRepositorioPostgres implements IOfertaAcademicaRepositorio {
 

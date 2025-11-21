@@ -1,6 +1,6 @@
-import { IProgramaAcademicoRepositorio } from "../../dominio/repositorio/IProgramaAcademico.js";
-import { ejecutarConsulta } from "./ConexionPostgres.js";
-import { IProgramaAcademico } from "../../dominio/entidades/IProgramaAcademico.js";
+import { IProgramaAcademicoRepositorio } from "../../dominio/repositorio/IProgramaAcademico";
+import { ejecutarConsulta } from "./ConexionPostgres";
+import { IProgramaAcademico } from "../../dominio/entidades/IProgramaAcademico";
 
 export class ProgramaAcademicoRepositorio implements IProgramaAcademicoRepositorio {
   async crearPrograma(datosProgramaAcademico: IProgramaAcademico): Promise<string> {

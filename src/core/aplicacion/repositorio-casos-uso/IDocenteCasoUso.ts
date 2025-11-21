@@ -1,5 +1,5 @@
-import { IDocente } from "../../dominio/entidades/IDocente.js";
-import { DocenteDTO } from "../../../presentation/esquemas/DocenteEsquema.js";
+import { IDocente } from "../../dominio/entidades/IDocente";
+import { DocenteDTO } from "../../../presentation/esquemas/DocenteEsquema";
 
 export interface IDocenteCasoUso {
   crearDocente(docente: DocenteDTO): Promise<string>;

@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { IDocente } from "../../core/dominio/entidades/IDocente.js";
-import { IDocenteCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IDocenteCasoUso.js";
-import { DocenteDTO, EsquemaDocente } from "../esquemas/DocenteEsquema.js";
+import { IDocente } from "../../core/dominio/entidades/IDocente";
+import { IDocenteCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IDocenteCasoUso";
+import { DocenteDTO, EsquemaDocente } from "../esquemas/DocenteEsquema";
 import { ZodError } from "zod";
 
 export class DocenteControlador {

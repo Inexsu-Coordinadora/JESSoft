@@ -1,4 +1,4 @@
-import { Asignatura } from "../entidades/Asignatura.js";
+import { Asignatura } from "../entidades/Asignatura";
 
 export interface IAsignaturaRepositorio {
   obtenerTodas(): Promise<Asignatura[]>;

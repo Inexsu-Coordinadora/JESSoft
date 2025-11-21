@@ -1,6 +1,6 @@
-import { IPeriodoAcademicoRepositorio } from "../../dominio/repositorio/IPeriodoAcademico.js";
-import { ejecutarConsulta, pool } from "./ConexionPostgres.js";
-import { IPeriodoAcademico } from "../../dominio/entidades/IPeriodoAcademico.js";
+import { IPeriodoAcademicoRepositorio } from "../../dominio/repositorio/IPeriodoAcademico";
+import { ejecutarConsulta, pool } from "./ConexionPostgres";
+import { IPeriodoAcademico } from "../../dominio/entidades/IPeriodoAcademico";
 
 export class PeriodoAcademicoRepositorio implements IPeriodoAcademicoRepositorio {
   async crearPeriodo(datosPeriodoAcademico: IPeriodoAcademico): Promise<string> {

@@ -1,6 +1,6 @@
-import { Asignatura } from "../../dominio/entidades/Asignatura.js";
-import { IAsignaturaRepositorio } from "../../dominio/repositorio/IAsignaturaRepositorio.js";
-import { pool } from "./ConexionPostgres.js"; // tu conexión
+import { Asignatura } from "../../dominio/entidades/Asignatura";
+import { IAsignaturaRepositorio } from "../../dominio/repositorio/IAsignaturaRepositorio";
+import { pool } from "./ConexionPostgres"; // tu conexión
 
 export class AsignaturaRepositorio implements IAsignaturaRepositorio {
     async obtenerTodas(): Promise<Asignatura[]> {

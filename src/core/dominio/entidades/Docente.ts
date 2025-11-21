@@ -1,4 +1,4 @@
-import { IDocente } from "./IDocente.js";
+import { IDocente } from "./IDocente";
 
 export class Docente implements IDocente {
   id_docente: string | undefined;

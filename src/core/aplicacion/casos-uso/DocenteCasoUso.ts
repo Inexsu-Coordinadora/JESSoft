@@ -1,5 +1,5 @@
-import { IDocente } from "../../dominio/entidades/IDocente.js";
-import { IDocenteRepositorio } from "../../dominio/repositorio/IDocenteRepositorio.js";
+import { IDocente } from "../../dominio/entidades/IDocente";
+import { IDocenteRepositorio } from "../../dominio/repositorio/IDocenteRepositorio";
 
 export class DocenteCasoUso {
   constructor(private docenteRepositorio: IDocenteRepositorio) {}

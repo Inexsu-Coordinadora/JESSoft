@@ -1,14 +1,14 @@
 import fastify from "fastify";
 import { FastifyError } from "fastify";
-import { construirPeriodosEnrutador } from "./rutas/PeriodoAcademicoEnrutador.js";
-import { construirProgramasEnrutador } from "./rutas/ProgramaAcademicoEnrutador.js";
-import { registrarAsignaturaRutas } from "./rutas/AsignaturaEnrutador.js";
-import { construirDocenteEnrutador } from "./rutas/DocenteEnrutador.js";
-import { construirAsignacionesEnrutador } from "./rutas/AsignacionDocenteEnrutador.js"
-import { construirOfertaAcademicaEnrutador } from "./rutas/OfertaAcademicaEnrutador.js";
-import { registrarPlanEstudioRutas } from "./rutas/PlanEstudioEnrutador.js";
+import { construirPeriodosEnrutador } from "./rutas/PeriodoAcademicoEnrutador";
+import { construirProgramasEnrutador } from "./rutas/ProgramaAcademicoEnrutador";
+import { registrarAsignaturaRutas } from "./rutas/AsignaturaEnrutador";
+import { construirDocenteEnrutador } from "./rutas/DocenteEnrutador";
+import { construirAsignacionesEnrutador } from "./rutas/AsignacionDocenteEnrutador"
+import { construirOfertaAcademicaEnrutador } from "./rutas/OfertaAcademicaEnrutador";
+import { registrarPlanEstudioRutas } from "./rutas/PlanEstudioEnrutador";
 
-const app = fastify({ logger: true });
+export const app = fastify({ logger: true });
 
 app.register(
   async (appInstance) => {

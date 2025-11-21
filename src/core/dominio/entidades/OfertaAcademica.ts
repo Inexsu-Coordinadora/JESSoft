@@ -1,4 +1,4 @@
-import { IOfertaAcademica } from "./IOfertaAcademica.js";
+import { IOfertaAcademica } from "./IOfertaAcademica";
 
 export class OfertaAcademica implements IOfertaAcademica {
   id_oferta?: string | undefined;
