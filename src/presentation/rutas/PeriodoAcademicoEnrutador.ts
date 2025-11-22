@@ -1,8 +1,8 @@
 import { FastifyInstance } from "fastify";
-import { PeriodoAcademicoControlador } from "../controladores/PeriodoAcademicoControlador.js";
-import { IPeriodoAcademicoRepositorio } from "../../core/dominio/repositorio/IPeriodoAcademico.js";
-import { PeriodoAcademicoCasoUso } from "../../core/aplicacion/casos-uso/PeriodoAcademicoCasoUso.js";
-import { PeriodoAcademicoRepositorio } from "../../core/infraestructura/postgres/PeriodoAcademicoRepositorioPostgres.js";
+import { PeriodoAcademicoControlador } from "../controladores/PeriodoAcademicoControlador";
+import { IPeriodoAcademicoRepositorio } from "../../core/dominio/repositorio/IPeriodoAcademico";
+import { PeriodoAcademicoCasoUso } from "../../core/aplicacion/casos-uso/PeriodoAcademicoCasoUso";
+import { PeriodoAcademicoRepositorio } from "../../core/infraestructura/postgres/PeriodoAcademicoRepositorioPostgres";
 function periodoAcademicoEnrutador(
     app: FastifyInstance,
     periodoControlador: PeriodoAcademicoControlador

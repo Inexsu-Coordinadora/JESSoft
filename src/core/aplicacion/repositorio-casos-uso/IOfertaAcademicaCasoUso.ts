@@ -1,5 +1,5 @@
-import { IOfertaAcademica } from "../../dominio/entidades/IOfertaAcademica.js";
-import { OfertaAcademicaDTO } from "../../../presentation/esquemas/OfertaAcademicaEsquema.js";
+import { IOfertaAcademica } from "../../dominio/entidades/IOfertaAcademica";
+import { OfertaAcademicaDTO } from "../../../presentation/esquemas/OfertaAcademicaEsquema";
 
 export interface IOfertaAcademicaCasoUso {
     crearOferta(datos: OfertaAcademicaDTO): Promise<string>;

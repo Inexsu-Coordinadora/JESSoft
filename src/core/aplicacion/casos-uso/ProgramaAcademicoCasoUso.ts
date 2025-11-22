@@ -1,5 +1,5 @@
-import { IProgramaAcademico } from "../../dominio/entidades/IProgramaAcademico.js";
-import { IProgramaAcademicoRepositorio } from "../../dominio/repositorio/IProgramaAcademico.js";
+import { IProgramaAcademico } from "../../dominio/entidades/IProgramaAcademico";
+import { IProgramaAcademicoRepositorio } from "../../dominio/repositorio/IProgramaAcademico";
 
 export class ProgramaAcademicoCasoUso {
     constructor(private ProgramaAcademicoRepositorio: IProgramaAcademicoRepositorio) {}

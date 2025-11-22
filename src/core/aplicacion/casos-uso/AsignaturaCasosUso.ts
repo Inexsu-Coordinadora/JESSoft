@@ -1,7 +1,7 @@
-import { IAsignaturaCasosUso } from "../repositorio-casos-uso/IAsignaturaCasosUso.js";
-import { IAsignaturaRepositorio } from "../../dominio/repositorio/IAsignaturaRepositorio.js";
-import { Asignatura } from "../../dominio/entidades/Asignatura.js";
-import { AsignaturaDTO } from "../../../presentation/esquemas/AsignaturaEsquema.js";
+import { IAsignaturaCasosUso } from "../repositorio-casos-uso/IAsignaturaCasosUso";
+import { IAsignaturaRepositorio } from "../../dominio/repositorio/IAsignaturaRepositorio";
+import { Asignatura } from "../../dominio/entidades/Asignatura";
+import { AsignaturaDTO } from "../../../presentation/esquemas/AsignaturaEsquema";
 
 
 export class AsignaturaCasosUso implements IAsignaturaCasosUso {

@@ -1,4 +1,4 @@
-import { IProgramaAcademico } from "./IProgramaAcademico.js"; 
+import { IProgramaAcademico } from "./IProgramaAcademico"; 
 
 export class ProgramaAcademico implements IProgramaAcademico{
     nombre : string;
