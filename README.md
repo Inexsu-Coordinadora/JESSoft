@@ -307,6 +307,209 @@ Checklist de completado:
 |    ✅   | **Documentación y entregables completos**        | Se entregaron el `README.md`, el informe técnico con descripción de arquitectura y decisiones de diseño, además del video demostrativo.                                                                                  |
 |    ✅   | **Pull Request creado**                          | Se generó el PR **`feature/gestion-academica → main`** integrando todo el desarrollo, validaciones y documentación final.                                                                                                |
 
+# 📌 Pruebas Unitarias e Integración  
+
+Este documento describe las pruebas unitarias, pruebas de integración, cobertura global e instrucciones de ejecución incluidas en la tercera entrega del proyecto.
+
+---
+
+## 🟩 1. Cobertura Global
+
+**Cobertura obtenida:** 
+
+![Cobertura](./cobertura.png)
+
+
+---
+
+## 🧪 2. Tecnologías Utilizadas
+
+- Jest  
+- ts-jest  
+- Supertest  
+- Fastify  
+- Mocks de Jest para repositorios PostgreSQL
+
+---
+
+## 🧩 3. Pruebas por Entidad
+
+A continuación se listan las pruebas unitarias y de integración desarrolladas por módulo.
+
+---
+
+# 👤 DOCENTE
+
+### Unitarias — `DocenteCasoUso.test.ts`
+
+- obtenerDocentes  
+- obtenerDocentePorId  
+- crearDocente  
+- actualizarDocente  
+- eliminarDocente  
+
+### Integración — `DocenteApi.test.ts`
+
+- GET /docentes — lista y estructura  
+- GET /docentes/:id — éxito y 404  
+- POST /docentes — validación Zod (400)  
+- GET /docentes — error interno (500 simulado)
+
+---
+
+# 📘 OFERTA ACADÉMICA
+
+### Unitarias — `OfertaAcademicaCasoUso.test.ts`
+
+- listarOfertas  
+- obtenerOfertaPorId  
+- crearOferta  
+- actualizarOferta  
+- eliminarOferta  
+
+### Integración — `OfertaAcademicaApi.test.ts`
+
+- GET /ofertas — lista  
+- GET /ofertas/:id — éxito y 404  
+- POST /ofertas — validación Zod  
+- GET /ofertas — error 500 simulado  
+
+---
+
+# 📚 ASIGNATURA
+
+### Unitarias — `Asignatura.test.ts`
+
+- obtenerTodas  
+- obtenerPorId  
+- crear  
+- actualizar  
+- eliminar  
+- Manejo de errores del repositorio
+
+### Integración — `Asignatura.test.ts`
+
+- POST /asignaturas — 201, 400 o 409  
+- GET /asignaturas — lista  
+- PUT /asignaturas/:id — valida ID  
+- DELETE /asignaturas/:id — 204  
+
+---
+
+# 🎓 PROGRAMA ACADÉMICO
+
+### Unitarias
+
+- Crear programa  
+- Listar (con y sin límite)  
+- Obtener por ID  
+- Actualizar (con validación de ID)  
+- Actualizar inexistente  
+- Eliminar  
+
+### Integración
+
+- GET /api/programas  
+- GET /api/programas/:id — éxito y 404  
+- POST /api/programas  
+- PUT /api/programas/:id — validación ID (400)  
+- PUT /api/programas/:id — no encontrado (404)  
+- DELETE /api/programas/:id  
+
+---
+
+# 🧑‍🏫 ASIGNACIÓN DOCENTE
+
+### Unitarias
+
+- Crear asignación  
+- Error si docente no existe  
+- Error si grupo no existe  
+- Error por asignación duplicada  
+- Error si supera límite máximo  
+- Error si grupo ya tiene docente  
+- Listar  
+- Obtener por ID  
+- Actualizar (bloqueo ID)  
+- Actualizar inexistente  
+- Eliminar  
+
+### Integración
+
+- GET /asignaciones  
+- GET /asignaciones/:id  
+- POST /asignaciones — 201  
+- POST errores por no existir docente o grupo — 404  
+- PUT /asignaciones/:id — éxito y 404  
+- DELETE /asignaciones/:id  
+
+---
+
+# 🗓 PERÍODO ACADÉMICO
+
+### Unitarias — `PeriodoAcademico.test.ts`
+
+- Crear período  
+- Listar períodos  
+- Obtener por ID  
+- Actualizar  
+- Bloquear modificación de ID  
+- Actualizar inexistente  
+- Eliminar  
+
+### Integración — `PeriodoAcademico.int.test.ts`
+
+- GET /api/periodos  
+- GET /api/periodos/:id  
+- POST /api/periodos  
+- PUT /api/periodos/:id  
+- DELETE /api/periodos/:id  
+
+---
+
+# 📘 PLAN DE ESTUDIO
+
+### Unitarias — `PlanEstudio.test.ts`
+
+- obtenerTodos  
+- obtenerPorId  
+- crear  
+- actualizar  
+- eliminar  
+
+### Integración — `PlanEstudio.int.test.ts`
+
+- GET /api/planes-estudio  
+- POST /api/planes-estudio  
+- PUT /api/planes-estudio/:id  
+- DELETE /api/planes-estudio/:id  
+
+---
+
+# ▶️ 4. Ejecución de Pruebas
+
+Ejecutar todas las pruebas:
+
+npm test
+
+Ejecutar con reporte de cobertura:
+
+npm run test:coverage
+
+Scripts utilizados:
+
+{
+"scripts": {
+"test": "jest",
+"test:coverage": "jest --coverage"
+}
+}
+
+# 🎥 5. Video de Evidencia
+
+Video donde se explica la ejecución de pruebas y la cobertura:
+
+https://youtu.be/Hhm9IJmoMkg
 
 🧠 Autor
 -
