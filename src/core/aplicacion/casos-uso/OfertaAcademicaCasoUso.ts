@@ -1,5 +1,5 @@
-import { IOfertaAcademicaRepositorio } from "../../dominio/repositorio/IOfertaAcademicaRepositorio.js";
-import { IOfertaAcademica } from "../../dominio/entidades/IOfertaAcademica.js";
+import { IOfertaAcademicaRepositorio } from "../../dominio/repositorio/IOfertaAcademicaRepositorio";
+import { IOfertaAcademica } from "../../dominio/entidades/IOfertaAcademica";
 
 export class OfertaAcademicaCasoUso {
     constructor(private ofertaRepositorio: IOfertaAcademicaRepositorio) {}

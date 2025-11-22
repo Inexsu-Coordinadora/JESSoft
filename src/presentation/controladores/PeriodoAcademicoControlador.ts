@@ -1,10 +1,8 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { IPeriodoAcademico } from "../../core/dominio/entidades/IPeriodoAcademico.js";
-import { IPeriodoAcademicoCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IPeriodoAcademicoCasoUso.js";
-import { PeriodoAcademicoDTO, EsquemaPeriodoAcademico} from "../esquemas/PeriodoAcademicoEsquema.js";
+import { IPeriodoAcademico } from "../../core/dominio/entidades/IPeriodoAcademico";
+import { IPeriodoAcademicoCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IPeriodoAcademicoCasoUso";
+import { PeriodoAcademicoDTO, EsquemaPeriodoAcademico} from "../esquemas/PeriodoAcademicoEsquema";
 import { ZodError } from "zod";
-import { PeriodoAcademicoCasoUso } from "../../core/aplicacion/casos-uso/PeriodoAcademicoCasoUso.js";
-
 export class PeriodoAcademicoControlador {
   constructor(private periodoAcademicoCasoUso: IPeriodoAcademicoCasoUso) {
     

@@ -1,8 +1,8 @@
 import { FastifyInstance } from "fastify";
-import { OfertaAcademicaControlador } from "../controladores/OfertaAcademicaControlador.js";
-import { IOfertaAcademicaRepositorio } from "../../core/dominio/repositorio/IOfertaAcademicaRepositorio.js";
-import { OfertaAcademicaRepositorioPostgres } from "../../core/infraestructura/postgres/OfertaAcademicaRepositorioPostgres.js";
-import { OfertaAcademicaCasoUso } from "../../core/aplicacion/casos-uso/OfertaAcademicaCasoUso.js";
+import { OfertaAcademicaControlador } from "../controladores/OfertaAcademicaControlador";
+import { IOfertaAcademicaRepositorio } from "../../core/dominio/repositorio/IOfertaAcademicaRepositorio";
+import { OfertaAcademicaRepositorioPostgres } from "../../core/infraestructura/postgres/OfertaAcademicaRepositorioPostgres";
+import { OfertaAcademicaCasoUso } from "../../core/aplicacion/casos-uso/OfertaAcademicaCasoUso";
 
 function ofertaAcademicaEnrutador(
   app: FastifyInstance,

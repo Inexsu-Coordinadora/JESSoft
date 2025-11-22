@@ -1,5 +1,5 @@
-import { IAsignacionDocente } from "../../dominio/entidades/IAsignacionDocente.js";
-import { IAsignacionDocenteRepositorio } from "../../dominio/repositorio/IAsignacionDocenteRepositorio.js";
+import { IAsignacionDocente } from "../../dominio/entidades/IAsignacionDocente";
+import { IAsignacionDocenteRepositorio } from "../../dominio/repositorio/IAsignacionDocenteRepositorio";
 
 export class AsignacionDocenteCasoUso {
     constructor(private AsignacionDocenteRepositorio: IAsignacionDocenteRepositorio) {}

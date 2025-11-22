@@ -1,4 +1,4 @@
-import { IOfertaAcademica } from "../entidades/IOfertaAcademica.js";
+import { IOfertaAcademica } from "../entidades/IOfertaAcademica";
 
 export interface IOfertaAcademicaRepositorio {
   crearOferta(datos: IOfertaAcademica): Promise<string>;

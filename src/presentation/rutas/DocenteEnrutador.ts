@@ -1,8 +1,8 @@
 import { FastifyInstance } from "fastify";
-import { DocenteControlador } from "../controladores/DocenteControlador.js";
-import { IDocenteRepositorio } from "../../core/dominio/repositorio/IDocenteRepositorio.js";
-import { DocenteRepositorioPostgres } from "../../core/infraestructura/postgres/DocenteRepositorioPostgres.js";
-import { DocenteCasoUso } from "../../core/aplicacion/casos-uso/DocenteCasoUso.js";
+import { DocenteControlador } from "../controladores/DocenteControlador";
+import { IDocenteRepositorio } from "../../core/dominio/repositorio/IDocenteRepositorio";
+import { DocenteRepositorioPostgres } from "../../core/infraestructura/postgres/DocenteRepositorioPostgres";
+import { DocenteCasoUso } from "../../core/aplicacion/casos-uso/DocenteCasoUso";
 
 function docenteEnrutador(
   app: FastifyInstance,

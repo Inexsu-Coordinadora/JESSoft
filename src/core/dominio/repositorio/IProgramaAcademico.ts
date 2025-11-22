@@ -1,4 +1,4 @@
-import { IProgramaAcademico } from "../entidades/IProgramaAcademico.js";
+import { IProgramaAcademico } from "../entidades/IProgramaAcademico";
 
 export interface IProgramaAcademicoRepositorio{
     crearPrograma(datosProgramaAcademico: IProgramaAcademico): Promise<string>;
