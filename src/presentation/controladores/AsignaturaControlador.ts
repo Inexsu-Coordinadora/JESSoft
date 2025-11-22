@@ -1,11 +1,13 @@
+// ...existing code...
 import { FastifyReply, FastifyRequest } from "fastify";
 import { AsignaturaCasosUso } from "../../core/aplicacion/casos-uso/AsignaturaCasosUso";
-import { AsignaturaRepositorio } from "../../core/infraestructura/postgres/AsignaturaRepositorio";
+// import { AsignaturaRepositorio } from "../../core/infraestructura/postgres/AsignaturaRepositorio";
 import { AsignaturaDTO, EsquemaAsignatura } from "../esquemas/AsignaturaEsquema";
 import { ZodError } from "zod";
 
-const repo = new AsignaturaRepositorio();
-const asignaturaCasosUso = new AsignaturaCasosUso(repo);
+// ...existing code...
+// const repo = new AsignaturaRepositorio();
+// const asignaturaCasosUso = new AsignaturaCasosUso(repo);
 
 export class AsignaturaControlador {
   constructor(private casosUso: AsignaturaCasosUso) { }
@@ -13,7 +15,7 @@ export class AsignaturaControlador {
   async crear(req: FastifyRequest<{ Body: AsignaturaDTO }>, res: FastifyReply) {
     try {
       const nuevaAsignatura = EsquemaAsignatura.parse(req.body);
-      const asignaturaCreada = await asignaturaCasosUso.crear(nuevaAsignatura);
+      const asignaturaCreada = await this.casosUso.crear(nuevaAsignatura);
       return res.status(201).send(asignaturaCreada);
     } catch (error) {
       if (error instanceof ZodError) {
@@ -31,7 +33,7 @@ export class AsignaturaControlador {
 
   async listar(req: FastifyRequest, res: FastifyReply) {
     try {
-      const asignaturas = await asignaturaCasosUso.obtenerTodas();
+      const asignaturas = await this.casosUso.obtenerTodas();
       return res.status(200).send(asignaturas);
     } catch (error) {
       if (error instanceof ZodError) {
@@ -49,7 +51,7 @@ export class AsignaturaControlador {
     try {
       const dto = EsquemaAsignatura.parse(req.body);
       const id = req.params.id;
-      const asignaturaActualizada = await asignaturaCasosUso.actualizar(dto, id);
+      const asignaturaActualizada = await this.casosUso.actualizar(dto, id);
 
       if (!asignaturaActualizada) {
         return res.status(404).send({ mensaje: "Asignatura no encontrada" });
@@ -72,7 +74,7 @@ export class AsignaturaControlador {
   async eliminar(req: FastifyRequest<{ Params: { id: string } }>, res: FastifyReply) {
     try {
       const id = req.params.id;
-      await asignaturaCasosUso.eliminar(id);
+      await this.casosUso.eliminar(id);
       return res.code(204).send({
         mensaje: "Asignatura eliminada correctamente",
         id: id
@@ -91,3 +93,4 @@ export class AsignaturaControlador {
     }
   }
 }
+// ...existing code...
