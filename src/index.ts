@@ -1,5 +1,5 @@
-import { startServer } from './presentation/app.js';
-import { configuracion } from './common/configuracion.js';
+import { startServer } from './presentation/app';
+import { configuracion } from './common/configuracion';
 async function main() {
   await startServer();
   console.log(`Servidor corriendo en http://localhost:${configuracion.port}`);

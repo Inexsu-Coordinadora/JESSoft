@@ -1,4 +1,4 @@
-import { IPeriodoAcademico } from "../entidades/IPeriodoAcademico.js";
+import { IPeriodoAcademico } from "../entidades/IPeriodoAcademico";
 
 export interface IPeriodoAcademicoRepositorio {
     crearPeriodo(datosPeriodoAcademico: IPeriodoAcademico): Promise<string>;

@@ -1,5 +1,5 @@
-import { IProgramaAcademico } from "../../dominio/entidades/IProgramaAcademico.js";
-import { ProgramaAcademicoDTO } from "../../../presentation/esquemas/ProgramaAcademicoEsquema.js";
+import { IProgramaAcademico } from "../../dominio/entidades/IProgramaAcademico";
+import { ProgramaAcademicoDTO } from "../../../presentation/esquemas/ProgramaAcademicoEsquema";
 
 export interface IProgramaAcademicoCasoUso{
     crearPrograma(programa: ProgramaAcademicoDTO): Promise<string>;

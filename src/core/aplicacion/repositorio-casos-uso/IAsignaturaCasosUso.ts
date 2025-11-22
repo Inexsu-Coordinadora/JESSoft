@@ -1,5 +1,5 @@
-import { Asignatura } from "../../dominio/entidades/Asignatura.js";
-import { AsignaturaDTO } from "../../../presentation/esquemas/AsignaturaEsquema.js";
+import { Asignatura } from "../../dominio/entidades/Asignatura";
+import { AsignaturaDTO } from "../../../presentation/esquemas/AsignaturaEsquema";
 
 export interface IAsignaturaCasosUso {
   obtenerTodas(): Promise<Asignatura[]>;

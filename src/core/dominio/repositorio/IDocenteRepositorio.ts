@@ -1,4 +1,4 @@
-import { IDocente } from "../entidades/IDocente.js";
+import { IDocente } from "../entidades/IDocente";
 
 export interface IDocenteRepositorio {
   crearDocente(docente: IDocente): Promise<string>;

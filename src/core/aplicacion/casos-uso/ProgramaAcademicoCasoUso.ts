@@ -1,5 +1,5 @@
-import { IProgramaAcademico } from "../../dominio/entidades/IProgramaAcademico.js";
-import { IProgramaAcademicoRepositorio } from "../../dominio/repositorio/IProgramaAcademico.js";
+import { IProgramaAcademico } from "../../dominio/entidades/IProgramaAcademico";
+import { IProgramaAcademicoRepositorio } from "../../dominio/repositorio/IProgramaAcademico";
 
 export class ProgramaAcademicoCasoUso {
     constructor(private ProgramaAcademicoRepositorio: IProgramaAcademicoRepositorio) {}
@@ -20,15 +20,24 @@ export class ProgramaAcademicoCasoUso {
     }
 
     async actualizarPrograma(id_plan: string, programa: IProgramaAcademico): Promise<IProgramaAcademico | null> {
+
         if (programa.id_programa && programa.id_programa !== id_plan) {
             throw new Error("No se permite modificar el ID del programa académico.");
         }
-        const programaActualizado = await this.ProgramaAcademicoRepositorio.actualizarPrograma(
+        const existente = await this.ProgramaAcademicoRepositorio.obtenerProgramaPorId(id_plan);
+
+        if (!existente) {
+            return null;  
+        }
+
+        const actualizado = await this.ProgramaAcademicoRepositorio.actualizarPrograma(
             id_plan,
             programa
         );
-        return programaActualizado || null;
+
+        return actualizado;
     }
+
 
     async eliminarPrograma(id_plan: string): Promise<void> {
         await this.ProgramaAcademicoRepositorio.eliminarPrograma(id_plan);

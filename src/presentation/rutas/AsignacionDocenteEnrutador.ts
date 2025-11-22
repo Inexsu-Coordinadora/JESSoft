@@ -1,8 +1,8 @@
 import { FastifyInstance } from "fastify";
-import { AsignacionDocenteControlador } from "../controladores/AsignacionDocenteControlador.js";
-import { IAsignacionDocenteRepositorio } from "../../core/dominio/repositorio/IAsignacionDocenteRepositorio.js";
-import { AsignacionDocenteCasoUso } from "../../core/aplicacion/casos-uso/AsignacionDocenteCasoUso.js";
-import { AsignacionDocenteRepositorio } from "../../core/infraestructura/postgres/AsignacionDocenteRepositorioPostgres.js";
+import { AsignacionDocenteControlador } from "../controladores/AsignacionDocenteControlador";
+import { IAsignacionDocenteRepositorio } from "../../core/dominio/repositorio/IAsignacionDocenteRepositorio";
+import { AsignacionDocenteCasoUso } from "../../core/aplicacion/casos-uso/AsignacionDocenteCasoUso";
+import { AsignacionDocenteRepositorio } from "../../core/infraestructura/postgres/AsignacionDocenteRepositorioPostgres";
 
 function asignacionDocenteEnrutador(
   app: FastifyInstance,

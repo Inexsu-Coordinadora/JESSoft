@@ -1,6 +1,6 @@
-import { IDocenteRepositorio } from "../../dominio/repositorio/IDocenteRepositorio.js";
-import { ejecutarConsulta } from "./ConexionPostgres.js";
-import { IDocente } from "../../dominio/entidades/IDocente.js";
+import { IDocenteRepositorio } from "../../dominio/repositorio/IDocenteRepositorio";
+import { ejecutarConsulta } from "./ConexionPostgres";
+import { IDocente } from "../../dominio/entidades/IDocente";
 
 export class DocenteRepositorioPostgres implements IDocenteRepositorio {
   async crearDocente(datosDocente: IDocente): Promise<string> {

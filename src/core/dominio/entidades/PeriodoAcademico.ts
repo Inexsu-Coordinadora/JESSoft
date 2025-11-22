@@ -1,4 +1,4 @@
-import { IPeriodoAcademico } from "./IPeriodoAcademico.js";
+import { IPeriodoAcademico } from "./IPeriodoAcademico";
 
 export class PeriodoAcademico implements IPeriodoAcademico {
     fecha_inicio: Date;

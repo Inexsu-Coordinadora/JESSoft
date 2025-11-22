@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { IProgramaAcademico } from "../../core/dominio/entidades/IProgramaAcademico.js";
-import { IProgramaAcademicoCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IProgramaAcademicoCasoUso.js";
-import { ProgramaAcademicoDTO, EsquemaProgramaAcademico} from "../esquemas/ProgramaAcademicoEsquema.js";
+import { IProgramaAcademico } from "../../core/dominio/entidades/IProgramaAcademico";
+import { IProgramaAcademicoCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IProgramaAcademicoCasoUso";
+import { ProgramaAcademicoDTO, EsquemaProgramaAcademico} from "../esquemas/ProgramaAcademicoEsquema";
 import { ZodError } from "zod";
 
 export class ProgramaAcademicoControlador {
@@ -29,12 +29,12 @@ export class ProgramaAcademicoControlador {
   };
 
   obtenerProgramaPorId = async (
-    request: FastifyRequest<{ Params: { id_plan: string } }>,
+    request: FastifyRequest<{ Params: { id_programa: string } }>,
     reply: FastifyReply
   ) => {
     try {
-      const { id_plan } = request.params;
-      const programaEncontrado = await this.programaAcademicoCasoUso.obtenerProgramaPorId(id_plan);
+      const { id_programa } = request.params;
+      const programaEncontrado = await this.programaAcademicoCasoUso.obtenerProgramaPorId(id_programa);
 
       if (!programaEncontrado) {
         return reply.code(404).send({
@@ -81,52 +81,51 @@ export class ProgramaAcademicoControlador {
   };
 
   actualizarPrograma = async (
-    request: FastifyRequest<{ Params: { id_plan: string }; Body: IProgramaAcademico }>,
+    request: FastifyRequest<{ Params: { id_programa: string }; Body: IProgramaAcademico }>,
     reply: FastifyReply
   ) => {
     try {
-        const { id_plan } = request.params;
-        const nuevoPrograma = request.body;
-        const programaActualizado = await this.programaAcademicoCasoUso.actualizarPrograma(
-            id_plan,
-            nuevoPrograma
-        );
+      const { id_programa } = request.params;
+      const nuevoPrograma = request.body;
 
-        if (!programaActualizado) {
-            return reply.code(404).send({
-            mensaje: "Programa no encontrado",
-            });
-        }
+      const programaActualizado =
+        await this.programaAcademicoCasoUso.actualizarPrograma(id_programa, nuevoPrograma);
 
-        if (nuevoPrograma.id_programa && nuevoPrograma.id_programa !== id_plan) {
-        return reply.code(400).send({
-            mensaje: "No se permite modificar el ID del programa académico.",
+      if (!programaActualizado) {
+        return reply.code(404).send({
+          mensaje: "Programa no encontrado",
         });
-        }
+      }
 
-        return reply.code(200).send({
-            mensaje: "Programa actualizado correctamente",
-            programaActualizado: programaActualizado,
-        });
-        } catch (err) {
-        return reply.code(500).send({
-            mensaje: "Error al actualizar el programa",
-            error: err instanceof Error ? err.message : err,
-        });
-        }
-    };
+      return reply.code(200).send({
+        mensaje: "Programa actualizado correctamente",
+        programaActualizado,
+      });
+
+    } catch (err) {
+
+      if (err instanceof Error && err.message.includes("No se permite modificar el ID")) {
+        return reply.code(400).send({ mensaje: err.message });
+      }
+
+      return reply.code(500).send({
+        mensaje: "Error al actualizar el programa",
+        error: err instanceof Error ? err.message : err,
+      });
+    }
+  };
 
   eliminarPrograma = async (
-    request: FastifyRequest<{ Params: { id_plan: string } }>,
+    request: FastifyRequest<{ Params: { id_programa: string } }>,
     reply: FastifyReply
   ) => {
     try {
-      const { id_plan } = request.params;
-      await this.programaAcademicoCasoUso.eliminarPrograma(id_plan);
+      const { id_programa } = request.params;
+      await this.programaAcademicoCasoUso.eliminarPrograma(id_programa);
 
       return reply.code(200).send({
         mensaje: "Programa eliminado correctamente",
-        idPrograma: id_plan,
+        idPrograma: id_programa,
       });
     } catch (err) {
       return reply.code(500).send({
