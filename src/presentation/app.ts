@@ -8,7 +8,7 @@ import { construirAsignacionesEnrutador } from "./rutas/AsignacionDocenteEnrutad
 import { construirOfertaAcademicaEnrutador } from "./rutas/OfertaAcademicaEnrutador";
 import { registrarPlanEstudioRutas } from "./rutas/PlanEstudioEnrutador";
 
-const app = fastify({ logger: true });
+export const app = fastify({ logger: true });
 
 app.register(
   async (appInstance) => {
@@ -25,8 +25,8 @@ app.register(
 
 export const startServer = async (): Promise<void> => {
   try {
-    await app.listen({ port: Number(process.env.PUERTO) });
-    app.log.info("El servidor esta corriendo... en puerto " + process.env.PUERTO);
+    await app.listen({ port: Number(process.env.PORT) });
+    app.log.info("El servidor está corriendo en el puerto " + process.env.PORT);
   } catch (err) {
     app.log.error(`Error al ejecutar el servidor\n ${err}`);
 
