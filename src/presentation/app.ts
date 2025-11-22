@@ -25,6 +25,7 @@ app.register(
 
 export const startServer = async (): Promise<void> => {
   try {
+    
     await app.listen({ port: Number(process.env.PORT) });
     app.log.info("El servidor está corriendo en el puerto " + process.env.PORT);
   } catch (err) {
@@ -40,5 +41,3 @@ export const startServer = async (): Promise<void> => {
     throw serverError;
   }
 };
-
-export { app };
