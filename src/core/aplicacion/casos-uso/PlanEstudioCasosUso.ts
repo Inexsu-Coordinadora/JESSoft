@@ -1,7 +1,6 @@
 import { IPlanEstudioCasosUso } from "../repositorio-casos-uso/IPlanEstudioCasosUso";
 import { IPlanEstudioRepositorio } from "../../dominio/repositorio/IPlanEstudioRepositorio";
 import { PlanEstudio } from "../../dominio/entidades/PlanEstudio";
-import { IAsignaturaCasosUso } from "../repositorio-casos-uso/IAsignaturaCasosUso";
 import { PlanEstudioDTO } from "../../../presentation/esquemas/PlanDeEstudioEsquema";
 
 export class PlanEstudioCasosUso implements IPlanEstudioCasosUso {

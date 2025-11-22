@@ -3,8 +3,6 @@ import { IPeriodoAcademico } from "../../core/dominio/entidades/IPeriodoAcademic
 import { IPeriodoAcademicoCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IPeriodoAcademicoCasoUso";
 import { PeriodoAcademicoDTO, EsquemaPeriodoAcademico} from "../esquemas/PeriodoAcademicoEsquema";
 import { ZodError } from "zod";
-import { PeriodoAcademicoCasoUso } from "../../core/aplicacion/casos-uso/PeriodoAcademicoCasoUso";
-
 export class PeriodoAcademicoControlador {
   constructor(private periodoAcademicoCasoUso: IPeriodoAcademicoCasoUso) {
     

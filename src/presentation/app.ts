@@ -17,7 +17,7 @@ app.register(
     registrarAsignaturaRutas(appInstance);
     construirDocenteEnrutador(appInstance);
     construirAsignacionesEnrutador(appInstance);
-    construirOfertaAcademicaEnrutador(appInstance);  
+    construirOfertaAcademicaEnrutador(appInstance);
     registrarPlanEstudioRutas(appInstance);
   },
   { prefix: "/api" }
@@ -40,3 +40,5 @@ export const startServer = async (): Promise<void> => {
     throw serverError;
   }
 };
+
+export { app };
