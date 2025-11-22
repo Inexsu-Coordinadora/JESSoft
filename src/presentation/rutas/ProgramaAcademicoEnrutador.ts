@@ -4,15 +4,16 @@ import { IProgramaAcademicoRepositorio } from "../../core/dominio/repositorio/IP
 import { ProgramaAcademicoCasoUso } from "../../core/aplicacion/casos-uso/ProgramaAcademicoCasoUso";
 import { ProgramaAcademicoRepositorio } from "../../core/infraestructura/postgres/ProgramaAcademicoRepositorioPostgres";
 
+
 function programaAcademicoEnrutador(
   app: FastifyInstance,
   programaControlador: ProgramaAcademicoControlador
 ) {
   app.get("/programas", programaControlador.obtenerProgramas);
-  app.get("/programas/:id_plan", programaControlador.obtenerProgramaPorId);
+  app.get("/programas/:id_programa", programaControlador.obtenerProgramaPorId);
   app.post("/programas", programaControlador.crearPrograma);
-  app.put("/programas/:id_plan", programaControlador.actualizarPrograma);
-  app.delete("/programas/:id_plan", programaControlador.eliminarPrograma);
+  app.put("/programas/:id_programa", programaControlador.actualizarPrograma);
+  app.delete("/programas/:id_programa", programaControlador.eliminarPrograma);
 }
 
 export async function construirProgramasEnrutador(app: FastifyInstance) {

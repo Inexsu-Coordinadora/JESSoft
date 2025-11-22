@@ -30,7 +30,6 @@ export class AsignacionDocenteCasoUso {
         return idNuevaAsignacion;
     }
 
-
     async obtenerAsignaciones(limite?: number): Promise<IAsignacionDocente[]> {
         return await this.AsignacionDocenteRepositorio.listarAsignaciones(limite);
     }
@@ -42,13 +41,21 @@ export class AsignacionDocenteCasoUso {
     }
 
     async actualizarAsignacion(id_asignacion: string, asignacion: IAsignacionDocente): Promise<IAsignacionDocente | null> {
+
         if (asignacion.id_asignacion && asignacion.id_asignacion !== id_asignacion) {
             throw new Error("No se permite modificar el ID de la asignación.");
         }
+
+        const existente = await this.AsignacionDocenteRepositorio.obtenerAsignacionPorId(id_asignacion);
+        if (!existente) {
+            return null; 
+        }
+
         const asignacionActualizada = await this.AsignacionDocenteRepositorio.actualizarAsignacion(
             id_asignacion,
             asignacion
         );
+
         return asignacionActualizada || null;
     }
 

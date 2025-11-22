@@ -19,18 +19,5 @@ export const EsquemaPlanEstudio = z.object({
         .number({ message: "El semestre es obligatorio." })
         .int("El semestre debe ser un número entero")
         .positive("El semestre debe ser mayor a 0"),
-/*
-    creditos: z
-          .number()
-          .int("Los créditos deben ser un número entero")
-          .positive("Los créditos deben ser mayores a 0")
-          .optional(),
-  
-      carga_horaria: z
-          .number()
-          .int("La carga horaria debe ser un número entero")
-          .positive("La carga horaria debe ser mayor a 0")
-          .optional(),
-  */
 });
 export type planEstudioDTO = z.infer<typeof EsquemaPlanEstudio>;

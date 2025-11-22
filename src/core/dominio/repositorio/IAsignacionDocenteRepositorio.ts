@@ -4,7 +4,7 @@ export interface IAsignacionDocenteRepositorio{
     crearAsignacion(datosAsignacionDocente: IAsignacionDocente): Promise<string>;
     listarAsignaciones(limite?: number): Promise<IAsignacionDocente[]>;
     obtenerAsignacionPorId(id: string): Promise<IAsignacionDocente | null>;
-    actualizarAsignacion(id: string, datosAsignacionDocente: IAsignacionDocente): Promise<IAsignacionDocente>;
+    actualizarAsignacion(id: string, datosAsignacionDocente: IAsignacionDocente): Promise<IAsignacionDocente | null>;
     eliminarAsignacion(id: string): Promise<void>;
     verificarExistenciaDocente(id_docente: string): Promise<boolean>;
     verificarExistenciaGrupo(id_oferta: string): Promise<boolean>;
