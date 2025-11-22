@@ -1,6 +1,6 @@
+process.env.NODE_ENV = "test";
 import request from "supertest";
 import { app } from "../../src/presentation/app";
-
 jest.mock("../../src/core/infraestructura/postgres/PlanEstudioRepositorio", () => {
     return {
         PlanEstudioRepositorio: jest.fn().mockImplementation(() => (
@@ -41,6 +41,8 @@ jest.mock("../../src/core/infraestructura/postgres/PlanEstudioRepositorio", () =
             })),
     };
 });
+
+
 
 describe("Pruebas de integración de PlanEstudio", () => {
     beforeAll(async () => {

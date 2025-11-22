@@ -87,6 +87,23 @@ describe("Pruebas unitarias de PeriodoAcademicoCasoUso", () => {
             periodoCasoUso.actualizarPeriodo("1", datosActualizados)
         ).rejects.toThrow("No se permite modificar el ID del periodo académico.");
     });
+    test("Actualizar Periodo - devuelve null si el repositorio no encuentra el periodo", async () => {
+        periodoRepoMock.actualizarPeriodo.mockResolvedValue(null);
+
+        const resultado = await periodoCasoUso.actualizarPeriodo("1", {
+            fecha_inicio: new Date(),
+            fecha_fin: new Date(),
+            estado: "activo",
+            descripcion: "Periodo X",
+        });
+
+        expect(periodoRepoMock.actualizarPeriodo).toHaveBeenCalledWith(
+            "1",
+            expect.any(Object)
+        );
+        expect(resultado).toBeNull();
+    });
+
 
     test("Actualizar Periodo acdémico correctamente", async () => {
         const datosActualizados: IPeriodoAcademico = {
