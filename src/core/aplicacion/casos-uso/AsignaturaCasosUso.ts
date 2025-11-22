@@ -42,6 +42,7 @@ export class AsignaturaCasosUso implements IAsignaturaCasosUso {
     return dtoCreado;
     //return AsignaturaMapeador.toDTO(asignatura);
   }
+  
 
   async eliminar(id: string): Promise<void> {
     return this.asignaturaRepositorio.eliminar(id);

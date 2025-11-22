@@ -96,6 +96,7 @@ export class AsignaturaRepositorio implements IAsignaturaRepositorio {
             asignatura.descripcion,
             id,
         ];
+        
 
         const result = await pool.query(query, values);
         return result.rows[0]; // Devuelve la asignatura actualizada

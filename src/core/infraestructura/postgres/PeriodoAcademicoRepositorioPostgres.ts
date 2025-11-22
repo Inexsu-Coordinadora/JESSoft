@@ -12,6 +12,7 @@ export class PeriodoAcademicoRepositorio implements IPeriodoAcademicoRepositorio
       SELECT * FROM periodo_academico
       WHERE fecha_inicio = $1 AND fecha_fin = $2
     `;
+    
 
     if (datosPeriodoAcademico.fecha_inicio.getFullYear() > datosPeriodoAcademico.fecha_fin.getFullYear()) {
       throw new Error("El año de fecha_inicio debe ser menor o igual al año de fecha_fin");

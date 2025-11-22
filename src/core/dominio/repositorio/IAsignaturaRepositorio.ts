@@ -7,3 +7,4 @@ export interface IAsignaturaRepositorio {
   eliminar(id: string): Promise<void>;
   actualizar(asignatura: Asignatura, id: string): Promise<void>;
 }
+

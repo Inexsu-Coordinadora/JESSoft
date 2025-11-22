@@ -3,34 +3,7 @@ import { IPlanEstudioRepositorio } from "../../dominio/repositorio/IPlanEstudioR
 import { pool } from "./ConexionPostgres";
 
 export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
-    async obtenerTodos(): Promise<PlanEstudio[]> {
-        const result = await pool.query("SELECT * FROM plan_estudio");
-        return result.rows.map(
-            (row) =>
-                new PlanEstudio(
-                    row.id_plan,
-                    row.id_asignatura,
-                    row.id_programa,
-                    row.semestre
-                )
-        );
-    }
 
-    async obtenerPorId(id: string): Promise<PlanEstudio | null> {
-        const result = await pool.query(
-            "SELECT * FROM plan_estudio WHERE id_plan = $1",
-            [id]
-        );
-        const row = result.rows[0];
-        if (!row) return null;
-
-        return new PlanEstudio(
-            row.id_plan,
-            row.id_asignatura,
-            row.id_programa,
-            row.semestre
-        );
-    }
     async crear(planEstudio: PlanEstudio): Promise<String> {
         const queryBuscarId = `SELECT * FROM plan_estudio WHERE id_plan = $1`;
         const queryBuscarPlanEstudio = `SELECT * FROM plan_estudio WHERE id_asignatura = $1 AND id_programa = $2 AND semestre = $3`;
@@ -68,6 +41,36 @@ export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
         ]);
         return planEstudio.id_plan;
     }
+
+    async obtenerTodos(): Promise<PlanEstudio[]> {
+        const result = await pool.query("SELECT * FROM plan_estudio");
+        return result.rows.map(
+            (row) =>
+                new PlanEstudio(
+                    row.id_plan,
+                    row.id_asignatura,
+                    row.id_programa,
+                    row.semestre
+                )
+        );
+    }
+
+    async obtenerPorId(id: string): Promise<PlanEstudio | null> {
+        const result = await pool.query(
+            "SELECT * FROM plan_estudio WHERE id_plan = $1",
+            [id]
+        );
+        const row = result.rows[0];
+        if (!row) return null;
+
+        return new PlanEstudio(
+            row.id_plan,
+            row.id_asignatura,
+            row.id_programa,
+            row.semestre
+        );
+    }
+
     async eliminar(id: string): Promise<void> {
 
         const buscarId = `SELECT * FROM plan_estudio WHERE id_plan = $1`;

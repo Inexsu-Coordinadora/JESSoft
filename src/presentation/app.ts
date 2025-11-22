@@ -23,6 +23,7 @@ app.register(
   { prefix: "/api" }
 );
 
+
 export const startServer = async (): Promise<void> => {
   try {
     
@@ -39,5 +40,6 @@ export const startServer = async (): Promise<void> => {
     };
 
     throw serverError;
+
   }
 };

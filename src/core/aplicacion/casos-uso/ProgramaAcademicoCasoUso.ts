@@ -13,8 +13,8 @@ export class ProgramaAcademicoCasoUso {
         return await this.ProgramaAcademicoRepositorio.listarProgramas(limite);
     }
 
-    async obtenerProgramaPorId(id_plan: string): Promise<IProgramaAcademico | null> {
-        const programaObtenido = await this.ProgramaAcademicoRepositorio.obtenerProgramaPorId(id_plan);
+    async obtenerProgramaPorId(id_pa: string): Promise<IProgramaAcademico | null> {
+        const programaObtenido = await this.ProgramaAcademicoRepositorio.obtenerProgramaPorId(id_pa);
         console.log(programaObtenido);
         return programaObtenido;
     }

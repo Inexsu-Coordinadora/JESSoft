@@ -66,6 +66,7 @@ export class AsignaturaControlador {
       } else if (error instanceof Error && error.message === "No existe una asignatura con ese ID.") {
         return res.status(404).send({ mensaje: error.message });
       }
+      
       console.error("Error actualizando asignatura:", error);
       return res.status(500).send({ mensaje: "Error interno al actualizar asignatura" });
     }

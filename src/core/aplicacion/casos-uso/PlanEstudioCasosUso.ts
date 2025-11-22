@@ -8,13 +8,15 @@ export class PlanEstudioCasosUso implements IPlanEstudioCasosUso {
     constructor(planEstudioRepositorio: IPlanEstudioRepositorio) {
         this.planEstudioRepositorio = planEstudioRepositorio;
     }
-    
+
     async obtenerTodos(): Promise<PlanEstudio[]> {
         return this.planEstudioRepositorio.obtenerTodos();
     }
+
     async obtenerPorId(id: string): Promise<PlanEstudio | null> {
         return this.planEstudioRepositorio.obtenerPorId(id);
     }
+
     async crear(dto: PlanEstudioDTO): Promise<String> {
         const planEstudio = new PlanEstudio(
             "",
@@ -25,9 +27,11 @@ export class PlanEstudioCasosUso implements IPlanEstudioCasosUso {
         const idNuevoPlanEstudio = await this.planEstudioRepositorio.crear(planEstudio);
         return idNuevoPlanEstudio;
     }
+    
     async eliminar(id: string): Promise<void> {
         return this.planEstudioRepositorio.eliminar(id);
     }
+
     async actualizar(dto: PlanEstudioDTO, id: string): Promise<PlanEstudioDTO> {
         const planEstudio = new PlanEstudio(
             id,

@@ -10,6 +10,7 @@ function planEstudioEnrutador(app: FastifyInstance, planEstudioControlador: Plan
     app.put("/planes-estudio/:id", planEstudioControlador.actualizar);
     app.delete("/planes-estudio/:id", planEstudioControlador.eliminar);
 }
+
 export async function registrarPlanEstudioRutas(app: FastifyInstance) {
     const planEstudioRepositorio: IPlanEstudioRepositorio = new PlanEstudioRepositorio();
     const planEstudioCasosUso = new PlanEstudioCasosUso(planEstudioRepositorio);

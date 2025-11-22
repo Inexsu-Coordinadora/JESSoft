@@ -1,5 +1,6 @@
 import { PlanEstudio } from "../entidades/PlanEstudio";
 export interface IPlanEstudioRepositorio {
+
     obtenerTodos(): Promise<PlanEstudio[]>;
     obtenerPorId(id: string): Promise<PlanEstudio | null>;
     crear(planEstudio: PlanEstudio): Promise<String>;
