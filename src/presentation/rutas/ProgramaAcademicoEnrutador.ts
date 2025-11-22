@@ -1,8 +1,8 @@
 import { FastifyInstance } from "fastify";
-import { ProgramaAcademicoControlador } from "../controladores/ProgramaAcademicoControlador.js";
-import { IProgramaAcademicoRepositorio } from "../../core/dominio/repositorio/IProgramaAcademico.js";
-import { ProgramaAcademicoCasoUso } from "../../core/aplicacion/casos-uso/ProgramaAcademicoCasoUso.js";
-import { ProgramaAcademicoRepositorio } from "../../core/infraestructura/postgres/ProgramaAcademicoRepositorioPostgres.js";
+import { ProgramaAcademicoControlador } from "../controladores/ProgramaAcademicoControlador";
+import { IProgramaAcademicoRepositorio } from "../../core/dominio/repositorio/IProgramaAcademico";
+import { ProgramaAcademicoCasoUso } from "../../core/aplicacion/casos-uso/ProgramaAcademicoCasoUso";
+import { ProgramaAcademicoRepositorio } from "../../core/infraestructura/postgres/ProgramaAcademicoRepositorioPostgres";
 
 function programaAcademicoEnrutador(
   app: FastifyInstance,

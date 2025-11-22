@@ -1,5 +1,5 @@
-import { IAsignacionDocente } from "../../dominio/entidades/IAsignacionDocente.js";
-import { AsignacionDocenteDTO } from "../../../presentation/esquemas/AsignacionDocenteEsquema.js";
+import { IAsignacionDocente } from "../../dominio/entidades/IAsignacionDocente";
+import { AsignacionDocenteDTO } from "../../../presentation/esquemas/AsignacionDocenteEsquema";
 
 export interface IAsignacionDocenteCasoUso{
     crearAsignacion(asignacion: AsignacionDocenteDTO): Promise<string>;

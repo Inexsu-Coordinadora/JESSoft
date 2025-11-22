@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { AsignaturaCasosUso } from "../../core/aplicacion/casos-uso/AsignaturaCasosUso.js";
-import { AsignaturaRepositorio } from "../../core/infraestructura/postgres/AsignaturaRepositorio.js";
-import { AsignaturaDTO, EsquemaAsignatura } from "../esquemas/AsignaturaEsquema.js";
+import { AsignaturaCasosUso } from "../../core/aplicacion/casos-uso/AsignaturaCasosUso";
+import { AsignaturaRepositorio } from "../../core/infraestructura/postgres/AsignaturaRepositorio";
+import { AsignaturaDTO, EsquemaAsignatura } from "../esquemas/AsignaturaEsquema";
 import { ZodError } from "zod";
 
 const repo = new AsignaturaRepositorio();

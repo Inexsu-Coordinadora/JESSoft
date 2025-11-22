@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { IProgramaAcademico } from "../../core/dominio/entidades/IProgramaAcademico.js";
-import { IProgramaAcademicoCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IProgramaAcademicoCasoUso.js";
-import { ProgramaAcademicoDTO, EsquemaProgramaAcademico} from "../esquemas/ProgramaAcademicoEsquema.js";
+import { IProgramaAcademico } from "../../core/dominio/entidades/IProgramaAcademico";
+import { IProgramaAcademicoCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IProgramaAcademicoCasoUso";
+import { ProgramaAcademicoDTO, EsquemaProgramaAcademico} from "../esquemas/ProgramaAcademicoEsquema";
 import { ZodError } from "zod";
 
 export class ProgramaAcademicoControlador {

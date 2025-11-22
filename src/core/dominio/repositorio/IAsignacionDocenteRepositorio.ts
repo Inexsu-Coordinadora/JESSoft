@@ -1,4 +1,4 @@
-import { IAsignacionDocente } from "../entidades/IAsignacionDocente.js";
+import { IAsignacionDocente } from "../entidades/IAsignacionDocente";
 
 export interface IAsignacionDocenteRepositorio{
     crearAsignacion(datosAsignacionDocente: IAsignacionDocente): Promise<string>;
