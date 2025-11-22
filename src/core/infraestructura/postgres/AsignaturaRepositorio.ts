@@ -1,6 +1,6 @@
-import { Asignatura } from "../../dominio/entidades/Asignatura.js";
-import { IAsignaturaRepositorio } from "../../dominio/repositorio/IAsignaturaRepositorio.js";
-import { pool } from "./ConexionPostgres.js"; // tu conexión
+import { Asignatura } from "../../dominio/entidades/Asignatura";
+import { IAsignaturaRepositorio } from "../../dominio/repositorio/IAsignaturaRepositorio";
+import { pool } from "./ConexionPostgres"; // tu conexión
 
 export class AsignaturaRepositorio implements IAsignaturaRepositorio {
     async obtenerTodas(): Promise<Asignatura[]> {
@@ -39,7 +39,7 @@ export class AsignaturaRepositorio implements IAsignaturaRepositorio {
     async crear(asignatura: Asignatura): Promise<void> {
         const queryBuscarNombre = `SELECT * FROM asignatura WHERE nombre = $1`;
         const resultBuscar = await pool.query(queryBuscarNombre, [
-            asignatura.getNombre(),
+            asignatura.nombre,
         ]);
         if (resultBuscar.rows.length > 0) {
             throw new Error("Ya existe una asignatura con ese nombre.");
@@ -49,11 +49,11 @@ export class AsignaturaRepositorio implements IAsignaturaRepositorio {
       VALUES ($1, $2, $3, $4, $5)
     `;
         await pool.query(query, [
-            asignatura.getNombre(),
-            asignatura.getCreditos(),
-            asignatura.getCarga_horaria(),
-            asignatura.getTipo(),
-            asignatura.getDescripcion(),
+            asignatura.nombre,
+            asignatura.creditos,
+            asignatura.carga_horaria,
+            asignatura.tipo,
+            asignatura.descripcion,
         ]);
     }
 
@@ -89,11 +89,11 @@ export class AsignaturaRepositorio implements IAsignaturaRepositorio {
     `;
 
         const values = [
-            asignatura.getNombre(),
-            asignatura.getCreditos(),
-            asignatura.getCarga_horaria(),
-            asignatura.getTipo(),
-            asignatura.getDescripcion(),
+            asignatura.nombre,
+            asignatura.creditos,
+            asignatura.carga_horaria,
+            asignatura.tipo,
+            asignatura.descripcion,
             id,
         ];
         

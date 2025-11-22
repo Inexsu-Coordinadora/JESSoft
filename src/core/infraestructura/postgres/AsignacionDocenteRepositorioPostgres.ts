@@ -1,6 +1,6 @@
 import { IAsignacionDocenteRepositorio } from "../../dominio/repositorio/IAsignacionDocenteRepositorio";
-import { ejecutarConsulta } from "./ConexionPostgres.js";
-import { IAsignacionDocente } from "../../dominio/entidades/IAsignacionDocente.js";
+import { ejecutarConsulta } from "./ConexionPostgres";
+import { IAsignacionDocente } from "../../dominio/entidades/IAsignacionDocente";
 
 export class AsignacionDocenteRepositorio implements IAsignacionDocenteRepositorio {
   async crearAsignacion(datosAsignacionDocente: IAsignacionDocente): Promise<string> {

@@ -1,6 +1,6 @@
 import { IPlanEstudioCasosUso } from "../repositorio-casos-uso/IPlanEstudioCasosUso";
-import { IPlanEstudioRepositorio } from "../../dominio/repositorio/IPlanEstudioRepositorio.js";
-import { PlanEstudio } from "../../dominio/entidades/PlanEstudio.js";
+import { IPlanEstudioRepositorio } from "../../dominio/repositorio/IPlanEstudioRepositorio";
+import { PlanEstudio } from "../../dominio/entidades/PlanEstudio";
 import { PlanEstudioDTO } from "../../../presentation/esquemas/PlanDeEstudioEsquema";
 
 export class PlanEstudioCasosUso implements IPlanEstudioCasosUso {

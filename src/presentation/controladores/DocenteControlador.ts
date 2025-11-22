@@ -1,188 +1,235 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { DocenteRepositorioPostgres } from '../../core/infraestructura/postgres/DocenteRepositorioPostgres';
-import { DocenteCasoUso } from '../../core/aplicacion/casos-uso/DocenteCasoUso';
-import { DocenteDTO } from '../../core/dominio/dtos/DocenteDTO';
-
-const repo = new DocenteRepositorioPostgres();
-const casoUso = new DocenteCasoUso(repo);
+import { FastifyRequest, FastifyReply } from "fastify";
+import { IDocente } from "../../core/dominio/entidades/IDocente";
+import { IDocenteCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IDocenteCasoUso";
+import { DocenteDTO, EsquemaDocente } from "../esquemas/DocenteEsquema";
+import { ZodError } from "zod";
 
 export class DocenteControlador {
-  // Listar todos los docentes
-  static async listar(req: FastifyRequest, reply: FastifyReply) {
-    try {
-      const data = await casoUso.listar();
+  constructor(private docenteCasoUso: IDocenteCasoUso) {}
 
-      if (!data || data.length === 0) {
-        return reply.code(404).send({
-          mensaje: 'No se encontraron docentes registrados',
-        });
-      }
+  // Obtener todos los docentes
+  obtenerDocentes = async (
+    request: FastifyRequest<{ Querystring: { limite?: number } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { limite } = request.query;
+      const docentesEncontrados = await this.docenteCasoUso.obtenerDocentes(limite);
 
       return reply.code(200).send({
-        mensaje: 'Docentes listados correctamente',
-        cantidad: data.length,
-        data,
+        mensaje: "Docentes encontrados correctamente",
+        docentes: docentesEncontrados,
+        docentesEncontrados: docentesEncontrados.length, //Muestra cuantos docentes hay
       });
     } catch (err) {
       return reply.code(500).send({
-        mensaje: 'Error al listar los docentes',
-        error: err instanceof Error ? err.message : String(err),
+        mensaje: "Error al obtener los docentes",
+        error: err instanceof Error ? err.message : err,
       });
     }
-  }
+  };
 
   // Obtener docente por ID
-  static async obtenerPorId(
-    req: FastifyRequest<{ Params: { id: string } }>,
+  obtenerDocentePorId = async (
+    request: FastifyRequest<{ Params: { id_docente: string } }>,
     reply: FastifyReply
-  ) {
+  ) => {
     try {
-      const { id } = req.params;
-
-      if (!id) {
-        return reply.code(400).send({
-          mensaje: 'Debe proporcionar el ID del docente',
-        });
-      }
-
-      const docente = await casoUso.buscarPorId(id);
+      const { id_docente } = request.params;
+      const docente = await this.docenteCasoUso.obtenerDocentePorId(id_docente);
 
       if (!docente) {
         return reply.code(404).send({
-          mensaje: 'Docente no encontrado',
+          mensaje: "Docente no encontrado",
         });
       }
 
       return reply.code(200).send({
-        mensaje: 'Docente encontrado correctamente',
-        data: docente,
+        mensaje: "Docente encontrado correctamente",
+        docente,
       });
     } catch (err) {
       return reply.code(500).send({
-        mensaje: 'Error al obtener el docente por ID',
-        error: err instanceof Error ? err.message : String(err),
+        mensaje: "Error al obtener el docente",
+        error: err instanceof Error ? err.message : err,
       });
     }
-  }
+  };
 
   // Crear docente
-  static async crear(
-    req: FastifyRequest<{
-      Body: {
-        cedula: string;
-        nombre: string;
-        apellido: string;
-        especialidad: string;
-        vinculacion: string;
-      };
-    }>,
-    reply: FastifyReply
-  ) {
-    try {
-      const { cedula, nombre, apellido, especialidad, vinculacion } = req.body;
+crearDocente = async (
+  request: FastifyRequest<{ Body: DocenteDTO }>,
+  reply: FastifyReply
+) => {
+  try {
+    //verificar si existe la propiedad vinculacion porque si la valido despues no meda :(
+    if (!("vinculacion" in request.body)) {
+      return reply.code(400).send({
+        mensaje: "La vinculación es obligatoria",
+      });
+    }
 
-      if (!cedula || !nombre || !apellido || !especialidad || !vinculacion) {
+    // Validación con Zod
+    const nuevoDocente = EsquemaDocente.parse(request.body);
+
+  
+    // Crear docente
+    const idNuevo = await this.docenteCasoUso.crearDocente(nuevoDocente);
+
+    return reply.code(201).send({
+      mensaje: "Docente creado correctamente",
+      idNuevo,
+    });
+
+  } catch (err) {
+
+    // 4. Errores de validación (Zod)
+    if (err instanceof ZodError) {
+
+      // Asegurar que issue siempre exista
+      const issue = err.issues.length > 0 ? err.issues[0] : null;
+
+      if (!issue) {
         return reply.code(400).send({
-          mensaje: 'Todos los campos son obligatorios',
+          mensaje: "Datos inválidos",
         });
       }
 
-      const dto = new DocenteDTO(req.body);
-      await casoUso.crear(dto);
+      // Campo que falló
+      const campo = issue.path?.[0] ?? null;
+      if (campo === "vinculacion") {
+        return reply.code(400).send({
+          mensaje:
+            "La vinculación debe ser 'Tiempo completo', 'Catedra' o 'Medio tiempo'",
+        });
+      }
+      //Campos obligatorios 
+      const mensajesCampos: Record<string, string> = {
+        cedula: "La cédula es obligatoria",
+        nombre: "El nombre es obligatorio",
+        apellido: "El apellido es obligatorio",
+        especialidad: "La especialidad es obligatoria",
+      };
 
-      return reply.code(201).send({
-        mensaje: 'Docente creado correctamente',
-      });
-    } catch (err) {
-      return reply.code(500).send({
-        mensaje: 'Error al crear el docente',
-        error: err instanceof Error ? err.message : String(err),
+      const campoStr = campo ? String(campo) : "";
+
+      return reply.code(400).send({
+        mensaje: mensajesCampos[campoStr] || issue.message || "Datos inválidos",
       });
     }
+    //Cédula duplicada
+    if (err instanceof Error && err.message === "CEDULA_YA_EXISTE") {
+      return reply.code(400).send({
+        mensaje: "La cédula ya existe",
+      });
+    }
+    //Error inesperado del servidor
+    return reply.code(500).send({
+      mensaje: "Error al crear docente",
+    });
   }
+};
 
   // Actualizar docente
-  static async actualizar(
-    req: FastifyRequest<{
-      Params: { id: string };
-      Body: {
-        nombre: string;
-        apellido: string;
-        especialidad: string;
-        vinculacion: string;
+  actualizarDocente = async (
+  request: FastifyRequest<{ Params: { id_docente: string }; Body: DocenteDTO }>,
+  reply: FastifyReply
+) => {
+  try {
+    const { id_docente } = request.params;
+    if (!("vinculacion" in request.body)) {
+      return reply.code(400).send({
+        mensaje: "La vinculación es obligatoria",
+      });
+    }
+
+    // 1. Validar TODO el body (PUT estricto)
+    const datosActualizados = EsquemaDocente.parse(request.body);
+
+    // 2. Obtener docente actual
+    const docenteActual = await this.docenteCasoUso.obtenerDocentePorId(id_docente);
+
+    if (!docenteActual) {
+      return reply.code(404).send({
+        mensaje: "Docente no encontrado",
+      });
+    }
+
+    // 3. Evitar modificar la cédula
+    if (datosActualizados.cedula !== docenteActual.cedula) {
+      return reply.code(400).send({
+        mensaje: "No se permite modificar la cédula del docente.",
+      });
+    }
+
+    // 4. Actualizar DOCENTE
+    const docenteActualizado = await this.docenteCasoUso.actualizarDocente(
+      id_docente,
+      datosActualizados
+    );
+
+    return reply.code(200).send({
+      mensaje: "Docente actualizado correctamente",
+      docente: docenteActualizado,
+    });
+
+  } catch (err) {
+
+    // Manejo de errores Zod
+    if (err instanceof ZodError) {
+      const issue = err.issues.length > 0 ? err.issues[0] : null;
+
+      if (!issue) {
+        return reply.code(400).send({
+          mensaje: "Datos inválidos",
+        });
+      }
+
+      const campo = String(issue.path[0] ?? "");
+
+      const mensajesCampos: Record<string, string> = {
+        cedula: "La cédula es obligatoria",
+        nombre: "El nombre es obligatorio",
+        apellido: "El apellido es obligatorio",
+        especialidad: "La especialidad es obligatoria",
+        vinculacion:
+          "La vinculación debe ser 'Tiempo completo', 'Catedra' o 'Medio tiempo'",
       };
-    }>,
-    reply: FastifyReply
-  ) {
-    try {
-      const { id } = req.params;
-      const { nombre, apellido, especialidad, vinculacion } = req.body;
 
-      if (!id || !nombre || !apellido || !especialidad || !vinculacion) {
-        return reply.code(400).send({
-          mensaje: 'Todos los campos son obligatorios',
-        });
-      }
-
-      const docenteExistente = await casoUso.buscarPorId(id);
-      if (!docenteExistente) {
-        return reply.code(404).send({
-          mensaje: `No existe un docente con el id_docente '${id}'`,
-        });
-      }
-
-      const dto = new DocenteDTO({
-        cedula: docenteExistente.cedula, // mantenemos la cédula original
-        nombre,
-        apellido,
-        especialidad,
-        vinculacion,
-      });
-
-      await casoUso.actualizar(id, dto);
-
-      return reply.code(200).send({
-        mensaje: 'Docente actualizado correctamente',
-      });
-    } catch (err) {
-      return reply.code(500).send({
-        mensaje: 'Error al actualizar el docente',
-        error: err instanceof Error ? err.message : String(err),
+      return reply.code(400).send({
+        mensaje: mensajesCampos[campo] || issue.message || "Datos inválidos",
       });
     }
+
+    // Error interno
+    return reply.code(500).send({
+      mensaje: "Error al actualizar el docente",
+    });
   }
+};
 
-  //  Eliminar docente
-  static async eliminar(
-    req: FastifyRequest<{ Params: { id: string } }>,
+  // Eliminar docente
+  eliminarDocente = async (
+    request: FastifyRequest<{ Params: { id_docente: string } }>,
     reply: FastifyReply
-  ) {
+  ) => {
     try {
-      const { id } = req.params;
-
-      if (!id) {
-        return reply.code(400).send({
-          mensaje: 'Debe proporcionar el id del docente',
-        });
-      }
-
-      const docente = await casoUso.buscarPorId(id);
-      if (!docente) {
-        return reply.code(404).send({
-          mensaje: `No existe un docente con el id_docente '${id}'`,
-        });
-      }
-
-      await casoUso.eliminar(id);
+      const { id_docente } = request.params;
+      await this.docenteCasoUso.eliminarDocente(id_docente);
 
       return reply.code(200).send({
-        mensaje: 'Docente eliminado correctamente',
+        mensaje: "Docente eliminado correctamente",
+        id_docente,
       });
     } catch (err) {
+       if (err instanceof Error && err.message === "DOCENTE_NO_ENCONTRADO") {
+        return reply.code(404).send({
+          mensaje: "Docente no encontrado",
+          });
+          }
       return reply.code(500).send({
-        mensaje: 'Error al eliminar el docente',
-        error: err instanceof Error ? err.message : String(err),
-      });
+    mensaje: "Error al eliminar el docente",
+    });
     }
-  }
+  };
 }

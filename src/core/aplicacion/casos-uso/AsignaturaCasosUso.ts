@@ -1,7 +1,7 @@
-import { IAsignaturaCasosUso } from "../repositorio-casos-uso/IAsignaturaCasosUso.js";
-import { IAsignaturaRepositorio } from "../../dominio/repositorio/IAsignaturaRepositorio.js";
-import { Asignatura } from "../../dominio/entidades/Asignatura.js";
-import { AsignaturaDTO } from "../../../presentation/esquemas/AsignaturaEsquema.js";
+import { IAsignaturaCasosUso } from "../repositorio-casos-uso/IAsignaturaCasosUso";
+import { IAsignaturaRepositorio } from "../../dominio/repositorio/IAsignaturaRepositorio";
+import { Asignatura } from "../../dominio/entidades/Asignatura";
+import { AsignaturaDTO } from "../../../presentation/esquemas/AsignaturaEsquema";
 
 
 export class AsignaturaCasosUso implements IAsignaturaCasosUso {
@@ -33,11 +33,11 @@ export class AsignaturaCasosUso implements IAsignaturaCasosUso {
     // Retornamos la entidad convertida a DTO de respuesta
 
     const dtoCreado: AsignaturaDTO = {
-      nombre: asignatura.getNombre(),
-      creditos: asignatura.getCreditos(),
-      carga_horaria: asignatura.getCarga_horaria(),
-      tipo: asignatura.getTipo(),
-      descripcion: asignatura.getDescripcion()
+      nombre: asignatura.nombre,
+      creditos: asignatura.creditos,
+      carga_horaria: asignatura.carga_horaria,
+      tipo: asignatura.tipo,
+      descripcion: asignatura.descripcion
     };
     return dtoCreado;
     //return AsignaturaMapeador.toDTO(asignatura);
@@ -58,11 +58,11 @@ export class AsignaturaCasosUso implements IAsignaturaCasosUso {
     );
     await this.asignaturaRepositorio.actualizar(asignatura, id);
     const dtoActualizado: AsignaturaDTO = {
-      nombre: asignatura.getNombre(),
-      creditos: asignatura.getCreditos(),
-      carga_horaria: asignatura.getCarga_horaria(),
-      tipo: asignatura.getTipo(),
-      descripcion: asignatura.getDescripcion()
+      nombre: asignatura.nombre,
+      creditos: asignatura.creditos,
+      carga_horaria: asignatura.carga_horaria,
+      tipo: asignatura.tipo,
+      descripcion: asignatura.descripcion
     };
     return dtoActualizado;
     //return AsignaturaMapeador.toDTO(asignatura);

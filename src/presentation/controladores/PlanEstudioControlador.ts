@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PlanEstudioCasosUso } from "../../core/aplicacion/casos-uso/PlanEstudioCasosUso";
-import { PlanEstudioRepositorio } from "../../core/infraestructura/postgres/PlanEstudioRepositorio.js";
+import { PlanEstudioRepositorio } from "../../core/infraestructura/postgres/PlanEstudioRepositorio";
 import { EsquemaPlanEstudio, PlanEstudioDTO } from "../esquemas/PlanDeEstudioEsquema";
 import { ZodError } from "zod";
 

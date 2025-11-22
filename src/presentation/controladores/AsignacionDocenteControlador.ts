@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { IAsignacionDocente } from "../../core/dominio/entidades/IAsignacionDocente.js";
-import { IAsignacionDocenteCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IAsignacionDocenteCasoUso.js";
-import { AsignacionDocenteDTO, EsquemaAsignacionDocente } from "../esquemas/AsignacionDocenteEsquema.js";
+import { IAsignacionDocente } from "../../core/dominio/entidades/IAsignacionDocente";
+import { IAsignacionDocenteCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IAsignacionDocenteCasoUso";
+import { AsignacionDocenteDTO, EsquemaAsignacionDocente } from "../esquemas/AsignacionDocenteEsquema";
 import { ZodError } from "zod";
 
 export class AsignacionDocenteControlador {
