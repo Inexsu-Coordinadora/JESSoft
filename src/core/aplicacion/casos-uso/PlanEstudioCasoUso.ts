@@ -1,4 +1,4 @@
-import { IPlanEstudioCasosUso } from "../repositorio-casos-uso/IPlanEstudioCasosUso";
+import { IPlanEstudioCasosUso } from "../repositorio-casos-uso/IPlanEstudioCasoUso";
 import { IPlanEstudioRepositorio } from "../../dominio/repositorio/IPlanEstudioRepositorio";
 import { PlanEstudio } from "../../dominio/entidades/PlanEstudio";
 import { PlanEstudioDTO } from "../../../presentation/esquemas/PlanDeEstudioEsquema";

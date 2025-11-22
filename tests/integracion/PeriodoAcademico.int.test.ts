@@ -1,6 +1,8 @@
 process.env.NODE_ENV = "test";
 import request from "supertest";
 import { app } from "../../src/presentation/app";
+import { HttpStatus } from "../../src/common/statusCode";
+
 jest.mock(
     "../../src/core/infraestructura/postgres/PeriodoAcademicoRepositorioPostgres",
     () => {
@@ -64,7 +66,7 @@ describe("Pruebas de integración: Periodo Académico", () => {
     test("GET /api/periodos - Mostrar periodos académicos", async () => {
         const res = await request(app.server).get("/api/periodos");
 
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(HttpStatus.EXITO);
         expect(res.body.periodos.length).toBe(2);
         expect(res.body.mensaje).toBe("Periodos encontrados correctamente!");
     });
@@ -72,7 +74,7 @@ describe("Pruebas de integración: Periodo Académico", () => {
     test("GET /api/periodos/:id - Mostrar periodo por ID", async () => {
         const res = await request(app.server).get("/api/periodos/p1");
 
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(HttpStatus.EXITO);
         expect(res.body.periodo.id_periodo).toBe("p1");
     });
 
@@ -88,7 +90,7 @@ describe("Pruebas de integración: Periodo Académico", () => {
             .post("/api/periodos")
             .send(payload);
 
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(HttpStatus.EXITO);
         expect(res.body).toEqual({
             mensaje: "El periodo se creó correctamente",
             idNuevoPeriodo: "nuevo-periodo-mock",
@@ -107,7 +109,7 @@ describe("Pruebas de integración: Periodo Académico", () => {
             .put("/api/periodos/p1")
             .send(payload);
 
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(HttpStatus.EXITO);
         expect(res.body.mensaje).toBe("Periodo académico actualizado correctamente");
         expect(res.body.periodoActualizado.descripcion).toBe("Modificado");
     });
@@ -115,7 +117,7 @@ describe("Pruebas de integración: Periodo Académico", () => {
     test("DELETE /api/periodos/:id - Eliminar un periodo académico", async () => {
         const res = await request(app.server).delete("/api/periodos/p1");
 
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(HttpStatus.EXITO);
         expect(res.body).toEqual({
             mensaje: "Periodo eliminado correctamente",
             idPeriodo: "p1",

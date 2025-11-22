@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">34.32% </span>
+                <span class="strong">35.29% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>23/67</span>
+                <span class='fraction'>24/68</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">34.32% </span>
+                <span class="strong">35.29% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>23/67</span>
+                <span class='fraction'>24/68</span>
             </div>
         
             
@@ -298,9 +298,11 @@
 <a name='L233'></a><a href='#L233'>233</a>
 <a name='L234'></a><a href='#L234'>234</a>
 <a name='L235'></a><a href='#L235'>235</a>
-<a name='L236'></a><a href='#L236'>236</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -538,6 +540,7 @@ import { IDocente } from "../../core/dominio/entidades/IDocente";
 import { IDocenteCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IDocenteCasoUso";
 import { DocenteDTO, EsquemaDocente } from "../esquemas/DocenteEsquema";
 import { ZodError } from "zod";
+import { HttpStatus } from "../../common/statusCode";
 &nbsp;
 export class DocenteControlador {
   constructor(private docenteCasoUso: IDocenteCasoUso) {}
@@ -551,13 +554,13 @@ export class DocenteControlador {
       const { limite } = request.query;
       const docentesEncontrados = await this.docenteCasoUso.obtenerDocentes(limite);
 &nbsp;
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Docentes encontrados correctamente",
         docentes: docentesEncontrados,
         docentesEncontrados: docentesEncontrados.length, //Muestra cuantos docentes hay
       });
     } catch (err) {
-      return reply.code(500).send({
+      return reply.code(HttpStatus.ERROR_SERVIDOR).send({
         mensaje: "Error al obtener los docentes",
         error: err instanceof Error ? err.message : <span class="branch-1 cbranch-no" title="branch not covered" >err,</span>
       });
@@ -574,17 +577,17 @@ export class DocenteControlador {
       const docente = await this.docenteCasoUso.obtenerDocentePorId(id_docente);
 &nbsp;
       <span class="missing-if-branch" title="else path not taken" >E</span>if (!docente) {
-        return reply.code(404).send({
+        return reply.code(HttpStatus.NO_ENCONTRADO).send({
           mensaje: "Docente no encontrado",
         });
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return reply.code(200).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.EXITO).send({</span>
         mensaje: "Docente encontrado correctamente",
         docente,
       });
     } catch (err) {
-      return reply.code(500).send({
+      return reply.code(HttpStatus.ERROR_SERVIDOR).send({
         mensaje: "Error al obtener el docente",
         error: err instanceof Error ? err.message : <span class="branch-1 cbranch-no" title="branch not covered" >err,</span>
       });
@@ -599,7 +602,7 @@ crearDocente = async (
   try {
     //verificar si existe la propiedad vinculacion porque si la valido despues no meda :(
     <span class="missing-if-branch" title="else path not taken" >E</span>if (!("vinculacion" in request.body)) {
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: "La vinculación es obligatoria",
       });
     }
@@ -611,7 +614,7 @@ crearDocente = async (
     // Crear docente
     const idNuevo = <span class="cstat-no" title="statement not covered" >await this.docenteCasoUso.crearDocente(nuevoDocente);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return reply.code(201).send({</span>
+<span class="cstat-no" title="statement not covered" >    return reply.code(HttpStatus.CREADO).send({</span>
       mensaje: "Docente creado correctamente",
       idNuevo,
     });
@@ -625,7 +628,7 @@ crearDocente = async (
       const issue = <span class="cstat-no" title="statement not covered" >err.issues.length &gt; 0 ? err.issues[0] : null;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (!issue) {</span>
-<span class="cstat-no" title="statement not covered" >        return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
           mensaje: "Datos inválidos",
         });
       }
@@ -633,7 +636,7 @@ crearDocente = async (
       // Campo que falló
       const campo = <span class="cstat-no" title="statement not covered" >issue.path?.[0] ?? null;</span>
 <span class="cstat-no" title="statement not covered" >      if (campo === "vinculacion") {</span>
-<span class="cstat-no" title="statement not covered" >        return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
           mensaje:
             "La vinculación debe ser 'Tiempo completo', 'Catedra' o 'Medio tiempo'",
         });
@@ -648,18 +651,18 @@ crearDocente = async (
 &nbsp;
       const campoStr = <span class="cstat-no" title="statement not covered" >campo ? String(campo) : "";</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
         mensaje: mensajesCampos[campoStr] || issue.message || "Datos inválidos",
       });
     }
     //Cédula duplicada
 <span class="cstat-no" title="statement not covered" >    if (err instanceof Error &amp;&amp; err.message === "CEDULA_YA_EXISTE") {</span>
-<span class="cstat-no" title="statement not covered" >      return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
         mensaje: "La cédula ya existe",
       });
     }
     //Error inesperado del servidor
-<span class="cstat-no" title="statement not covered" >    return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >    return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
       mensaje: "Error al crear docente",
     });
   }
@@ -673,7 +676,7 @@ crearDocente = async (
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const { id_docente } = <span class="cstat-no" title="statement not covered" >request.params;</span>
 <span class="cstat-no" title="statement not covered" >    if (!("vinculacion" in request.body)) {</span>
-<span class="cstat-no" title="statement not covered" >      return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
         mensaje: "La vinculación es obligatoria",
       });
     }
@@ -685,14 +688,14 @@ crearDocente = async (
     const docenteActual = <span class="cstat-no" title="statement not covered" >await this.docenteCasoUso.obtenerDocentePorId(id_docente);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!docenteActual) {</span>
-<span class="cstat-no" title="statement not covered" >      return reply.code(404).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.NO_ENCONTRADO).send({</span>
         mensaje: "Docente no encontrado",
       });
     }
 &nbsp;
     // 3. Evitar modificar la cédula
 <span class="cstat-no" title="statement not covered" >    if (datosActualizados.cedula !== docenteActual.cedula) {</span>
-<span class="cstat-no" title="statement not covered" >      return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
         mensaje: "No se permite modificar la cédula del docente.",
       });
     }
@@ -703,7 +706,7 @@ crearDocente = async (
       datosActualizados
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return reply.code(200).send({</span>
+<span class="cstat-no" title="statement not covered" >    return reply.code(HttpStatus.EXITO).send({</span>
       mensaje: "Docente actualizado correctamente",
       docente: docenteActualizado,
     });
@@ -715,7 +718,7 @@ crearDocente = async (
       const issue = <span class="cstat-no" title="statement not covered" >err.issues.length &gt; 0 ? err.issues[0] : null;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (!issue) {</span>
-<span class="cstat-no" title="statement not covered" >        return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
           mensaje: "Datos inválidos",
         });
       }
@@ -731,13 +734,13 @@ crearDocente = async (
           "La vinculación debe ser 'Tiempo completo', 'Catedra' o 'Medio tiempo'",
       };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
         mensaje: mensajesCampos[campo] || issue.message || "Datos inválidos",
       });
     }
 &nbsp;
     // Error interno
-<span class="cstat-no" title="statement not covered" >    return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >    return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
       mensaje: "Error al actualizar el docente",
     });
   }
@@ -752,17 +755,17 @@ crearDocente = async (
       const { id_docente } = <span class="cstat-no" title="statement not covered" >request.params;</span>
 <span class="cstat-no" title="statement not covered" >      await this.docenteCasoUso.eliminarDocente(id_docente);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return reply.code(200).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.EXITO).send({</span>
         mensaje: "Docente eliminado correctamente",
         id_docente,
       });
     } catch (err) {
 <span class="cstat-no" title="statement not covered" >       if (err instanceof Error &amp;&amp; err.message === "DOCENTE_NO_ENCONTRADO") {</span>
-<span class="cstat-no" title="statement not covered" >        return reply.code(404).send({</span>
+<span class="cstat-no" title="statement not covered" >        return reply.code(HttpStatus.NO_ENCONTRADO).send({</span>
           mensaje: "Docente no encontrado",
           });
           }
-<span class="cstat-no" title="statement not covered" >      return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
     mensaje: "Error al eliminar el docente",
     });
     }
@@ -775,7 +778,7 @@ crearDocente = async (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-22T17:27:19.595Z
+                at 2025-11-22T22:19:02.427Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

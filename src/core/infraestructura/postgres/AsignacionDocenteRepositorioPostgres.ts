@@ -15,7 +15,7 @@ export class AsignacionDocenteRepositorio implements IAsignacionDocenteRepositor
     `;
 
     const respuesta = await ejecutarConsulta(query, parametros);
-    return respuesta.rows[0].id_pa;
+    return respuesta.rows[0].id_asignacion;
   }
 
   async listarAsignaciones(limite?: number): Promise<IAsignacionDocente[]> {

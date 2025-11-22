@@ -3,6 +3,7 @@ import { IDocente } from "../../core/dominio/entidades/IDocente";
 import { IDocenteCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IDocenteCasoUso";
 import { DocenteDTO, EsquemaDocente } from "../esquemas/DocenteEsquema";
 import { ZodError } from "zod";
+import { HttpStatus } from "../../common/statusCode";
 
 export class DocenteControlador {
   constructor(private docenteCasoUso: IDocenteCasoUso) {}
@@ -16,13 +17,13 @@ export class DocenteControlador {
       const { limite } = request.query;
       const docentesEncontrados = await this.docenteCasoUso.obtenerDocentes(limite);
 
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Docentes encontrados correctamente",
         docentes: docentesEncontrados,
         docentesEncontrados: docentesEncontrados.length, //Muestra cuantos docentes hay
       });
     } catch (err) {
-      return reply.code(500).send({
+      return reply.code(HttpStatus.ERROR_SERVIDOR).send({
         mensaje: "Error al obtener los docentes",
         error: err instanceof Error ? err.message : err,
       });
@@ -39,17 +40,17 @@ export class DocenteControlador {
       const docente = await this.docenteCasoUso.obtenerDocentePorId(id_docente);
 
       if (!docente) {
-        return reply.code(404).send({
+        return reply.code(HttpStatus.NO_ENCONTRADO).send({
           mensaje: "Docente no encontrado",
         });
       }
 
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Docente encontrado correctamente",
         docente,
       });
     } catch (err) {
-      return reply.code(500).send({
+      return reply.code(HttpStatus.ERROR_SERVIDOR).send({
         mensaje: "Error al obtener el docente",
         error: err instanceof Error ? err.message : err,
       });
@@ -64,7 +65,7 @@ crearDocente = async (
   try {
     //verificar si existe la propiedad vinculacion porque si la valido despues no meda :(
     if (!("vinculacion" in request.body)) {
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: "La vinculación es obligatoria",
       });
     }
@@ -76,7 +77,7 @@ crearDocente = async (
     // Crear docente
     const idNuevo = await this.docenteCasoUso.crearDocente(nuevoDocente);
 
-    return reply.code(201).send({
+    return reply.code(HttpStatus.CREADO).send({
       mensaje: "Docente creado correctamente",
       idNuevo,
     });
@@ -90,7 +91,7 @@ crearDocente = async (
       const issue = err.issues.length > 0 ? err.issues[0] : null;
 
       if (!issue) {
-        return reply.code(400).send({
+        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
           mensaje: "Datos inválidos",
         });
       }
@@ -98,7 +99,7 @@ crearDocente = async (
       // Campo que falló
       const campo = issue.path?.[0] ?? null;
       if (campo === "vinculacion") {
-        return reply.code(400).send({
+        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
           mensaje:
             "La vinculación debe ser 'Tiempo completo', 'Catedra' o 'Medio tiempo'",
         });
@@ -113,18 +114,18 @@ crearDocente = async (
 
       const campoStr = campo ? String(campo) : "";
 
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: mensajesCampos[campoStr] || issue.message || "Datos inválidos",
       });
     }
     //Cédula duplicada
     if (err instanceof Error && err.message === "CEDULA_YA_EXISTE") {
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: "La cédula ya existe",
       });
     }
     //Error inesperado del servidor
-    return reply.code(500).send({
+    return reply.code(HttpStatus.ERROR_SERVIDOR).send({
       mensaje: "Error al crear docente",
     });
   }
@@ -138,7 +139,7 @@ crearDocente = async (
   try {
     const { id_docente } = request.params;
     if (!("vinculacion" in request.body)) {
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: "La vinculación es obligatoria",
       });
     }
@@ -150,14 +151,14 @@ crearDocente = async (
     const docenteActual = await this.docenteCasoUso.obtenerDocentePorId(id_docente);
 
     if (!docenteActual) {
-      return reply.code(404).send({
+      return reply.code(HttpStatus.NO_ENCONTRADO).send({
         mensaje: "Docente no encontrado",
       });
     }
 
     // 3. Evitar modificar la cédula
     if (datosActualizados.cedula !== docenteActual.cedula) {
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: "No se permite modificar la cédula del docente.",
       });
     }
@@ -168,7 +169,7 @@ crearDocente = async (
       datosActualizados
     );
 
-    return reply.code(200).send({
+    return reply.code(HttpStatus.EXITO).send({
       mensaje: "Docente actualizado correctamente",
       docente: docenteActualizado,
     });
@@ -180,7 +181,7 @@ crearDocente = async (
       const issue = err.issues.length > 0 ? err.issues[0] : null;
 
       if (!issue) {
-        return reply.code(400).send({
+        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
           mensaje: "Datos inválidos",
         });
       }
@@ -196,13 +197,13 @@ crearDocente = async (
           "La vinculación debe ser 'Tiempo completo', 'Catedra' o 'Medio tiempo'",
       };
 
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: mensajesCampos[campo] || issue.message || "Datos inválidos",
       });
     }
 
     // Error interno
-    return reply.code(500).send({
+    return reply.code(HttpStatus.ERROR_SERVIDOR).send({
       mensaje: "Error al actualizar el docente",
     });
   }
@@ -217,17 +218,17 @@ crearDocente = async (
       const { id_docente } = request.params;
       await this.docenteCasoUso.eliminarDocente(id_docente);
 
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Docente eliminado correctamente",
         id_docente,
       });
     } catch (err) {
        if (err instanceof Error && err.message === "DOCENTE_NO_ENCONTRADO") {
-        return reply.code(404).send({
+        return reply.code(HttpStatus.NO_ENCONTRADO).send({
           mensaje: "Docente no encontrado",
           });
           }
-      return reply.code(500).send({
+      return reply.code(HttpStatus.ERROR_SERVIDOR).send({
     mensaje: "Error al eliminar el docente",
     });
     }

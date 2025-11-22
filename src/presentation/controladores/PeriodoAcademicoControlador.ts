@@ -3,7 +3,7 @@ import { IPeriodoAcademico } from "../../core/dominio/entidades/IPeriodoAcademic
 import { IPeriodoAcademicoCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IPeriodoAcademicoCasoUso";
 import { PeriodoAcademicoDTO, EsquemaPeriodoAcademico} from "../esquemas/PeriodoAcademicoEsquema";
 import { ZodError } from "zod";
-import { PeriodoAcademicoCasoUso } from "../../core/aplicacion/casos-uso/PeriodoAcademicoCasoUso";
+import { HttpStatus } from "../../common/statusCode";
 
 export class PeriodoAcademicoControlador {
   constructor(private periodoAcademicoCasoUso: IPeriodoAcademicoCasoUso) {
@@ -18,13 +18,13 @@ export class PeriodoAcademicoControlador {
       const { limite } = request.query;
       const periodosEncontrados = await this.periodoAcademicoCasoUso.obtenerPeriodos(limite);
 
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Periodos encontrados correctamente!",
         periodos: periodosEncontrados,
         periodosEncontrados: periodosEncontrados.length,
       });
     } catch (err) {
-      return reply.code(500).send({
+      return reply.code(HttpStatus.ERROR_SERVIDOR).send({
         mensaje: "Error al obtener los periodos",
         error: err instanceof Error ? err.message : err,
       });
@@ -40,17 +40,17 @@ export class PeriodoAcademicoControlador {
       const periodoEncontrado = await this.periodoAcademicoCasoUso.obtenerPeriodoPorId(id_p);
 
       if (!periodoEncontrado) {
-        return reply.code(404).send({
+        return reply.code(HttpStatus.NO_ENCONTRADO).send({
           mensaje: "Periodo no encontrado",
         });
       }
 
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Periodo encontrado correctamente",
         periodo: periodoEncontrado,
       });
     } catch (err) {
-      return reply.code(500).send({
+      return reply.code(HttpStatus.ERROR_SERVIDOR).send({
         mensaje: "Error al obtener el periodo",
         error: err instanceof Error ? err.message : err,
       });
@@ -65,28 +65,28 @@ export class PeriodoAcademicoControlador {
       const nuevoPeriodo = EsquemaPeriodoAcademico.parse(request.body);
       const idNuevoPeriodo = await this.periodoAcademicoCasoUso.crearPeriodo(nuevoPeriodo);
 
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "El periodo se creó correctamente",
         idNuevoPeriodo: idNuevoPeriodo,
       });
     } catch (err) {
       if (err instanceof ZodError) {
-        return reply.code(400).send({
+        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
           mensaje: "Error crear un nuevo periodo",
           error: err.issues[0]?.message || "Error desconocido",
         });
       } else if (err instanceof Error && err.message === "El año de fecha_inicio debe ser menor o igual al año de fecha_fin") {
-        return reply.code(400).send({
+        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
           mensaje: "El año de fecha_inicio debe ser menor o igual al año de fecha_fin",
           error: err.message,
         });
       } else if (err instanceof Error && err.message === "Ya existe un periodo académico con las mismas fechas de inicio y fin") {
-        return reply.code(409).send({
+        return reply.code(HttpStatus.CONFLICTO).send({
           mensaje: "Ya existe un periodo académico con las mismas fechas de inicio y fin",
           error: err.message,
         });
       }
-      return reply.code(500).send({
+      return reply.code(HttpStatus.ERROR_SERVIDOR).send({
         mensaje: "Error crear un nuevo periodo",
         error: err instanceof Error ? err.message : String(err),
       });
@@ -106,23 +106,23 @@ export class PeriodoAcademicoControlador {
         );
 
         if (!periodoActualizado) {
-            return reply.code(404).send({
+            return reply.code(HttpStatus.NO_ENCONTRADO).send({
             mensaje: "Periodo no encontrado",
             });
         }
 
         if (nuevoPeriodo.id_periodo && nuevoPeriodo.id_periodo !== id_p) {
-        return reply.code(400).send({
+        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
             mensaje: "No se permite modificar el ID del periodo académico.",
         });
         }
 
-        return reply.code(200).send({
+        return reply.code(HttpStatus.EXITO).send({
             mensaje: "Periodo académico actualizado correctamente",
             periodoActualizado: periodoActualizado,
         });
         } catch (err) {
-        return reply.code(500).send({
+        return reply.code(HttpStatus.ERROR_SERVIDOR).send({
             mensaje: "Error al actualizar el periodo",
             error: err instanceof Error ? err.message : err,
         });
@@ -137,12 +137,12 @@ export class PeriodoAcademicoControlador {
       const { id_p } = request.params;
       await this.periodoAcademicoCasoUso.eliminarPeriodo(id_p);
 
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Periodo eliminado correctamente",
         idPeriodo: id_p,
       });
     } catch (err) {
-      return reply.code(500).send({
+      return reply.code(HttpStatus.ERROR_SERVIDOR).send({
         mensaje: "Error al eliminar el periodo",
         error: err instanceof Error ? err.message : err,
       });

@@ -1,4 +1,4 @@
-import { AsignaturaCasosUso } from "../../src/core/aplicacion/casos-uso/AsignaturaCasosUso";
+import { AsignaturaCasosUso } from "../../src/core/aplicacion/casos-uso/AsignaturaCasoUso";
 import { IAsignaturaRepositorio } from "../../src/core/dominio/repositorio/IAsignaturaRepositorio";
 import { Asignatura } from "../../src/core/dominio/entidades/Asignatura";
 import { AsignaturaDTO } from "../../src/presentation/esquemas/AsignaturaEsquema";

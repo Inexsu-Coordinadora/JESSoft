@@ -177,39 +177,15 @@
 <a name='L112'></a><a href='#L112'>112</a>
 <a name='L113'></a><a href='#L113'>113</a>
 <a name='L114'></a><a href='#L114'>114</a>
-<a name='L115'></a><a href='#L115'>115</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -246,6 +222,36 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -296,35 +302,8 @@ import { IPlanEstudioRepositorio } from "../../dominio/repositorio/IPlanEstudioR
 import { pool } from "./ConexionPostgres";
 &nbsp;
 export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
-<span class="fstat-no" title="function not covered" >    async </span>obtenerTodos(): Promise&lt;PlanEstudio[]&gt; {
-        const result = <span class="cstat-no" title="statement not covered" >await pool.query("SELECT * FROM plan_estudio");</span>
-<span class="cstat-no" title="statement not covered" >        return result.rows.map(</span>
-<span class="fstat-no" title="function not covered" >            (r</span>ow) =&gt;
-<span class="cstat-no" title="statement not covered" >                new PlanEstudio(</span>
-                    row.id_plan,
-                    row.id_asignatura,
-                    row.id_programa,
-                    row.semestre
-                )
-        );
-    }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    async </span>obtenerPorId(id: string): Promise&lt;PlanEstudio | null&gt; {
-        const result = <span class="cstat-no" title="statement not covered" >await pool.query(</span>
-            "SELECT * FROM plan_estudio WHERE id_plan = $1",
-            [id]
-        );
-        const row = <span class="cstat-no" title="statement not covered" >result.rows[0];</span>
-<span class="cstat-no" title="statement not covered" >        if (!row) <span class="cstat-no" title="statement not covered" >return null;</span></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        return new PlanEstudio(</span>
-            row.id_plan,
-            row.id_asignatura,
-            row.id_programa,
-            row.semestre
-        );
-    }
-<span class="fstat-no" title="function not covered" >    async </span>crear(planEstudio: PlanEstudio): Promise&lt;String&gt; {
+<span class="fstat-no" title="function not covered" >    async </span>crear(planEstudio: PlanEstudio): Promise&lt;string&gt; {
         const queryBuscarId = <span class="cstat-no" title="statement not covered" >`SELECT * FROM plan_estudio WHERE id_plan = $1`;</span>
         const queryBuscarPlanEstudio = <span class="cstat-no" title="statement not covered" >`SELECT * FROM plan_estudio WHERE id_asignatura = $1 AND id_programa = $2 AND semestre = $3`;</span>
         const queryBuscarAsignatura_Programa = <span class="cstat-no" title="statement not covered" >`SELECT * FROM plan_estudio WHERE id_asignatura = $1 AND id_programa = $2`;</span>
@@ -361,6 +340,36 @@ export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
         ]);
 <span class="cstat-no" title="statement not covered" >        return planEstudio.id_plan;</span>
     }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    async </span>obtenerTodos(): Promise&lt;PlanEstudio[]&gt; {
+        const result = <span class="cstat-no" title="statement not covered" >await pool.query("SELECT * FROM plan_estudio");</span>
+<span class="cstat-no" title="statement not covered" >        return result.rows.map(</span>
+<span class="fstat-no" title="function not covered" >            (r</span>ow) =&gt;
+<span class="cstat-no" title="statement not covered" >                new PlanEstudio(</span>
+                    row.id_plan,
+                    row.id_asignatura,
+                    row.id_programa,
+                    row.semestre
+                )
+        );
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    async </span>obtenerPorId(id: string): Promise&lt;PlanEstudio | null&gt; {
+        const result = <span class="cstat-no" title="statement not covered" >await pool.query(</span>
+            "SELECT * FROM plan_estudio WHERE id_plan = $1",
+            [id]
+        );
+        const row = <span class="cstat-no" title="statement not covered" >result.rows[0];</span>
+<span class="cstat-no" title="statement not covered" >        if (!row) <span class="cstat-no" title="statement not covered" >return null;</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return new PlanEstudio(</span>
+            row.id_plan,
+            row.id_asignatura,
+            row.id_programa,
+            row.semestre
+        );
+    }
+&nbsp;
 <span class="fstat-no" title="function not covered" >    async </span>eliminar(id: string): Promise&lt;void&gt; {
 &nbsp;
         const buscarId = <span class="cstat-no" title="statement not covered" >`SELECT * FROM plan_estudio WHERE id_plan = $1`;</span>
@@ -412,7 +421,7 @@ export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-22T17:27:19.595Z
+                at 2025-11-22T22:19:02.427Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

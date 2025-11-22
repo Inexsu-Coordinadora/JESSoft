@@ -1,8 +1,9 @@
 import Fastify from "fastify";
 import { AsignaturaControlador } from "../../src/presentation/controladores/AsignaturaControlador";
-import { AsignaturaCasosUso } from "../../src/core/aplicacion/casos-uso/AsignaturaCasosUso";
+import { AsignaturaCasosUso } from "../../src/core/aplicacion/casos-uso/AsignaturaCasoUso";
 import { IAsignaturaRepositorio } from "../../src/core/dominio/repositorio/IAsignaturaRepositorio";
 import { AsignaturaDTO } from "../../src/presentation/esquemas/AsignaturaEsquema";
+import { HttpStatus } from "../../src/common/statusCode";
 
 describe("Integración - Asignatura (controller + casos de uso)", () => {
   let fastify: ReturnType<typeof Fastify>;
@@ -53,7 +54,7 @@ describe("Integración - Asignatura (controller + casos de uso)", () => {
       headers: { "content-type": "application/json" },
     });
 
-    expect(res.statusCode).toBe(201);
+    expect(res.statusCode).toBe(HttpStatus.CREADO);
     const body = JSON.parse(res.body);
     expect(body).toEqual({
       nombre: payload.nombre,
@@ -73,7 +74,7 @@ describe("Integración - Asignatura (controller + casos de uso)", () => {
 
     const res = await fastify.inject({ method: "GET", url: "/asignaturas" });
 
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(HttpStatus.EXITO);
     expect(JSON.parse(res.body)).toEqual(listaMock);
     expect(mockRepo.obtenerTodas).toHaveBeenCalled();
   });
@@ -96,7 +97,7 @@ describe("Integración - Asignatura (controller + casos de uso)", () => {
       headers: { "content-type": "application/json" },
     });
 
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(HttpStatus.EXITO);
     expect(JSON.parse(res.body)).toEqual({
       nombre: payload.nombre,
       creditos: payload.creditos,
@@ -113,7 +114,7 @@ describe("Integración - Asignatura (controller + casos de uso)", () => {
 
     const res = await fastify.inject({ method: "DELETE", url: `/asignaturas/${id}` });
 
-    expect(res.statusCode).toBe(204);
+    expect(res.statusCode).toBe(HttpStatus.SIN_CONTENIDO);
     // controlador envía un body con mensaje e id aunque es 204
     if (res.body) {
       const body = JSON.parse(res.body);
@@ -136,7 +137,7 @@ describe("Integración - Asignatura (controller + casos de uso)", () => {
       headers: { "content-type": "application/json" },
     });
 
-    expect(res.statusCode).toBe(400);
+    expect(res.statusCode).toBe(HttpStatus.SOLICITUD_INCORRECTA);
     const body = JSON.parse(res.body);
     expect(body).toHaveProperty("mensaje", "Error crear un nuevo programa");
     expect(body).toHaveProperty("error");
@@ -159,7 +160,7 @@ describe("Integración - Asignatura (controller + casos de uso)", () => {
       headers: { "content-type": "application/json" },
     });
 
-    expect(res.statusCode).toBe(409);
+    expect(res.statusCode).toBe(HttpStatus.CONFLICTO);
     const body = JSON.parse(res.body);
     expect(body).toEqual({ mensaje: "Ya existe una asignatura con ese nombre." });
   });

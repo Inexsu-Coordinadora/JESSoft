@@ -1,8 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { PlanEstudioCasosUso } from "../../core/aplicacion/casos-uso/PlanEstudioCasosUso";
+import { PlanEstudioCasosUso } from "../../core/aplicacion/casos-uso/PlanEstudioCasoUso";
 import { PlanEstudioRepositorio } from "../../core/infraestructura/postgres/PlanEstudioRepositorio";
 import { EsquemaPlanEstudio, PlanEstudioDTO } from "../esquemas/PlanDeEstudioEsquema";
 import { ZodError } from "zod";
+import { HttpStatus } from "../../common/statusCode";
 
 const repo = new PlanEstudioRepositorio();
 const planEstudioCasosUso = new PlanEstudioCasosUso(repo);
@@ -15,27 +16,27 @@ export class PlanEstudioControlador {
         try {
             const nuevoPlanEstudio = EsquemaPlanEstudio.parse(req.body);
             const idPlanEstudio = await planEstudioCasosUso.crear(nuevoPlanEstudio);
-            return res.status(201).send({
+            return res.status(HttpStatus.CREADO).send({
                 mensaje: "Plan de estudio creado correctamente",
                 id: idPlanEstudio
             });
         } catch (error) {
             if (error instanceof Error && (error.message === "Ya existe un plan de estudio con esos datos." || error.message === "Ya existe un plan de estudio con ese ID.")) {
-                return res.status(400).send({ mensaje: error.message });
+                return res.status(HttpStatus.SOLICITUD_INCORRECTA).send({ mensaje: error.message });
             } else if (error instanceof Error && error.message === "Ya existe un plan de estudio para esa asignatura en ese programa.") {
-                return res.status(409).send({ mensaje: error.message });
+                return res.status(HttpStatus.SOLICITUD_INCORRECTA).send({ mensaje: error.message });
             } else if (error instanceof Error && error.message.includes("insert or update on table \"plan_estudio\" violates foreign key constraint \"plan_estudio_id_asignatura_fkey\"")) {
-                return res.status(400).send({ mensaje: "El ID de asignatura no existe." });
+                return res.status(HttpStatus.SOLICITUD_INCORRECTA).send({ mensaje: "El ID de asignatura no existe." });
             } else if (error instanceof Error && error.message.includes("insert or update on table \"plan_estudio\" violates foreign key constraint \"plan_estudio_id_programa_fkey\"")) {
-                return res.status(400).send({ mensaje: "El ID de programa no existe." });
+                return res.status(HttpStatus.SOLICITUD_INCORRECTA).send({ mensaje: "El ID de programa no existe." });
             } else if (error instanceof ZodError) {
-                return res.code(400).send({
+                return res.code(HttpStatus.SOLICITUD_INCORRECTA).send({
                     mensaje: "Error crear un nuevo programa",
                     error: error.issues[0]?.message || "Error desconocido",
                 });
             }
             console.error("Error creando plan de estudio:", error);
-            return res.status(500).send({ mensaje: "Error interno al crear plan de estudio" });
+            return res.status(HttpStatus.ERROR_SERVIDOR).send({ mensaje: "Error interno al crear plan de estudio" });
         }
     }
 
@@ -43,11 +44,11 @@ export class PlanEstudioControlador {
     async listar(req: FastifyRequest, res: FastifyReply) {
         try {
             const planesEstudio = await planEstudioCasosUso.obtenerTodos();
-            return res.status(200).send(planesEstudio);
+            return res.status(HttpStatus.EXITO).send(planesEstudio);
         }
         catch (error) {
             console.error("Error listando planes de estudio:", error);
-            return res.status(500).send({ mensaje: "Error interno al listar planes de estudio" });
+            return res.status(HttpStatus.ERROR_SERVIDOR).send({ mensaje: "Error interno al listar planes de estudio" });
         }
     }
 
@@ -58,27 +59,27 @@ export class PlanEstudioControlador {
             const id = req.params.id;
             const id_plan = id;
             const planEstudioActualizado = await planEstudioCasosUso.actualizar(dto, id_plan);
-            return res.status(200).send({
+            return res.status(HttpStatus.EXITO).send({
                 mensaje: "Plan de estudio actualizado correctamente",
                 planEstudioActualizado
             });
         } catch (error) {
             if (error instanceof Error && (error.message === "Ya existe un plan de estudio con esos datos." || error.message === "Ya existe un plan de estudio con ese ID.")) {
-                return res.status(400).send({ mensaje: error.message });
+                return res.status(HttpStatus.SOLICITUD_INCORRECTA).send({ mensaje: error.message });
             } else if (error instanceof Error && error.message === "Ya existe un plan de estudio para esa asignatura en ese programa.") {
-                return res.status(409).send({ mensaje: error.message });
+                return res.status(HttpStatus.CONFLICTO).send({ mensaje: error.message });
             } else if (error instanceof Error && error.message.includes("insert or update on table \"plan_estudio\" violates foreign key constraint \"plan_estudio_id_asignatura_fkey\"")) {
-                return res.status(400).send({ mensaje: "El ID de asignatura no existe." });
+                return res.status(HttpStatus.SOLICITUD_INCORRECTA).send({ mensaje: "El ID de asignatura no existe." });
             } else if (error instanceof Error && error.message.includes("insert or update on table \"plan_estudio\" violates foreign key constraint \"plan_estudio_id_programa_fkey\"")) {
-                return res.status(400).send({ mensaje: "El ID de programa no existe." });
+                return res.status(HttpStatus.SOLICITUD_INCORRECTA).send({ mensaje: "El ID de programa no existe." });
             } else if (error instanceof ZodError) {
-                return res.code(400).send({
+                return res.code(HttpStatus.SOLICITUD_INCORRECTA).send({
                     mensaje: "Error al actualizar un nuevo programa",
                     error: error.issues[0]?.message || "Error desconocido",
                 });
             }
             console.error("Error creando plan de estudio:", error);
-            return res.status(500).send({ mensaje: "Error interno al crear plan de estudio" });
+            return res.status(HttpStatus.ERROR_SERVIDOR).send({ mensaje: "Error interno al crear plan de estudio" });
         }
     }
 
@@ -87,16 +88,16 @@ export class PlanEstudioControlador {
         try {
             const id = req.params.id;
             await planEstudioCasosUso.eliminar(id);
-            return res.status(204).send({
+            return res.status(HttpStatus.SIN_CONTENIDO).send({
                 mensaje: "Plan de estudio eliminado correctamente",
                 id: id
             });
         } catch (error) {
             if (error instanceof Error && error.message === "No existe un plan de estudio con ese ID.") {
-                return res.status(404).send({ mensaje: error.message });
+                return res.status(HttpStatus.NO_ENCONTRADO).send({ mensaje: error.message });
             }
             console.error("Error eliminando plan de estudio:", error);
-            return res.status(500).send({ mensaje: "Error interno al eliminar plan de estudio" });
+            return res.status(HttpStatus.ERROR_SERVIDOR).send({ mensaje: "Error interno al eliminar plan de estudio" });
         }
     }
 }   

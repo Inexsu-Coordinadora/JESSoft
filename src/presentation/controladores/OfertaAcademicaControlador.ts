@@ -3,7 +3,7 @@ import { IOfertaAcademica } from "../../core/dominio/entidades/IOfertaAcademica"
 import { IOfertaAcademicaCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IOfertaAcademicaCasoUso";
 import { OfertaAcademicaDTO, EsquemaOfertaAcademica } from "../esquemas/OfertaAcademicaEsquema";
 import { ZodError } from "zod";
-
+import { HttpStatus } from "../../common/statusCode";
 
 export class OfertaAcademicaControlador {
   constructor(private ofertaCasoUso: IOfertaAcademicaCasoUso) {}
@@ -17,13 +17,13 @@ export class OfertaAcademicaControlador {
       const { limite } = request.query;
       const ofertas = await this.ofertaCasoUso.listarOfertas(limite);
 
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Ofertas encontradas correctamente",
         ofertas,
         cantidad: ofertas.length,
       });
     } catch (err) {
-      return reply.code(500).send({
+      return reply.code(HttpStatus.ERROR_SERVIDOR).send({
         mensaje: "Error al listar las ofertas académicas",
         error: err instanceof Error ? err.message : err,
       });
@@ -40,15 +40,15 @@ export class OfertaAcademicaControlador {
       const oferta = await this.ofertaCasoUso.obtenerOfertaPorId(id_oferta);
 
       if (!oferta) {
-        return reply.code(404).send({ mensaje: "Oferta académica no encontrada" });
+        return reply.code(HttpStatus.NO_ENCONTRADO).send({ mensaje: "Oferta académica no encontrada" });
       }
 
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Oferta encontrada correctamente",
         oferta,
       });
     } catch (err) {
-      return reply.code(500).send({
+      return reply.code(HttpStatus.ERROR_SERVIDOR).send({
         mensaje: "Error al obtener la oferta académica",
         error: err instanceof Error ? err.message : err,
       });
@@ -65,7 +65,7 @@ crearOferta = async (
 
     const idNueva = await this.ofertaCasoUso.crearOferta(datosValidados);
 
-    return reply.code(201).send({
+    return reply.code(HttpStatus.CREADO).send({
       mensaje: "Oferta académica creada correctamente",
       id_oferta: idNueva,
     });
@@ -87,22 +87,22 @@ crearOferta = async (
         }
       }
 
-      return reply.code(400).send({ mensaje });
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({ mensaje });
     }
 
     if (err.code === "23505") {
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: "La oferta académica ya existe",
       });
     }
 
     if (err instanceof Error) {
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: err.message,
       });
     }
 
-    return reply.code(500).send({
+    return reply.code(HttpStatus.ERROR_SERVIDOR).send({
       mensaje: "Error al crear la oferta académica",
       error: err,
     });
@@ -117,7 +117,7 @@ crearOferta = async (
     const { id_oferta } = request.params;
     // Rechazar si intenta cambiar el ID
     if ("id_oferta" in request.body && request.body.id_oferta !== id_oferta) {
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: "No se permite modificar el ID de la oferta académica",
       });
     }
@@ -130,26 +130,26 @@ crearOferta = async (
     const ofertaActual = await this.ofertaCasoUso.obtenerOfertaPorId(id_oferta);
 
     if (!ofertaActual) {
-      return reply.code(404).send({
+      return reply.code(HttpStatus.NO_ENCONTRADO).send({
         mensaje: "Oferta académica no encontrada",
       });
     }
 
     //Prohibir modificar campos 
     if (id_periodo !== ofertaActual.id_periodo) {
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: "No se permite modificar el periodo académico",
       });
     }
 
     if (id_plan !== ofertaActual.id_plan) {
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: "No se permite modificar el plan de estudio",
       });
     }
 
     if (grupo !== ofertaActual.grupo) {
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: "No se permite modificar el grupo",
       });
     }
@@ -160,7 +160,7 @@ crearOferta = async (
       datosActualizados 
     );
 
-    return reply.code(200).send({
+    return reply.code(HttpStatus.EXITO).send({
       mensaje: "Oferta académica actualizada correctamente",
       oferta: ofertaActualizada,
     });
@@ -170,7 +170,7 @@ crearOferta = async (
       const issue = err.issues.length > 0 ? err.issues[0] : null;
 
       if (!issue) {
-        return reply.code(400).send({
+        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
           mensaje: "Datos inválidos",
         });
       }
@@ -182,12 +182,12 @@ crearOferta = async (
         cupo: "El cupo es obligatorio y debe ser mayor que cero",
       };
 
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: mensajesCampos[campo] || issue.message || "Datos inválidos",
       });
     }
 
-    return reply.code(500).send({
+    return reply.code(HttpStatus.ERROR_SERVIDOR).send({
       mensaje: "Error al actualizar la oferta académica",
     });
   }
@@ -203,7 +203,7 @@ crearOferta = async (
 
     await this.ofertaCasoUso.eliminarOferta(id_oferta);
 
-    return reply.code(200).send({
+    return reply.code(HttpStatus.EXITO).send({
       mensaje: "Oferta académica eliminada correctamente",
       id_oferta,
     });
@@ -211,12 +211,12 @@ crearOferta = async (
   } catch (err: any) {
 
     if (err instanceof Error && err.message === "OFERTA_NO_ENCONTRADA") {
-      return reply.code(404).send({
+      return reply.code(HttpStatus.NO_ENCONTRADO).send({
         mensaje: "Oferta académica no encontrada",
       });
     }
 
-    return reply.code(500).send({
+    return reply.code(HttpStatus.ERROR_SERVIDOR).send({
       mensaje: "Error al eliminar la oferta académica",
     });
   }

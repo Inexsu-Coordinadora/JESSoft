@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.21% </span>
+                <span class="strong">70.83% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>33/47</span>
+                <span class='fraction'>34/48</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.21% </span>
+                <span class="strong">70.83% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>33/47</span>
+                <span class='fraction'>34/48</span>
             </div>
         
             
@@ -219,7 +219,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -370,7 +370,7 @@ import { IPeriodoAcademico } from "../../core/dominio/entidades/IPeriodoAcademic
 import { IPeriodoAcademicoCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IPeriodoAcademicoCasoUso";
 import { PeriodoAcademicoDTO, EsquemaPeriodoAcademico} from "../esquemas/PeriodoAcademicoEsquema";
 import { ZodError } from "zod";
-import { PeriodoAcademicoCasoUso } from "../../core/aplicacion/casos-uso/PeriodoAcademicoCasoUso";
+import { HttpStatus } from "../../common/statusCode";
 &nbsp;
 export class PeriodoAcademicoControlador {
   constructor(private periodoAcademicoCasoUso: IPeriodoAcademicoCasoUso) {
@@ -385,13 +385,13 @@ export class PeriodoAcademicoControlador {
       const { limite } = request.query;
       const periodosEncontrados = await this.periodoAcademicoCasoUso.obtenerPeriodos(limite);
 &nbsp;
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Periodos encontrados correctamente!",
         periodos: periodosEncontrados,
         periodosEncontrados: periodosEncontrados.length,
       });
     } catch (err) {
-<span class="cstat-no" title="statement not covered" >      return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
         mensaje: "Error al obtener los periodos",
         error: err instanceof Error ? err.message : err,
       });
@@ -407,17 +407,17 @@ export class PeriodoAcademicoControlador {
       const periodoEncontrado = await this.periodoAcademicoCasoUso.obtenerPeriodoPorId(id_p);
 &nbsp;
       <span class="missing-if-branch" title="if path not taken" >I</span>if (!periodoEncontrado) {
-<span class="cstat-no" title="statement not covered" >        return reply.code(404).send({</span>
+<span class="cstat-no" title="statement not covered" >        return reply.code(HttpStatus.NO_ENCONTRADO).send({</span>
           mensaje: "Periodo no encontrado",
         });
       }
 &nbsp;
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Periodo encontrado correctamente",
         periodo: periodoEncontrado,
       });
     } catch (err) {
-<span class="cstat-no" title="statement not covered" >      return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
         mensaje: "Error al obtener el periodo",
         error: err instanceof Error ? err.message : err,
       });
@@ -432,28 +432,28 @@ export class PeriodoAcademicoControlador {
       const nuevoPeriodo = EsquemaPeriodoAcademico.parse(request.body);
       const idNuevoPeriodo = await this.periodoAcademicoCasoUso.crearPeriodo(nuevoPeriodo);
 &nbsp;
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "El periodo se creó correctamente",
         idNuevoPeriodo: idNuevoPeriodo,
       });
     } catch (err) {
 <span class="cstat-no" title="statement not covered" >      if (err instanceof ZodError) {</span>
-<span class="cstat-no" title="statement not covered" >        return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
           mensaje: "Error crear un nuevo periodo",
           error: err.issues[0]?.message || "Error desconocido",
         });
       } else <span class="cstat-no" title="statement not covered" >if (err instanceof Error &amp;&amp; err.message === "El año de fecha_inicio debe ser menor o igual al año de fecha_fin") {</span>
-<span class="cstat-no" title="statement not covered" >        return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
           mensaje: "El año de fecha_inicio debe ser menor o igual al año de fecha_fin",
           error: err.message,
         });
       } else <span class="cstat-no" title="statement not covered" >if (err instanceof Error &amp;&amp; err.message === "Ya existe un periodo académico con las mismas fechas de inicio y fin") {</span>
-<span class="cstat-no" title="statement not covered" >        return reply.code(409).send({</span>
+<span class="cstat-no" title="statement not covered" >        return reply.code(HttpStatus.CONFLICTO).send({</span>
           mensaje: "Ya existe un periodo académico con las mismas fechas de inicio y fin",
           error: err.message,
         });
       }
-<span class="cstat-no" title="statement not covered" >      return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
         mensaje: "Error crear un nuevo periodo",
         error: err instanceof Error ? err.message : String(err),
       });
@@ -473,23 +473,23 @@ export class PeriodoAcademicoControlador {
         );
 &nbsp;
         <span class="missing-if-branch" title="if path not taken" >I</span>if (!periodoActualizado) {
-<span class="cstat-no" title="statement not covered" >            return reply.code(404).send({</span>
+<span class="cstat-no" title="statement not covered" >            return reply.code(HttpStatus.NO_ENCONTRADO).send({</span>
             mensaje: "Periodo no encontrado",
             });
         }
 &nbsp;
         <span class="missing-if-branch" title="if path not taken" >I</span>if (nuevoPeriodo.id_periodo &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >nuevoPeriodo.id_periodo !== id_p)</span> {
-<span class="cstat-no" title="statement not covered" >        return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
             mensaje: "No se permite modificar el ID del periodo académico.",
         });
         }
 &nbsp;
-        return reply.code(200).send({
+        return reply.code(HttpStatus.EXITO).send({
             mensaje: "Periodo académico actualizado correctamente",
             periodoActualizado: periodoActualizado,
         });
         } catch (err) {
-<span class="cstat-no" title="statement not covered" >        return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >        return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
             mensaje: "Error al actualizar el periodo",
             error: err instanceof Error ? err.message : err,
         });
@@ -504,12 +504,12 @@ export class PeriodoAcademicoControlador {
       const { id_p } = request.params;
       await this.periodoAcademicoCasoUso.eliminarPeriodo(id_p);
 &nbsp;
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Periodo eliminado correctamente",
         idPeriodo: id_p,
       });
     } catch (err) {
-<span class="cstat-no" title="statement not covered" >      return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
         mensaje: "Error al eliminar el periodo",
         error: err instanceof Error ? err.message : err,
       });
@@ -523,7 +523,7 @@ export class PeriodoAcademicoControlador {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-22T17:27:19.595Z
+                at 2025-11-22T22:19:02.427Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

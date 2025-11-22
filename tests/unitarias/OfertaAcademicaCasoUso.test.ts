@@ -186,7 +186,7 @@ test("Eliminar oferta - no funciona", async () => {
   expect(ofertaRepoMock.eliminarOferta).toHaveBeenCalledWith("OF1");
 });
 
-// 🔥 NUEVO TEST 1: Listar ofertas con límite
+
 test("Listar ofertas - con límite", async () => {
   const ofertasEsperadas: IOfertaAcademica[] = [
     {
@@ -207,10 +207,9 @@ test("Listar ofertas - con límite", async () => {
 });
 
 
-// 🔥 NUEVO TEST 2: Crear oferta - validar que el objeto no esté vacío
+
 test("Crear oferta - no funciona si se envía un objeto vacío", async () => {
-  // Si quieres validar esto, el caso de uso debería manejarlo.
-  // Simulamos comportamiento esperado: el repositorio rechaza.
+
   ofertaRepoMock.crearOferta.mockRejectedValue(
     new Error("Datos incompletos para crear oferta")
   );
@@ -223,7 +222,6 @@ test("Crear oferta - no funciona si se envía un objeto vacío", async () => {
 });
 
 
-// 🔥 NUEVO TEST 3: Actualizar oferta – permitir que no venga id_oferta en el body
 test("Actualizar oferta - funciona si el objeto no trae id_oferta", async () => {
   const datosActualizados: IOfertaAcademica = {
     id_periodo: "P1",
@@ -245,8 +243,6 @@ test("Actualizar oferta - funciona si el objeto no trae id_oferta", async () => 
   expect(resultado).toEqual(respuestaEsperada);
 });
 
-
-// 🔥 NUEVO TEST 4: Eliminar oferta - falla si se envía id vacío
 test("Eliminar oferta - no funciona si se envía un id vacío", async () => {
   ofertaRepoMock.eliminarOferta.mockRejectedValue(
     new Error("ID inválido para eliminar oferta")

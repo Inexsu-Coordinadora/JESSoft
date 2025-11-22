@@ -1,6 +1,7 @@
 process.env.NODE_ENV = "test";
 import request from "supertest";
 import { app } from "../../src/presentation/app";
+import { HttpStatus } from "../../src/common/statusCode";
 jest.mock("../../src/core/infraestructura/postgres/PlanEstudioRepositorio", () => {
     return {
         PlanEstudioRepositorio: jest.fn().mockImplementation(() => (
@@ -56,7 +57,7 @@ describe("Pruebas de integración de PlanEstudio", () => {
     test("GET /api/planes-estudio - Mostrar todos los planes", async () => {
         const res = await request(app.server).get("/api/planes-estudio");
 
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(HttpStatus.EXITO);
         expect(res.body).toEqual([
             {
                 id_plan: "mock1",
@@ -84,7 +85,7 @@ describe("Pruebas de integración de PlanEstudio", () => {
             .post("/api/planes-estudio")
             .send(payload);
 
-        expect(res.status).toBe(201);
+        expect(res.status).toBe(HttpStatus.CREADO);
         expect(res.body).toEqual({
             mensaje: "Plan de estudio creado correctamente",
             id: "mock-created-id",
@@ -102,7 +103,7 @@ describe("Pruebas de integración de PlanEstudio", () => {
             .put("/api/planes-estudio/mock1")
             .send(payload);
 
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(HttpStatus.EXITO);
         expect(res.body).toEqual({
             mensaje: "Plan de estudio actualizado correctamente",
             planEstudioActualizado: {
@@ -117,7 +118,7 @@ describe("Pruebas de integración de PlanEstudio", () => {
         const res = await request(app.server)
             .delete("/api/planes-estudio/mock1");
 
-        expect(res.status).toBe(204);
+        expect(res.status).toBe(HttpStatus.SIN_CONTENIDO);
         expect(res.body).toEqual({});
     });
 });

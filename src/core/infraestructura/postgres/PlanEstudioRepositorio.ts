@@ -4,7 +4,7 @@ import { pool } from "./ConexionPostgres";
 
 export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
 
-    async crear(planEstudio: PlanEstudio): Promise<String> {
+    async crear(planEstudio: PlanEstudio): Promise<string> {
         const queryBuscarId = `SELECT * FROM plan_estudio WHERE id_plan = $1`;
         const queryBuscarPlanEstudio = `SELECT * FROM plan_estudio WHERE id_asignatura = $1 AND id_programa = $2 AND semestre = $3`;
         const queryBuscarAsignatura_Programa = `SELECT * FROM plan_estudio WHERE id_asignatura = $1 AND id_programa = $2`;

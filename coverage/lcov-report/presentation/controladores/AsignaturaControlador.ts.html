@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">56.81% </span>
+                <span class="strong">57.77% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>25/44</span>
+                <span class='fraction'>26/45</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">56.81% </span>
+                <span class="strong">57.77% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>25/44</span>
+                <span class='fraction'>26/45</span>
             </div>
         
             
@@ -154,20 +154,11 @@
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
 <a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">10x</span>
@@ -226,6 +217,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -253,16 +245,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// ...existing code...
-import { FastifyReply, FastifyRequest } from "fastify";
-import { AsignaturaCasosUso } from "../../core/aplicacion/casos-uso/AsignaturaCasosUso";
-// import { AsignaturaRepositorio } from "../../core/infraestructura/postgres/AsignaturaRepositorio";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { FastifyReply, FastifyRequest } from "fastify";
+import { AsignaturaCasosUso } from "../../core/aplicacion/casos-uso/AsignaturaCasoUso";
 import { AsignaturaDTO, EsquemaAsignatura } from "../esquemas/AsignaturaEsquema";
 import { ZodError } from "zod";
-&nbsp;
-// ...existing code...
-// const repo = new AsignaturaRepositorio();
-// const asignaturaCasosUso = new AsignaturaCasosUso(repo);
+import { HttpStatus } from "../../common/statusCode";
 &nbsp;
 export class AsignaturaControlador {
   constructor(private casosUso: AsignaturaCasosUso) { }
@@ -271,34 +258,34 @@ export class AsignaturaControlador {
     try {
       const nuevaAsignatura = EsquemaAsignatura.parse(req.body);
       const asignaturaCreada = await this.casosUso.crear(nuevaAsignatura);
-      return res.status(201).send(asignaturaCreada);
+      return res.status(HttpStatus.CREADO).send(asignaturaCreada);
     } catch (error) {
       if (error instanceof ZodError) {
-        return res.code(400).send({
+        return res.code(HttpStatus.SOLICITUD_INCORRECTA).send({
           mensaje: "Error crear un nuevo programa",
           error: error.issues[0]?.message || <span class="branch-1 cbranch-no" title="branch not covered" >"Error desconocido",</span>
         });
       } else <span class="missing-if-branch" title="else path not taken" >E</span>if (error instanceof Error &amp;&amp; error.message === "Ya existe una asignatura con ese nombre.") {
-        return res.status(409).send({ mensaje: error.message });
+        return res.status(HttpStatus.CONFLICTO).send({ mensaje: error.message });
       }
 <span class="cstat-no" title="statement not covered" >      console.error("Error creando asignatura:", error);</span>
-<span class="cstat-no" title="statement not covered" >      return res.status(500).send({ mensaje: "Error interno al crear asignatura" });</span>
+<span class="cstat-no" title="statement not covered" >      return res.status(HttpStatus.ERROR_SERVIDOR).send({ mensaje: "Error interno al crear asignatura" });</span>
     }
   }
 &nbsp;
   async listar(req: FastifyRequest, res: FastifyReply) {
     try {
       const asignaturas = await this.casosUso.obtenerTodas();
-      return res.status(200).send(asignaturas);
+      return res.status(HttpStatus.EXITO).send(asignaturas);
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      if (error instanceof ZodError) {</span>
-<span class="cstat-no" title="statement not covered" >        return res.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >        return res.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
           mensaje: "Error crear un nuevo programa",
           error: error.issues[0]?.message || "Error desconocido",
         });
       }
 <span class="cstat-no" title="statement not covered" >      console.error("Error listando asignaturas:", error);</span>
-<span class="cstat-no" title="statement not covered" >      return res.status(500).send({ mensaje: "Error interno al listar asignaturas" });</span>
+<span class="cstat-no" title="statement not covered" >      return res.status(HttpStatus.ERROR_SERVIDOR).send({ mensaje: "Error interno al listar asignaturas" });</span>
     }
   }
 &nbsp;
@@ -309,20 +296,21 @@ export class AsignaturaControlador {
       const asignaturaActualizada = await this.casosUso.actualizar(dto, id);
 &nbsp;
       <span class="missing-if-branch" title="if path not taken" >I</span>if (!asignaturaActualizada) {
-<span class="cstat-no" title="statement not covered" >        return res.status(404).send({ mensaje: "Asignatura no encontrada" });</span>
+<span class="cstat-no" title="statement not covered" >        return res.status(HttpStatus.NO_ENCONTRADO).send({ mensaje: "Asignatura no encontrada" });</span>
       }
-      return res.status(200).send(asignaturaActualizada);
+      return res.status(HttpStatus.EXITO).send(asignaturaActualizada);
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      if (error instanceof ZodError) {</span>
-<span class="cstat-no" title="statement not covered" >        return res.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >        return res.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
           mensaje: "Error crear un nuevo programa",
           error: error.issues[0]?.message || "Error desconocido",
         });
       } else <span class="cstat-no" title="statement not covered" >if (error instanceof Error &amp;&amp; error.message === "No existe una asignatura con ese ID.") {</span>
-<span class="cstat-no" title="statement not covered" >        return res.status(404).send({ mensaje: error.message });</span>
+<span class="cstat-no" title="statement not covered" >        return res.status(HttpStatus.NO_ENCONTRADO).send({ mensaje: error.message });</span>
       }
+      
 <span class="cstat-no" title="statement not covered" >      console.error("Error actualizando asignatura:", error);</span>
-<span class="cstat-no" title="statement not covered" >      return res.status(500).send({ mensaje: "Error interno al actualizar asignatura" });</span>
+<span class="cstat-no" title="statement not covered" >      return res.status(HttpStatus.ERROR_SERVIDOR).send({ mensaje: "Error interno al actualizar asignatura" });</span>
     }
   }
 &nbsp;
@@ -330,32 +318,32 @@ export class AsignaturaControlador {
     try {
       const id = req.params.id;
       await this.casosUso.eliminar(id);
-      return res.code(204).send({
+      return res.code(HttpStatus.SIN_CONTENIDO).send({
         mensaje: "Asignatura eliminada correctamente",
         id: id
       });
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      if (error instanceof ZodError) {</span>
-<span class="cstat-no" title="statement not covered" >        return res.code(400).send({</span>
-          mensaje: "Error crear un nuevo programa",
+<span class="cstat-no" title="statement not covered" >        return res.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
+          mensaje: "Error crear una nueva asignatura",
           error: error.issues[0]?.message || "Error desconocido",
         });
       } else <span class="cstat-no" title="statement not covered" >if (error instanceof Error &amp;&amp; error.message === "No existe una asignatura con ese ID.") {</span>
-<span class="cstat-no" title="statement not covered" >        return res.status(404).send({ mensaje: error.message });</span>
+<span class="cstat-no" title="statement not covered" >        return res.status(HttpStatus.NO_ENCONTRADO).send({ mensaje: error.message });</span>
       }
 <span class="cstat-no" title="statement not covered" >      console.error("Error eliminando asignatura:", error);</span>
-<span class="cstat-no" title="statement not covered" >      return res.status(500).send({ mensaje: "Error interno al eliminar asignatura" });</span>
+<span class="cstat-no" title="statement not covered" >      return res.status(HttpStatus.ERROR_SERVIDOR).send({ mensaje: "Error interno al eliminar asignatura" });</span>
     }
   }
 }
-// ...existing code...</pre></td></tr></table></pre>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-22T17:27:19.595Z
+                at 2025-11-22T22:19:02.427Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

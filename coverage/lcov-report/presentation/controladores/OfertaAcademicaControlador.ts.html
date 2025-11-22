@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.01% </span>
+                <span class="strong">69.44% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>49/71</span>
+                <span class='fraction'>50/72</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.01% </span>
+                <span class="strong">69.44% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>49/71</span>
+                <span class='fraction'>50/72</span>
             </div>
         
             
@@ -292,7 +292,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -516,7 +516,7 @@ import { IOfertaAcademica } from "../../core/dominio/entidades/IOfertaAcademica"
 import { IOfertaAcademicaCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IOfertaAcademicaCasoUso";
 import { OfertaAcademicaDTO, EsquemaOfertaAcademica } from "../esquemas/OfertaAcademicaEsquema";
 import { ZodError } from "zod";
-&nbsp;
+import { HttpStatus } from "../../common/statusCode";
 &nbsp;
 export class OfertaAcademicaControlador {
   constructor(private ofertaCasoUso: IOfertaAcademicaCasoUso) {}
@@ -530,13 +530,13 @@ export class OfertaAcademicaControlador {
       const { limite } = request.query;
       const ofertas = await this.ofertaCasoUso.listarOfertas(limite);
 &nbsp;
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Ofertas encontradas correctamente",
         ofertas,
         cantidad: ofertas.length,
       });
     } catch (err) {
-      return reply.code(500).send({
+      return reply.code(HttpStatus.ERROR_SERVIDOR).send({
         mensaje: "Error al listar las ofertas académicas",
         error: err instanceof Error ? err.message : <span class="branch-1 cbranch-no" title="branch not covered" >err,</span>
       });
@@ -553,15 +553,15 @@ export class OfertaAcademicaControlador {
       const oferta = await this.ofertaCasoUso.obtenerOfertaPorId(id_oferta);
 &nbsp;
       if (!oferta) {
-        return reply.code(404).send({ mensaje: "Oferta académica no encontrada" });
+        return reply.code(HttpStatus.NO_ENCONTRADO).send({ mensaje: "Oferta académica no encontrada" });
       }
 &nbsp;
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Oferta encontrada correctamente",
         oferta,
       });
     } catch (err) {
-<span class="cstat-no" title="statement not covered" >      return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
         mensaje: "Error al obtener la oferta académica",
         error: err instanceof Error ? err.message : err,
       });
@@ -578,7 +578,7 @@ crearOferta = async (
 &nbsp;
     const idNueva = await this.ofertaCasoUso.crearOferta(datosValidados);
 &nbsp;
-    return reply.code(201).send({
+    return reply.code(HttpStatus.CREADO).send({
       mensaje: "Oferta académica creada correctamente",
       id_oferta: idNueva,
     });
@@ -600,22 +600,22 @@ crearOferta = async (
         }
       }
 &nbsp;
-      return reply.code(400).send({ mensaje });
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({ mensaje });
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (err.code === "23505") {</span>
-<span class="cstat-no" title="statement not covered" >      return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
         mensaje: "La oferta académica ya existe",
       });
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (err instanceof Error) {</span>
-<span class="cstat-no" title="statement not covered" >      return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
         mensaje: err.message,
       });
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >    return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
       mensaje: "Error al crear la oferta académica",
       error: err,
     });
@@ -630,7 +630,7 @@ crearOferta = async (
     const { id_oferta } = request.params;
     // Rechazar si intenta cambiar el ID
     if ("id_oferta" in request.body &amp;&amp; request.body.id_oferta !== id_oferta) {
-      return reply.code(400).send({
+      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({
         mensaje: "No se permite modificar el ID de la oferta académica",
       });
     }
@@ -643,26 +643,26 @@ crearOferta = async (
     const ofertaActual = await this.ofertaCasoUso.obtenerOfertaPorId(id_oferta);
 &nbsp;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (!ofertaActual) {
-<span class="cstat-no" title="statement not covered" >      return reply.code(404).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.NO_ENCONTRADO).send({</span>
         mensaje: "Oferta académica no encontrada",
       });
     }
 &nbsp;
     //Prohibir modificar campos 
     <span class="missing-if-branch" title="if path not taken" >I</span>if (id_periodo !== ofertaActual.id_periodo) {
-<span class="cstat-no" title="statement not covered" >      return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
         mensaje: "No se permite modificar el periodo académico",
       });
     }
 &nbsp;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (id_plan !== ofertaActual.id_plan) {
-<span class="cstat-no" title="statement not covered" >      return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
         mensaje: "No se permite modificar el plan de estudio",
       });
     }
 &nbsp;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (grupo !== ofertaActual.grupo) {
-<span class="cstat-no" title="statement not covered" >      return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
         mensaje: "No se permite modificar el grupo",
       });
     }
@@ -673,7 +673,7 @@ crearOferta = async (
       datosActualizados 
     );
 &nbsp;
-    return reply.code(200).send({
+    return reply.code(HttpStatus.EXITO).send({
       mensaje: "Oferta académica actualizada correctamente",
       oferta: ofertaActualizada,
     });
@@ -683,7 +683,7 @@ crearOferta = async (
       const issue = <span class="cstat-no" title="statement not covered" >err.issues.length &gt; 0 ? err.issues[0] : null;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (!issue) {</span>
-<span class="cstat-no" title="statement not covered" >        return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
           mensaje: "Datos inválidos",
         });
       }
@@ -695,12 +695,12 @@ crearOferta = async (
         cupo: "El cupo es obligatorio y debe ser mayor que cero",
       };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
         mensaje: mensajesCampos[campo] || issue.message || "Datos inválidos",
       });
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >    return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
       mensaje: "Error al actualizar la oferta académica",
     });
   }
@@ -716,7 +716,7 @@ crearOferta = async (
 &nbsp;
     await this.ofertaCasoUso.eliminarOferta(id_oferta);
 &nbsp;
-    return reply.code(200).send({
+    return reply.code(HttpStatus.EXITO).send({
       mensaje: "Oferta académica eliminada correctamente",
       id_oferta,
     });
@@ -724,12 +724,12 @@ crearOferta = async (
   } catch (err: any) {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (err instanceof Error &amp;&amp; err.message === "OFERTA_NO_ENCONTRADA") {</span>
-<span class="cstat-no" title="statement not covered" >      return reply.code(404).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.NO_ENCONTRADO).send({</span>
         mensaje: "Oferta académica no encontrada",
       });
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >    return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
       mensaje: "Error al eliminar la oferta académica",
     });
   }
@@ -742,7 +742,7 @@ crearOferta = async (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-22T17:27:19.595Z
+                at 2025-11-22T22:19:02.427Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

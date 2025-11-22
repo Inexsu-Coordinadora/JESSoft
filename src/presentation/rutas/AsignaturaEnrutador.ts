@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { AsignaturaControlador } from "../controladores/AsignaturaControlador";
 import { AsignaturaRepositorio } from "../../core/infraestructura/postgres/AsignaturaRepositorio";
-import { AsignaturaCasosUso } from "../../core/aplicacion/casos-uso/AsignaturaCasosUso";
+import { AsignaturaCasosUso } from "../../core/aplicacion/casos-uso/AsignaturaCasoUso";
 import { IAsignaturaRepositorio } from "../../core/dominio/repositorio/IAsignaturaRepositorio";
 
 function asignaturaEnrutador(app: FastifyInstance, asignaturaControlador: AsignaturaControlador) {

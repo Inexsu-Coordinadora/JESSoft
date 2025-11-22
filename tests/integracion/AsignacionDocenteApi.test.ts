@@ -58,6 +58,7 @@ jest.mock("../../src/core/infraestructura/postgres/ConexionPostgres", () => ({
 
 import request from "supertest";
 import { app } from "../../src/presentation/app";
+import { HttpStatus } from "../../src/common/statusCode";
 
 describe("Pruebas de integración – API Asignación Docente", () => {
 
@@ -72,7 +73,7 @@ describe("Pruebas de integración – API Asignación Docente", () => {
   test("GET /api/asignaciones – retorna todas las asignaciones", async () => {
     const response = await request(app.server).get("/api/asignaciones");
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(HttpStatus.EXITO);
     expect(response.body.asignaciones.length).toBe(2);
     expect(response.body).toEqual({
       mensaje: "Asignaciones encontradas correctamente!",
@@ -99,14 +100,14 @@ describe("Pruebas de integración – API Asignación Docente", () => {
   test("GET /api/asignaciones/:id_asignacion – retorna una asignación existente", async () => {
     const response = await request(app.server).get("/api/asignaciones/AS1");
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(HttpStatus.EXITO);
     expect(response.body.asignacion.id_asignacion).toBe("AS1");
   });
 
   test("GET /api/asignaciones/:id_asignacion – retorna 404 si no existe", async () => {
     const response = await request(app.server).get("/api/asignaciones/NO_EXISTE");
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(HttpStatus.NO_ENCONTRADO);
     expect(response.body).toEqual({ mensaje: "Asignación no encontrada" });
   });
 
@@ -120,7 +121,7 @@ describe("Pruebas de integración – API Asignación Docente", () => {
       .post("/api/asignaciones")
       .send(nueva);
 
-    expect(response.status).toBe(201);
+    expect(response.status).toBe(HttpStatus.CREADO);
     expect(response.body).toEqual({
       mensaje: "La asignación se creó correctamente",
       idNuevaAsignacion: "AS_NEW"
@@ -134,7 +135,7 @@ describe("Pruebas de integración – API Asignación Docente", () => {
       .post("/api/asignaciones")
       .send(body);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(HttpStatus.NO_ENCONTRADO);
     expect(response.body.mensaje).toContain("no existe");
   });
 
@@ -145,7 +146,7 @@ describe("Pruebas de integración – API Asignación Docente", () => {
       .post("/api/asignaciones")
       .send(body);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(HttpStatus.NO_ENCONTRADO);
     expect(response.body.mensaje).toContain("no existe");
   });
 
@@ -159,7 +160,7 @@ describe("Pruebas de integración – API Asignación Docente", () => {
       .put("/api/asignaciones/AS1")
       .send(update);
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(HttpStatus.EXITO);
     expect(response.body.asignacionActualizada).toEqual({
       id_asignacion: "AS1",
       ...update
@@ -174,7 +175,7 @@ describe("Pruebas de integración – API Asignación Docente", () => {
       .send(update);
 
     expect(response.status).toBe;
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(HttpStatus.NO_ENCONTRADO);
     expect(response.body.mensaje).toBe("Asignación no encontrada");
   });
 
@@ -182,7 +183,7 @@ describe("Pruebas de integración – API Asignación Docente", () => {
     const response = await request(app.server)
       .delete("/api/asignaciones/AS1");
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(HttpStatus.EXITO);
     expect(response.body).toEqual({
       mensaje: "Asignación eliminada correctamente",
       idAsignacion: "AS1"

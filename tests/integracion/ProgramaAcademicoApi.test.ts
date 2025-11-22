@@ -54,6 +54,7 @@ jest.mock("../../src/core/infraestructura/postgres/ConexionPostgres", () => ({
 
 import request from "supertest";
 import { app } from "../../src/presentation/app";
+import { HttpStatus } from "../../src/common/statusCode";
 
 describe("Pruebas de integración – API Programa Académico", () => {
 
@@ -68,7 +69,7 @@ describe("Pruebas de integración – API Programa Académico", () => {
   test("GET /api/programas – retorna todos los programas", async () => {
     const response = await request(app.server).get("/api/programas");
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(HttpStatus.EXITO);
     expect(response.body.programas.length).toBe(2);
     expect(response.body).toEqual({
       mensaje: "Programas encontrados correctamente!",
@@ -97,14 +98,14 @@ describe("Pruebas de integración – API Programa Académico", () => {
   test("GET /api/programas/:id_programa – retorna un programa existente", async () => {
     const response = await request(app.server).get("/api/programas/PA1");
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(HttpStatus.EXITO);
     expect(response.body.programa.id_programa).toBe("PA1");
   });
 
   test("GET /api/programas/:id_programa – retorna 404 si no existe", async () => {
     const response = await request(app.server).get("/api/programas/NO_EXISTE");
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(HttpStatus.NO_ENCONTRADO);
     expect(response.body).toEqual({ mensaje: "Programa no encontrado" });
   });
 
@@ -119,7 +120,7 @@ describe("Pruebas de integración – API Programa Académico", () => {
 
     const response = await request(app.server).post("/api/programas").send(nuevo);
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(HttpStatus.EXITO);
     expect(response.body).toEqual({
       mensaje: "El programa se creó correctamente",
       idNuevoPrograma: "PA_NEW"
@@ -137,7 +138,7 @@ describe("Pruebas de integración – API Programa Académico", () => {
 
     const response = await request(app.server).put("/api/programas/PA1").send(update);
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(HttpStatus.EXITO);
     expect(response.body.programaActualizado).toEqual({
       id_programa: "PA1",
       ...update
@@ -153,14 +154,14 @@ describe("Pruebas de integración – API Programa Académico", () => {
       }
     });
 
-    expect(response.statusCode).toBe(404);
+    expect(response.statusCode).toBe(HttpStatus.NO_ENCONTRADO);
   });
 
 
   test("DELETE /api/programas/PA1 – elimina un programa", async () => {
     const response = await request(app.server).delete("/api/programas/PA1");
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(HttpStatus.EXITO);
     expect(response.body).toEqual({
       mensaje: "Programa eliminado correctamente",
       idPrograma: "PA1"
@@ -182,7 +183,7 @@ describe("Pruebas de integración – API Programa Académico", () => {
     .put("/api/programas/PA1")
     .send(updateInvalido);
 
-  expect(response.status).toBe(400); 
+  expect(response.status).toBe(HttpStatus.SOLICITUD_INCORRECTA); 
   expect(response.body.mensaje).toBe(
     "No se permite modificar el ID del programa académico."
   );

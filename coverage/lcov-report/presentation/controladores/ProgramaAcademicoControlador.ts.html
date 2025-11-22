@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.72% </span>
+                <span class="strong">84.09% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>36/43</span>
+                <span class='fraction'>37/44</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.72% </span>
+                <span class="strong">84.09% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>36/43</span>
+                <span class='fraction'>37/44</span>
             </div>
         
             
@@ -200,9 +200,11 @@
 <a name='L135'></a><a href='#L135'>135</a>
 <a name='L136'></a><a href='#L136'>136</a>
 <a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -342,6 +344,7 @@ import { IProgramaAcademico } from "../../core/dominio/entidades/IProgramaAcadem
 import { IProgramaAcademicoCasoUso } from "../../core/aplicacion/repositorio-casos-uso/IProgramaAcademicoCasoUso";
 import { ProgramaAcademicoDTO, EsquemaProgramaAcademico} from "../esquemas/ProgramaAcademicoEsquema";
 import { ZodError } from "zod";
+import { HttpStatus } from "../../common/statusCode";
 &nbsp;
 export class ProgramaAcademicoControlador {
   constructor(private programaAcademicoCasoUso: IProgramaAcademicoCasoUso) {}
@@ -354,13 +357,13 @@ export class ProgramaAcademicoControlador {
       const { limite } = request.query;
       const programasEncontrados = await this.programaAcademicoCasoUso.obtenerProgramas(limite);
 &nbsp;
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Programas encontrados correctamente!",
         programas: programasEncontrados,
         programasEncontrados: programasEncontrados.length,
       });
     } catch (err) {
-<span class="cstat-no" title="statement not covered" >      return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
         mensaje: "Error al obtener los programas",
         error: err instanceof Error ? err.message : err,
       });
@@ -376,17 +379,17 @@ export class ProgramaAcademicoControlador {
       const programaEncontrado = await this.programaAcademicoCasoUso.obtenerProgramaPorId(id_programa);
 &nbsp;
       if (!programaEncontrado) {
-        return reply.code(404).send({
+        return reply.code(HttpStatus.NO_ENCONTRADO).send({
           mensaje: "Programa no encontrado",
         });
       }
 &nbsp;
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Programa encontrado correctamente",
         programa: programaEncontrado,
       });
     } catch (err) {
-<span class="cstat-no" title="statement not covered" >      return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
         mensaje: "Error al obtener el programa",
         error: err instanceof Error ? err.message : err,
       });
@@ -401,18 +404,18 @@ export class ProgramaAcademicoControlador {
       const nuevoPrograma = EsquemaProgramaAcademico.parse(request.body);
       const idNuevoPrograma = await this.programaAcademicoCasoUso.crearPrograma(nuevoPrograma);
 &nbsp;
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "El programa se creó correctamente",
         idNuevoPrograma: idNuevoPrograma,
       });
     } catch (err) {
 <span class="cstat-no" title="statement not covered" >      if (err instanceof ZodError) {</span>
-<span class="cstat-no" title="statement not covered" >        return reply.code(400).send({</span>
+<span class="cstat-no" title="statement not covered" >        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({</span>
           mensaje: "Error crear un nuevo programa",
           error: err.issues[0]?.message || "Error desconocido",
         });
       }
-<span class="cstat-no" title="statement not covered" >      return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
         mensaje: "Error crear un nuevo programa",
         error: err instanceof Error ? err.message : String(err),
       });
@@ -431,12 +434,12 @@ export class ProgramaAcademicoControlador {
         await this.programaAcademicoCasoUso.actualizarPrograma(id_programa, nuevoPrograma);
 &nbsp;
       if (!programaActualizado) {
-        return reply.code(404).send({
+        return reply.code(HttpStatus.NO_ENCONTRADO).send({
           mensaje: "Programa no encontrado",
         });
       }
 &nbsp;
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Programa actualizado correctamente",
         programaActualizado,
       });
@@ -444,10 +447,10 @@ export class ProgramaAcademicoControlador {
     } catch (err) {
 &nbsp;
       <span class="missing-if-branch" title="else path not taken" >E</span>if (err instanceof Error &amp;&amp; err.message.includes("No se permite modificar el ID")) {
-        return reply.code(400).send({ mensaje: err.message });
+        return reply.code(HttpStatus.SOLICITUD_INCORRECTA).send({ mensaje: err.message });
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.ERROR_SERVIDOR).send({</span>
         mensaje: "Error al actualizar el programa",
         error: err instanceof Error ? err.message : err,
       });
@@ -462,12 +465,12 @@ export class ProgramaAcademicoControlador {
       const { id_programa } = request.params;
       await this.programaAcademicoCasoUso.eliminarPrograma(id_programa);
 &nbsp;
-      return reply.code(200).send({
+      return reply.code(HttpStatus.EXITO).send({
         mensaje: "Programa eliminado correctamente",
         idPrograma: id_programa,
       });
     } catch (err) {
-<span class="cstat-no" title="statement not covered" >      return reply.code(500).send({</span>
+<span class="cstat-no" title="statement not covered" >      return reply.code(HttpStatus.EXITO).send({</span>
         mensaje: "Error al eliminar el programa",
         error: err instanceof Error ? err.message : err,
       });
@@ -481,7 +484,7 @@ export class ProgramaAcademicoControlador {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-22T17:27:19.595Z
+                at 2025-11-22T22:19:02.427Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

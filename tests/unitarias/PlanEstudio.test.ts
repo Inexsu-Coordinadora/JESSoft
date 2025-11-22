@@ -1,5 +1,5 @@
 import { IPlanEstudioRepositorio } from "../../src/core/dominio/repositorio/IPlanEstudioRepositorio";
-import { PlanEstudioCasosUso } from "../../src/core/aplicacion/casos-uso/PlanEstudioCasosUso";
+import { PlanEstudioCasosUso } from "../../src/core/aplicacion/casos-uso/PlanEstudioCasoUso";
 import { PlanEstudioDTO } from "../../src/presentation/esquemas/PlanDeEstudioEsquema";
 import { PlanEstudio } from "../../src/core/dominio/entidades/PlanEstudio";
 
