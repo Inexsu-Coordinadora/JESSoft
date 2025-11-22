@@ -309,7 +309,7 @@ Checklist de completado:
 
 # 📌 Pruebas Unitarias e Integración  
 
-Este documento describe las pruebas unitarias, pruebas de integración, cobertura global e instrucciones de ejecución incluidas en la tercera entrega del proyecto.
+En esta parte del documento se describen las pruebas unitarias, pruebas de integración, cobertura global e instrucciones de ejecución incluidas en la tercera entrega del proyecto.
 
 ---
 
@@ -317,8 +317,7 @@ Este documento describe las pruebas unitarias, pruebas de integración, cobertur
 
 **Cobertura obtenida:** 
 
-![Cobertura](./cobertura.png)
-
+![cobertura](https://github.com/user-attachments/assets/bcf513b4-3a81-4ab3-88c2-d5c893bc605a)
 
 ---
 
