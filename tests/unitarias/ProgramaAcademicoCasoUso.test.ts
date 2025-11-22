@@ -99,27 +99,39 @@ describe("Pruebas unitarias ProgramaAcademicoCasoUso", () => {
     expect(result).toBeNull();
   });
 
-  test("Actualizar programa correctamente", async () => {
-    const datos: IProgramaAcademico = {
-      nombre: "Ingeniería Industrial",
-      informacion: "Optimización de procesos, logística y gestión de operaciones.",
-      nivel_educativo: "Profesional",
-      duracion: "10 semestres",
-      modalidad: "Presencial"
-    };
+test("Actualizar programa correctamente", async () => {
+  const datos: IProgramaAcademico = {
+    nombre: "Ingeniería Industrial",
+    informacion: "Optimización de procesos, logística y gestión de operaciones.",
+    nivel_educativo: "Profesional",
+    duracion: "10 semestres",
+    modalidad: "Presencial"
+  };
 
-    const actualizado: IProgramaAcademico = {
-      id_programa: "PA50",
-      ...datos
-    };
+  const existente: IProgramaAcademico = {
+    id_programa: "PA50",
+    nombre: "Antiguo",
+    informacion: "Antiguo",
+    nivel_educativo: "Profesional",
+    duracion: "10 semestres",
+    modalidad: "Presencial"
+  };
 
-    programaRepoMock.actualizarPrograma.mockResolvedValue(actualizado);
+  const actualizado: IProgramaAcademico = {
+    id_programa: "PA50",
+    ...datos
+  };
 
-    const result = await casoUso.actualizarPrograma("PA50", datos);
+  programaRepoMock.obtenerProgramaPorId.mockResolvedValue(existente);
 
-    expect(programaRepoMock.actualizarPrograma).toHaveBeenCalledWith("PA50", datos);
-    expect(result).toEqual(actualizado);
-  });
+  programaRepoMock.actualizarPrograma.mockResolvedValue(actualizado);
+
+  const result = await casoUso.actualizarPrograma("PA50", datos);
+
+  expect(programaRepoMock.actualizarPrograma).toHaveBeenCalledWith("PA50", datos);
+  expect(result).toEqual(actualizado);
+});
+
 
   test("Error al intentar modificar el ID del programa", async () => {
     const datosInvalidos: IProgramaAcademico = {

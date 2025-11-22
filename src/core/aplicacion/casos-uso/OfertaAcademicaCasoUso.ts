@@ -18,7 +18,6 @@ export class OfertaAcademicaCasoUso {
     // Obtener oferta por id
     async obtenerOfertaPorId(id_oferta: string): Promise<IOfertaAcademica | null> {
         const ofertaObtenida = await this.ofertaRepositorio.obtenerOfertaPorId(id_oferta);
-        console.log(ofertaObtenida);
         return ofertaObtenida;
     }
 

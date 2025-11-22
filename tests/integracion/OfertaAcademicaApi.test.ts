@@ -126,4 +126,94 @@ test("POST /ofertas - Error de validación (400)", async () => {
       "Error al listar las ofertas académicas"
     );
   });
+
+  test("PUT /ofertas/:id - No permite modificar el ID de la oferta", async () => {
+
+    instanciaMock.obtenerOfertaPorId = async () => ({
+      id_oferta: "OF1",
+      id_periodo: "P1",
+      id_plan: "PL1",
+      grupo: "G1",
+      cupo: 30,
+    });
+
+    const response = await request(testApp.server)
+      .put("/ofertas/OF1")
+      .send({
+        id_oferta: "OTRO_ID",
+        id_periodo: "P1",
+        id_plan: "PL1",
+        grupo: "G1",
+        cupo: 30,
+      });
+
+    expect(response.status).toBe(400);
+  });
+
+  test("POST /ofertas - Crea una oferta correctamente", async () => {
+    instanciaMock.crearOferta.mockResolvedValue("OF100");
+
+    const response = await request(testApp.server)
+      .post("/ofertas")
+      .send({
+        id_oferta: "OF100",
+        id_periodo: "P1",
+        id_plan: "PL1",
+        grupo: "G1",
+        cupo: 40
+      });
+
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual({
+      mensaje: "Oferta académica creada correctamente",
+      id_oferta: "OF100"
+    });
+  });
+
+
+  test("PUT /ofertas/:id - Actualiza solo el cupo correctamente", async () => {
+
+    instanciaMock.obtenerOfertaPorId = async () => ({
+      id_oferta: "OF1",
+      id_periodo: "P1",
+      id_plan: "PL1",
+      grupo: "G1",
+      cupo: 30
+    });
+
+    instanciaMock.actualizarOferta = async () => ({
+      id_oferta: "OF1",
+      id_periodo: "P1",
+      id_plan: "PL1",
+      grupo: "G1",
+      cupo: 50
+    });
+
+    const response = await request(testApp.server)
+      .put("/ofertas/OF1")
+      .send({
+        id_oferta: "OF1",
+        id_periodo: "P1",
+        id_plan: "PL1",
+        grupo: "G1",
+        cupo: 50
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body.oferta.cupo).toBe(50);
+  });
+
+  test("DELETE /ofertas/:id - Elimina una oferta correctamente", async () => {
+    instanciaMock.eliminarOferta = jest.fn();
+
+    const response = await request(testApp.server).delete("/ofertas/OF1");
+
+    expect(instanciaMock.eliminarOferta).toHaveBeenCalledWith("OF1");
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      mensaje: "Oferta académica eliminada correctamente",
+      id_oferta: "OF1"
+    });
+  });
+
 });

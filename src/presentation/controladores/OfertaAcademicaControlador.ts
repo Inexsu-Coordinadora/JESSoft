@@ -115,7 +115,12 @@ crearOferta = async (
 ) => {
   try {
     const { id_oferta } = request.params;
-
+    // Rechazar si intenta cambiar el ID
+    if ("id_oferta" in request.body && request.body.id_oferta !== id_oferta) {
+      return reply.code(400).send({
+        mensaje: "No se permite modificar el ID de la oferta académica",
+      });
+    }
     //  Validar absolutamente todo el body 
     const datosActualizados = EsquemaOfertaAcademica.parse(request.body);
 

@@ -186,4 +186,80 @@ test("Eliminar oferta - no funciona", async () => {
   expect(ofertaRepoMock.eliminarOferta).toHaveBeenCalledWith("OF1");
 });
 
+// 🔥 NUEVO TEST 1: Listar ofertas con límite
+test("Listar ofertas - con límite", async () => {
+  const ofertasEsperadas: IOfertaAcademica[] = [
+    {
+      id_oferta: "OF1",
+      id_periodo: "P1",
+      id_plan: "PL1",
+      grupo: "G1",
+      cupo: 30,
+    },
+  ];
+
+  ofertaRepoMock.listarOfertas.mockResolvedValue(ofertasEsperadas);
+
+  const resultado = await ofertaCasoUso.listarOfertas(10);
+
+  expect(ofertaRepoMock.listarOfertas).toHaveBeenCalledWith(10);
+  expect(resultado).toEqual(ofertasEsperadas);
+});
+
+
+// 🔥 NUEVO TEST 2: Crear oferta - validar que el objeto no esté vacío
+test("Crear oferta - no funciona si se envía un objeto vacío", async () => {
+  // Si quieres validar esto, el caso de uso debería manejarlo.
+  // Simulamos comportamiento esperado: el repositorio rechaza.
+  ofertaRepoMock.crearOferta.mockRejectedValue(
+    new Error("Datos incompletos para crear oferta")
+  );
+
+  await expect(ofertaCasoUso.crearOferta({} as IOfertaAcademica))
+    .rejects
+    .toThrow("Datos incompletos para crear oferta");
+
+  expect(ofertaRepoMock.crearOferta).toHaveBeenCalled();
+});
+
+
+// 🔥 NUEVO TEST 3: Actualizar oferta – permitir que no venga id_oferta en el body
+test("Actualizar oferta - funciona si el objeto no trae id_oferta", async () => {
+  const datosActualizados: IOfertaAcademica = {
+    id_periodo: "P1",
+    id_plan: "PL1",
+    grupo: "G2",
+    cupo: 45,
+  };
+
+  const respuestaEsperada: IOfertaAcademica = {
+    id_oferta: "OF1",
+    ...datosActualizados,
+  };
+
+  ofertaRepoMock.actualizarOferta.mockResolvedValue(respuestaEsperada);
+
+  const resultado = await ofertaCasoUso.actualizarOferta("OF1", datosActualizados);
+
+  expect(ofertaRepoMock.actualizarOferta).toHaveBeenCalledWith("OF1", datosActualizados);
+  expect(resultado).toEqual(respuestaEsperada);
+});
+
+
+// 🔥 NUEVO TEST 4: Eliminar oferta - falla si se envía id vacío
+test("Eliminar oferta - no funciona si se envía un id vacío", async () => {
+  ofertaRepoMock.eliminarOferta.mockRejectedValue(
+    new Error("ID inválido para eliminar oferta")
+  );
+
+  await expect(ofertaCasoUso.eliminarOferta(""))
+    .rejects
+    .toThrow("ID inválido para eliminar oferta");
+
+  expect(ofertaRepoMock.eliminarOferta).toHaveBeenCalledWith("");
+});
+
+
+
+
 });
