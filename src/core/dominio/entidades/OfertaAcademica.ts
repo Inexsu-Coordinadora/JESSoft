@@ -4,7 +4,7 @@ export class OfertaAcademica implements IOfertaAcademica {
   id_oferta?: string | undefined;
   id_periodo: string;
   id_plan: string;
-  grupo: string;
+  grupo?: string | undefined;
   cupo: number;
 
   constructor(datos: IOfertaAcademica) {

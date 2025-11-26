@@ -75,7 +75,7 @@ describe("Integración - Asignatura (controller + casos de uso)", () => {
     const res = await fastify.inject({ method: "GET", url: "/asignaturas" });
 
     expect(res.statusCode).toBe(HttpStatus.EXITO);
-    expect(JSON.parse(res.body)).toEqual(listaMock);
+    expect(JSON.parse(res.body)).toEqual({ asignaturas: listaMock });
     expect(mockRepo.obtenerTodas).toHaveBeenCalled();
   });
 

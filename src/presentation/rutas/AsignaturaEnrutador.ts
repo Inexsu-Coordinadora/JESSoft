@@ -5,11 +5,12 @@ import { AsignaturaCasosUso } from "../../core/aplicacion/casos-uso/AsignaturaCa
 import { IAsignaturaRepositorio } from "../../core/dominio/repositorio/IAsignaturaRepositorio";
 
 function asignaturaEnrutador(app: FastifyInstance, asignaturaControlador: AsignaturaControlador) {
-  app.post("/asignaturas", asignaturaControlador.crear);
-  app.get("/asignaturas", asignaturaControlador.listar);
-  app.put("/asignaturas/:id", asignaturaControlador.actualizar);
-  app.delete("/asignaturas/:id", asignaturaControlador.eliminar);
+  app.post("/asignaturas", asignaturaControlador.crear.bind(asignaturaControlador));
+  app.get("/asignaturas", asignaturaControlador.listar.bind(asignaturaControlador));
+  app.put("/asignaturas/:id", asignaturaControlador.actualizar.bind(asignaturaControlador));
+  app.delete("/asignaturas/:id", asignaturaControlador.eliminar.bind(asignaturaControlador));
 }
+
 
 export async function registrarAsignaturaRutas(app: FastifyInstance) {
     const asignaturaRepositorio: IAsignaturaRepositorio = new AsignaturaRepositorio();

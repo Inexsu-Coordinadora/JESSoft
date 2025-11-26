@@ -19,18 +19,14 @@ export const EsquemaOfertaAcademica = z.object({
     .max(20, "El ID del plan no puede tener más de 20 caracteres")
     .transform((t) => t.trim()),
 
-  grupo: z
-    .string()
-    .nonempty("El grupo es obligatorio")
-    .max(10, "El grupo no puede tener más de 10 caracteres")
-    .transform(capitalizar),
-
   cupo: z
     .number({
       message: "El cupo es obligatorio",
     })
     .int("El cupo debe ser un número entero")
     .positive("El cupo debe ser mayor que cero"),
+  grupo: z
+    .string().optional()
 });
 
 export type OfertaAcademicaDTO = z.infer<typeof EsquemaOfertaAcademica>;

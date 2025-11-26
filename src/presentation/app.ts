@@ -1,5 +1,8 @@
 import fastify from "fastify";
 import { FastifyError } from "fastify";
+
+import cors from "@fastify/cors"; 
+
 import { construirPeriodosEnrutador } from "./rutas/PeriodoAcademicoEnrutador";
 import { construirProgramasEnrutador } from "./rutas/ProgramaAcademicoEnrutador";
 import { registrarAsignaturaRutas } from "./rutas/AsignaturaEnrutador";
@@ -9,6 +12,12 @@ import { construirOfertaAcademicaEnrutador } from "./rutas/OfertaAcademicaEnruta
 import { registrarPlanEstudioRutas } from "./rutas/PlanEstudioEnrutador";
 
 export const app = fastify({ logger: true });
+
+app.register(cors, {
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+});
 
 app.register(
   async (appInstance) => {

@@ -29,16 +29,16 @@ export class AsignaturaControlador {
   async listar(req: FastifyRequest, res: FastifyReply) {
     try {
       const asignaturas = await this.casosUso.obtenerTodas();
-      return res.status(HttpStatus.EXITO).send(asignaturas);
+
+      return res.status(HttpStatus.EXITO).send({
+        asignaturas: asignaturas
+      });
+
     } catch (error) {
-      if (error instanceof ZodError) {
-        return res.code(HttpStatus.SOLICITUD_INCORRECTA).send({
-          mensaje: "Error crear un nuevo programa",
-          error: error.issues[0]?.message || "Error desconocido",
-        });
-      }
       console.error("Error listando asignaturas:", error);
-      return res.status(HttpStatus.ERROR_SERVIDOR).send({ mensaje: "Error interno al listar asignaturas" });
+      return res.status(HttpStatus.ERROR_SERVIDOR).send({
+        mensaje: "Error interno al listar asignaturas"
+      });
     }
   }
 
