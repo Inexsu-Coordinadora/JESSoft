@@ -1,20 +1,21 @@
 import fastify from "fastify";
 import { FastifyError } from "fastify";
-import { construirPeriodosEnrutador } from "./rutas/PeriodoAcademicoEnrutador.js";
-import { construirProgramasEnrutador } from "./rutas/ProgramaAcademicoEnrutador.js";
-import { registrarAsignaturaRutas } from "./rutas/AsignaturaEnrutador.js";
-import { DocenteEnrutador } from "./rutas/DocenteEnrutador.js";
-import { construirAsignacionesEnrutador } from "./rutas/AsignacionDocenteEnrutador.js"
+import { construirPeriodosEnrutador } from "./rutas/PeriodoAcademicoEnrutador";
+import { construirProgramasEnrutador } from "./rutas/ProgramaAcademicoEnrutador";
+import { registrarAsignaturaRutas } from "./rutas/AsignaturaEnrutador";
+import { construirDocenteEnrutador } from "./rutas/DocenteEnrutador";
+import { construirAsignacionesEnrutador } from "./rutas/AsignacionDocenteEnrutador"
 import { construirOfertaAcademicaEnrutador } from "./rutas/OfertaAcademicaEnrutador";
-import { registrarPlanEstudioRutas } from "./rutas/PlanEstudioEnrutador.js";
-const app = fastify({ logger: true });
+import { registrarPlanEstudioRutas } from "./rutas/PlanEstudioEnrutador";
+
+export const app = fastify({ logger: true });
 
 app.register(
   async (appInstance) => {
     construirPeriodosEnrutador(appInstance);
     construirProgramasEnrutador(appInstance);
     registrarAsignaturaRutas(appInstance);
-    DocenteEnrutador(appInstance);
+    construirDocenteEnrutador(appInstance);
     construirAsignacionesEnrutador(appInstance);
     construirOfertaAcademicaEnrutador(appInstance);
     registrarPlanEstudioRutas(appInstance);
@@ -25,8 +26,10 @@ app.register(
 
 export const startServer = async (): Promise<void> => {
   try {
-    await app.listen({ port: 3000 });
-    app.log.info("El servidor esta corriendo...");
+
+    const port = Number(process.env.PORT) || 3000;
+    await app.listen({ port, host: "0.0.0.0" });
+    app.log.info("El servidor esta corriendo... en puerto " + port);
   } catch (err) {
     app.log.error(`Error al ejecutar el servidor\n ${err}`);
 
@@ -40,7 +43,4 @@ export const startServer = async (): Promise<void> => {
     throw serverError;
 
   }
-}
-
-
-
+};

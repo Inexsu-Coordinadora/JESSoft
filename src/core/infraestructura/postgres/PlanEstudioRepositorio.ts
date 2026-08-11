@@ -4,28 +4,28 @@ import { pool } from "./ConexionPostgres";
 
 export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
 
-    async crear(planEstudio: PlanEstudio): Promise<String> {
+    async crear(planEstudio: PlanEstudio): Promise<string> {
         const queryBuscarId = `SELECT * FROM plan_estudio WHERE id_plan = $1`;
         const queryBuscarPlanEstudio = `SELECT * FROM plan_estudio WHERE id_asignatura = $1 AND id_programa = $2 AND semestre = $3`;
         const queryBuscarAsignatura_Programa = `SELECT * FROM plan_estudio WHERE id_asignatura = $1 AND id_programa = $2`;
         const resultBuscarPlanEstudio = await pool.query(queryBuscarPlanEstudio, [
-            planEstudio.getIdAsignatura(),
-            planEstudio.getIdPrograma(),
-            planEstudio.getSemestre(),
+            planEstudio.id_asignatura,
+            planEstudio.id_programa,
+            planEstudio.semestre,
         ]);
         if (resultBuscarPlanEstudio.rows.length > 0) {
             throw new Error("Ya existe un plan de estudio con esos datos.");
         }
 
         const resultBuscarAsignatura_Programa = await pool.query(queryBuscarAsignatura_Programa, [
-            planEstudio.getIdAsignatura(),
-            planEstudio.getIdPrograma(),
+            planEstudio.id_asignatura,
+            planEstudio.id_programa,
         ]);
         if (resultBuscarAsignatura_Programa.rows.length > 0) {
             throw new Error("Ya existe un plan de estudio para esa asignatura en ese programa.");
         }
         const resultBuscar = await pool.query(queryBuscarId, [
-            planEstudio.getIdPlan(),
+            planEstudio.id_plan,
         ]);
         if (resultBuscar.rows.length > 0) {
             throw new Error("Ya existe un plan de estudio con ese ID.");
@@ -35,11 +35,11 @@ export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
         VALUES ($1, $2, $3)
         `;
         await pool.query(query, [
-            planEstudio.getIdAsignatura(),
-            planEstudio.getIdPrograma(),
-            planEstudio.getSemestre(),
+            planEstudio.id_asignatura,
+            planEstudio.id_programa,
+            planEstudio.semestre,
         ]);
-        return planEstudio.getIdPlan();
+        return planEstudio.id_plan;
     }
 
     async obtenerTodos(): Promise<PlanEstudio[]> {
@@ -87,17 +87,17 @@ export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
         const queryBuscarPlanEstudio = `SELECT * FROM plan_estudio WHERE id_asignatura = $1 AND id_programa = $2 AND semestre = $3`;
         const queryBuscarAsignatura_Programa = `SELECT * FROM plan_estudio WHERE id_asignatura = $1 AND id_programa = $2`;
         const resultBuscarPlanEstudio = await pool.query(queryBuscarPlanEstudio, [
-            planEstudio.getIdAsignatura(),
-            planEstudio.getIdPrograma(),
-            planEstudio.getSemestre(),
+            planEstudio.id_asignatura,
+            planEstudio.id_programa,
+            planEstudio.semestre,
         ]);
         if (resultBuscarPlanEstudio.rows.length > 0) {
             throw new Error("Ya existe un plan de estudio con esos datos.");
         }
 
         const resultBuscarAsignatura_Programa = await pool.query(queryBuscarAsignatura_Programa, [
-            planEstudio.getIdAsignatura(),
-            planEstudio.getIdPrograma(),
+            planEstudio.id_asignatura,
+            planEstudio.id_programa,
         ]);
 
         if (resultBuscarAsignatura_Programa.rows.length > 0) {
@@ -109,10 +109,10 @@ export class PlanEstudioRepositorio implements IPlanEstudioRepositorio {
       WHERE id_plan = $4
     `;
         await pool.query(query, [
-            planEstudio.getIdAsignatura(),
-            planEstudio.getIdPrograma(),
-            planEstudio.getSemestre(),
-            planEstudio.getIdPlan(),
+            planEstudio.id_asignatura,
+            planEstudio.id_programa,
+            planEstudio.semestre,
+            planEstudio.id_plan,
         ]);
     }
 }

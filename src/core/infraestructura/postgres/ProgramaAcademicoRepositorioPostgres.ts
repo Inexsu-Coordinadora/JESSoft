@@ -1,6 +1,6 @@
-import { IProgramaAcademicoRepositorio } from "../../dominio/repositorio/IProgramaAcademico.js";
-import { ejecutarConsulta } from "./ConexionPostgres.js";
-import { IProgramaAcademico } from "../../dominio/entidades/IProgramaAcademico.js";
+import { IProgramaAcademicoRepositorio } from "../../dominio/repositorio/IProgramaAcademico";
+import { ejecutarConsulta } from "./ConexionPostgres";
+import { IProgramaAcademico } from "../../dominio/entidades/IProgramaAcademico";
 
 export class ProgramaAcademicoRepositorio implements IProgramaAcademicoRepositorio {
   async crearPrograma(datosProgramaAcademico: IProgramaAcademico): Promise<string> {
@@ -15,7 +15,7 @@ export class ProgramaAcademicoRepositorio implements IProgramaAcademicoRepositor
     `;
 
     const respuesta = await ejecutarConsulta(query, parametros);
-    return respuesta.rows[0].id_pa;
+    return respuesta.rows[0].id_programa;
   }
 
   async listarProgramas(limite?: number): Promise<IProgramaAcademico[]> {

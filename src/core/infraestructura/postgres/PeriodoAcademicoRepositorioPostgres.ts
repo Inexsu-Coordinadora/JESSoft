@@ -1,6 +1,6 @@
-import { IPeriodoAcademicoRepositorio } from "../../dominio/repositorio/IPeriodoAcademico.js";
-import { ejecutarConsulta, pool } from "./ConexionPostgres.js";
-import { IPeriodoAcademico } from "../../dominio/entidades/IPeriodoAcademico.js";
+import { IPeriodoAcademicoRepositorio } from "../../dominio/repositorio/IPeriodoAcademico";
+import { ejecutarConsulta, pool } from "./ConexionPostgres";
+import { IPeriodoAcademico } from "../../dominio/entidades/IPeriodoAcademico";
 
 export class PeriodoAcademicoRepositorio implements IPeriodoAcademicoRepositorio {
   async crearPeriodo(datosPeriodoAcademico: IPeriodoAcademico): Promise<string> {
@@ -13,9 +13,8 @@ export class PeriodoAcademicoRepositorio implements IPeriodoAcademicoRepositorio
       WHERE fecha_inicio = $1 AND fecha_fin = $2
     `;
     
-
-    if (datosPeriodoAcademico.fecha_inicio.getFullYear() > datosPeriodoAcademico.fecha_fin.getFullYear()) {
-      throw new Error("El año de fecha_inicio debe ser menor o igual al año de fecha_fin");
+    if (datosPeriodoAcademico.fecha_inicio > datosPeriodoAcademico.fecha_fin) {
+      throw new Error("La fecha de inicio no puede ser mayor que la fecha de fin");
     }
 
     const periodoExistente = await pool.query(buscarPeriodoQuery, [

@@ -1,8 +1,8 @@
 import { FastifyInstance } from "fastify";
-import { AsignaturaControlador } from "../controladores/AsignaturaControlador.js";
-import { AsignaturaRepositorio } from "../../core/infraestructura/postgres/AsignaturaRepositorio.js";
-import { AsignaturaCasosUso } from "../../core/aplicacion/casos-uso/AsignaturaCasosUso.js";
-import { IAsignaturaRepositorio } from "../../core/dominio/repositorio/IAsignaturaRepositorio.js";
+import { AsignaturaControlador } from "../controladores/AsignaturaControlador";
+import { AsignaturaRepositorio } from "../../core/infraestructura/postgres/AsignaturaRepositorio";
+import { AsignaturaCasosUso } from "../../core/aplicacion/casos-uso/AsignaturaCasoUso";
+import { IAsignaturaRepositorio } from "../../core/dominio/repositorio/IAsignaturaRepositorio";
 
 function asignaturaEnrutador(app: FastifyInstance, asignaturaControlador: AsignaturaControlador) {
   app.post("/asignaturas", asignaturaControlador.crear);

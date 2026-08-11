@@ -1,5 +1,4 @@
 import { PlanEstudio } from "../entidades/PlanEstudio";
-
 export interface IPlanEstudioRepositorio {
 
     obtenerTodos(): Promise<PlanEstudio[]>;

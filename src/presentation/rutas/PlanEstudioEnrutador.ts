@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { PlanEstudioControlador } from "../controladores/PlanEstudioControlador";
 import { PlanEstudioRepositorio } from "../../core/infraestructura/postgres/PlanEstudioRepositorio";
-import { PlanEstudioCasosUso } from "../../core/aplicacion/casos-uso/PlanEstudioCasosUso";
+import { PlanEstudioCasosUso } from "../../core/aplicacion/casos-uso/PlanEstudioCasoUso";
 import { IPlanEstudioRepositorio } from "../../core/dominio/repositorio/IPlanEstudioRepositorio";
 
 function planEstudioEnrutador(app: FastifyInstance, planEstudioControlador: PlanEstudioControlador) {
